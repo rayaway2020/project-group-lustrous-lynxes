@@ -7,7 +7,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto mt-24 mb-8">
+      <div className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto my-24">
         {[...Array(5)].map((_, i) => (
           <PlaylistRow />
         ))}

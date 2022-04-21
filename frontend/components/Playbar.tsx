@@ -2,6 +2,7 @@ import {
   HeartIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
+  ChevronUpIcon,
   PlayIcon,
   CubeIcon,
   VolumeUpIcon,
@@ -25,15 +26,16 @@ const Playbar = () => {
           <HeartIcon className="w-6 h-6" />
         </div>
         {/* control bar */}
-        <div className="flex flex-row items-center justify-center flex-1 gap-4">
+        <div className="flex flex-row items-center justify-center flex-1 gap-8">
           <ChevronDoubleLeftIcon className="w-6 h-6" />
           <PlayIcon className="w-8 h-8" />
           <ChevronDoubleRightIcon className="w-6 h-6" />
         </div>
         {/* play setting */}
-        <div className="flex flex-row items-center justify-end flex-1 gap-4">
+        <div className="flex flex-row items-center justify-end flex-1 gap-6">
           <CubeIcon className="w-6 h-6" />
           <VolumeUpIcon className="w-6 h-6" />
+          <ChevronUpIcon className="w-6 h-6" />
         </div>
       </div>
     </section>
