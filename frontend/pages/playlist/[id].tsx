@@ -1,6 +1,4 @@
 import type { NextPage } from 'next'
-import Header from '../../components/Header'
-import Playbar from '../../components/Playbar'
 import SongItem from '../../components/SongItem'
 import PlaylistHeader from '../../components/PlaylistHeader'
 import { getPlayList, getPlayListInfo } from '../../mock/playlist'
@@ -10,7 +8,6 @@ const Playlist: NextPage = () => {
   const info = getPlayListInfo()
   return (
     <>
-      <Header />
       <div className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto my-24">
         {/* header section */}
         <PlaylistHeader {...info} />
@@ -28,7 +25,6 @@ const Playlist: NextPage = () => {
           ))}
         </div>
       </div>
-      <Playbar />
     </>
   )
 }
