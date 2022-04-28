@@ -11,8 +11,36 @@ import { createPlaylist,
 
 const router = express.Router();
 
-router.get('/', (req, res) => res.send('Get All Created Playlist'));
+// Retrieve one playlist
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
 
-router.get('/:id', (req, res) => res.send('Get A Playlist'));
+    const playlist = await retrievePlaylist(id);
+
+    if (playlist) {
+        res.json(playlist);
+    } else {
+        res.statusCode(404);
+    }
+});
+
+// Retrieve trending playlists
+router.get('/trending/', (req, res) => {
+    res.json(await retrieveTrendingPlaylist());
+})
+
+// Retrieve latest playlists
+router.get('/latest/', (req, res) => {
+    res.json(await retrieveLatestPlaylist());
+})
+
+// Delete one playlist
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    await deletePlaylist(id);
+
+    res.sendStatus(204);
+});
 
 export default router;
