@@ -1,13 +1,20 @@
 import { Comment, Song, User } from "./schema.js";
+import { retrieveSong } from "./song-dao.js";
 
 async function retrieveComment(id) {
     return await Comment.findById(id);
 }
 
+async function retrieveAllComment() {
+    return await Comment.find();
+}
+
 //getting all comments of a song
-async function retrieveCommentList(idList) {
+async function retrieveSongComment(songId) {
+    const dbSong = await retrieveSong(songId);
+
     return await Comment.find({
-        '_id': { $in: idList }
+        '_id': { $in: dbSong.comments }
     });
 }
 
@@ -40,7 +47,7 @@ async function updateComment(comment) {
 
         dbComment.text = comment.text;
         dbComment.likes = comment.likes;
-                
+
         await dbComment.save()
         return true;
     }
@@ -54,7 +61,8 @@ async function deleteComment(id) {
 
 export {
     retrieveComment,
-    retrieveCommentList,
+    retrieveAllComment,
+    retrieveSongComment,
     createComment,
     updateComment,
     deleteComment

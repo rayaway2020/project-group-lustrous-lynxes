@@ -3,9 +3,8 @@ import { User, Song, Playlist, Comment } from './schema.js';
 import { dummyData } from './dummy-data.js';
 import { createPlaylist, retrieveTrendingPlaylist } from './playlist-dao.js';
 import { addLikedSong, createUser, addLikedPlaylist } from './user-dao.js';
-import { createComment } from './comment-dao.js';
-
-// mongod --dbpath=/Users/yinqixia/data/db
+import { createComment, retrieveSongComment } from './comment-dao.js';
+import { retrieveSong } from './song-dao.js';
 
 main();
 
@@ -66,4 +65,7 @@ async function initialiseDatabase() {
     await addLikedPlaylist(admin0._id, playlist2._id);
 
     await addLikedPlaylist(admin1._id, playlist2._id);
+
+    //test retrieveCommentList
+    console.log(await retrieveSongComment("QMKG0KV452w"));
 }
