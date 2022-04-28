@@ -28,4 +28,13 @@ router.get('/playlist/:playlistId', async (req, res) => {
     res.json(await retrieveSongList(playlistId));
 })
 
+//Create One Song
+router.post('/', async (req, res) => {
+    const newSong = await createSong(req.body);
+    
+    res.statusCode(201)
+    .header('Location', `/api/songs/${newSong._id}`)
+    .json(newSong);
+})
+
 export default router;
