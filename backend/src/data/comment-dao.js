@@ -40,9 +40,7 @@ async function updateComment(comment) {
 
         dbComment.text = comment.text;
         dbComment.likes = comment.likes;
-        dbComment.owner = comment.owner;
-        dbComment.createdDate = comment.createdDate;
-
+                
         await dbComment.save()
         return true;
     }
