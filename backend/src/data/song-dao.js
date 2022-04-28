@@ -1,4 +1,4 @@
-import { Song } from './schema.js';
+import { Playlist, Song } from './schema.js';
 
 async function createSong(song) {
     const dbSong = await Song.create(song);
@@ -9,7 +9,11 @@ async function retrieveSong(id) {
     return await Song.findById(id);
 }
 
-async function retrieveSongList(idList) {
+async function retrieveSongList(playlistId) {
+    const dbPlaylist = await Playlist.findById(playlistId);
+
+    const idList = dbPlaylist.songs;
+
     return await Song.find({ _id: {$in: idList }})
 }
 
