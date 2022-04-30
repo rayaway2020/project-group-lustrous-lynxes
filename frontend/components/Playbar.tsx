@@ -10,7 +10,7 @@ import {
 
 const Playbar = () => {
   return (
-    <section className="fixed bottom-0 left-0 right-0 z-50 max-w-screen-xl px-6 m-auto bg-white ">
+    <section className="fixed bottom-0 left-0 right-0 z-40 max-w-screen-xl px-6 m-auto bg-white ">
       <div className="flex flex-row items-center justify-between h-16">
         {/* cover section */}
         <div className="flex flex-row items-center flex-1 gap-4">

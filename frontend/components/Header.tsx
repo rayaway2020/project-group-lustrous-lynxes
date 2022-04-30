@@ -12,7 +12,7 @@ const Header = () => {
   const toPlaylist = () => {}
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex max-w-screen-xl px-6 py-4 m-auto bg-white">
+    <header className="fixed top-0 left-0 right-0 z-40 flex max-w-screen-xl px-6 py-4 m-auto bg-white">
       {/* nav section */}
       <div className="flex flex-row items-center justify-start flex-1 w-0 gap-4">
         <ChevronLeftIcon
