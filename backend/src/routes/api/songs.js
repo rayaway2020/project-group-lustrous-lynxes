@@ -1,5 +1,4 @@
 import express from 'express';
-import { Playlist } from '../../data/schema.js';
 import { createSong,
     retrieveSong,
     retrieveSongList

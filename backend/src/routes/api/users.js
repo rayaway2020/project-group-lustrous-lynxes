@@ -63,7 +63,7 @@ router.put('/removesong/:userId/:songId', (req, res) => {
     res.sendStatus(success? 204: 404);
 });
 
-// Add Liked Song
+// Add Liked Playlist
 router.put('/addplaylist/:userId/:playlistId', (req, res) => {
     const userId = req.params.userId;
     const playlistId = req.params.playlistId;
@@ -73,7 +73,7 @@ router.put('/addplaylist/:userId/:playlistId', (req, res) => {
     res.sendStatus(success? 204: 404);
 });
 
-// Remove Liked Song
+// Remove Liked Playlist
 router.put('/removeplaylist/:userId/:playlistId', (req, res) => {
     const userId = req.params.userId;
     const playlistId = req.params.playlistId;

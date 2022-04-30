@@ -34,6 +34,39 @@ router.get('/latest/', (req, res) => {
     res.json(await retrieveLatestPlaylist());
 })
 
+// Create a playlist by a user
+router.post('/', (req, res) => {
+    const newPlaylist = await createPlaylist(req.body.userId, req.body.playlist);
+
+    res.status(201)
+        .header('Location', `/api/playlists/${newPlaylist._id}`)
+        .json(newPlaylist);
+});
+
+
+router.put('/addSong/:playlistId/:songId', (req, res) => {
+    const success = await addToPlaylist(req.params.songId, req.params.playlistId);
+
+    res.sendStatus(success? 204: 404);
+});
+
+router.put('/deleteSong/:playlistId/:index', (req, res) => {
+    const success = await deleteFromPlaylist(req.params.index, req.params.playlistId);
+
+    res.sendStatus(success? 204: 404);
+});
+
+router.put('/:id', (req, res) => {
+    const id = req.params.id;
+    const playlist = req.body;
+    playlist._id = id;
+    const success = await updatePlaylist(playlist);
+
+    res.sendStatus(success ? 204 : 404);
+})
+
+
+
 // Delete one playlist
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
