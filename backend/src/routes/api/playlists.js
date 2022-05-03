@@ -12,7 +12,7 @@ import { createPlaylist,
 const router = express.Router();
 
 // Retrieve one playlist
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     const id = req.params.id;
 
     const playlist = await retrievePlaylist(id);
@@ -25,17 +25,17 @@ router.get('/:id', (req, res) => {
 });
 
 // Retrieve trending playlists
-router.get('/trending/', (req, res) => {
+router.get('/trending/', async (req, res) => {
     res.json(await retrieveTrendingPlaylist());
 })
 
 // Retrieve latest playlists
-router.get('/latest/', (req, res) => {
+router.get('/latest/', async (req, res) => {
     res.json(await retrieveLatestPlaylist());
 })
 
 // Create a playlist by a user
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const newPlaylist = await createPlaylist(req.body.userId, req.body.playlist);
 
     res.status(201)
@@ -44,19 +44,19 @@ router.post('/', (req, res) => {
 });
 
 
-router.put('/addSong/:playlistId/:songId', (req, res) => {
+router.put('/addSong/:playlistId/:songId', async (req, res) => {
     const success = await addToPlaylist(req.params.songId, req.params.playlistId);
 
     res.sendStatus(success? 204: 404);
 });
 
-router.put('/deleteSong/:playlistId/:index', (req, res) => {
+router.put('/deleteSong/:playlistId/:index', async (req, res) => {
     const success = await deleteFromPlaylist(req.params.index, req.params.playlistId);
 
     res.sendStatus(success? 204: 404);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const id = req.params.id;
     const playlist = req.body;
     playlist._id = id;

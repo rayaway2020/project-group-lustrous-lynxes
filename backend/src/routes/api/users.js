@@ -11,7 +11,7 @@ import { retrieveUser,
 const router = express.Router();
 
 // Retrieve One User
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     const id = req.params.id;
 
     const user = await retrieveUser(id);
@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Create One User
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const newUser = await createUser(req.body);
 
     res.status(201)
@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
 })
 
 // Modify One User
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const id = req.params.id;
 
     const user = req.body;
@@ -44,7 +44,7 @@ router.put('/:id', (req, res) => {
 })
 
 // Add Liked Song
-router.put('/addsong/:userId/:songId', (req, res) => {
+router.put('/addsong/:userId/:songId', async (req, res) => {
     const userId = req.params.userId;
     const songId = req.params.songId;
 
@@ -54,7 +54,7 @@ router.put('/addsong/:userId/:songId', (req, res) => {
 });
 
 // Remove Liked Song
-router.put('/removesong/:userId/:songId', (req, res) => {
+router.put('/removesong/:userId/:songId', async (req, res) => {
     const userId = req.params.userId;
     const songId = req.params.songId;
 
@@ -64,7 +64,7 @@ router.put('/removesong/:userId/:songId', (req, res) => {
 });
 
 // Add Liked Playlist
-router.put('/addplaylist/:userId/:playlistId', (req, res) => {
+router.put('/addplaylist/:userId/:playlistId', async (req, res) => {
     const userId = req.params.userId;
     const playlistId = req.params.playlistId;
 
@@ -74,7 +74,7 @@ router.put('/addplaylist/:userId/:playlistId', (req, res) => {
 });
 
 // Remove Liked Playlist
-router.put('/removeplaylist/:userId/:playlistId', (req, res) => {
+router.put('/removeplaylist/:userId/:playlistId', async (req, res) => {
     const userId = req.params.userId;
     const playlistId = req.params.playlistId;
 
