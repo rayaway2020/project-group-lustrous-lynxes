@@ -1,10 +1,11 @@
 import express from 'express';
-import { retrieveComment, 
-    retrieveAllComment, 
+import {
+    retrieveComment,
+    retrieveAllComment,
     retrieveSongComment,
-    createComment, 
-    updateComment, 
-    deleteComment 
+    createComment,
+    updateComment,
+    deleteComment,
 } from '../../data/comment-dao.js';
 
 const router = express.Router();
@@ -25,7 +26,6 @@ router.get('/comment/:id', async (req, res) => {
     } else {
         res.statusCode(404);
     }
-
 });
 
 // Retrieve song comments
@@ -37,12 +37,16 @@ router.get('/:songid', async (req, res) => {
 
 //Create a comment
 router.post('/', async (req, res) => {
-    const newComment = await createComment(req.body.userId, req.body.songId, req.body.comment);
+    const newComment = await createComment(
+        req.body.userId,
+        req.body.songId,
+        req.body.comment
+    );
 
     res.status(201)
         .header('Location', `/api/comments/${newComment._id}`)
         .json(newComment);
-})
+});
 
 // Update comment
 router.put('/:id', async (req, res) => {

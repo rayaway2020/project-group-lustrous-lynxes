@@ -1,10 +1,10 @@
-import { Playlist, User } from "./schema.js";
+import { Playlist, User } from './schema.js';
 
 async function createPlaylist(userId, playlist) {
     const dbPlaylist = await Playlist.create({
         title: playlist.title,
         songs: playlist.songs,
-        owner: userId
+        owner: userId,
     });
 
     const dbUser = await User.findById(userId);
@@ -26,14 +26,13 @@ async function retrieveLatestPlaylist() {
 }
 
 async function retrievePlaylist(id) {
-    return await Playlist.findById(id)
+    return await Playlist.findById(id);
 }
 
 async function addToPlaylist(song, playlist) {
     const dbPlaylist = await Playlist.findById(playlist._id);
 
     if (dbPlaylist) {
-        
         dbPlaylist.songs.push(song._id);
         dbPlaylist.save();
 
@@ -47,21 +46,19 @@ async function deleteFromPlaylist(index, playlist) {
     const dbPlaylist = await Playlist.findById(playlist._id);
 
     if (dbPlaylist) {
-        
         dbPlaylist.songs.splice(index, 1);
         dbPlaylist.save();
 
         return true;
     }
 
-    return false; 
+    return false;
 }
 
 async function updatePlaylist(playlist) {
     const dbPlaylist = await Playlist.findById(playlist._id);
 
     if (dbPlaylist) {
-
         dbPlaylist.title = playlist.title;
         dbPlaylist.description = playlist.description;
         dbPlaylist.followers = playlist.followers;
@@ -86,5 +83,5 @@ export {
     retrieveTrendingPlaylist,
     retrieveLatestPlaylist,
     updatePlaylist,
-    deletePlaylist
-}
+    deletePlaylist,
+};

@@ -1,12 +1,13 @@
 import express from 'express';
-import { createPlaylist, 
+import {
+    createPlaylist,
     retrievePlaylist,
     addToPlaylist,
     deleteFromPlaylist,
     retrieveTrendingPlaylist,
     retrieveLatestPlaylist,
     updatePlaylist,
-    deletePlaylist 
+    deletePlaylist,
 } from '../../data/playlist-dao.js';
 
 const router = express.Router();
@@ -27,33 +28,41 @@ router.get('/:id', async (req, res) => {
 // Retrieve trending playlists
 router.get('/trending/', async (req, res) => {
     res.json(await retrieveTrendingPlaylist());
-})
+});
 
 // Retrieve latest playlists
 router.get('/latest/', async (req, res) => {
     res.json(await retrieveLatestPlaylist());
-})
+});
 
 // Create a playlist by a user
 router.post('/', async (req, res) => {
-    const newPlaylist = await createPlaylist(req.body.userId, req.body.playlist);
+    const newPlaylist = await createPlaylist(
+        req.body.userId,
+        req.body.playlist
+    );
 
     res.status(201)
         .header('Location', `/api/playlists/${newPlaylist._id}`)
         .json(newPlaylist);
 });
 
-
 router.put('/addSong/:playlistId/:songId', async (req, res) => {
-    const success = await addToPlaylist(req.params.songId, req.params.playlistId);
+    const success = await addToPlaylist(
+        req.params.songId,
+        req.params.playlistId
+    );
 
-    res.sendStatus(success? 204: 404);
+    res.sendStatus(success ? 204 : 404);
 });
 
 router.put('/deleteSong/:playlistId/:index', async (req, res) => {
-    const success = await deleteFromPlaylist(req.params.index, req.params.playlistId);
+    const success = await deleteFromPlaylist(
+        req.params.index,
+        req.params.playlistId
+    );
 
-    res.sendStatus(success? 204: 404);
+    res.sendStatus(success ? 204 : 404);
 });
 
 router.put('/:id', async (req, res) => {
@@ -63,9 +72,7 @@ router.put('/:id', async (req, res) => {
     const success = await updatePlaylist(playlist);
 
     res.sendStatus(success ? 204 : 404);
-})
-
-
+});
 
 // Delete one playlist
 router.delete('/:id', async (req, res) => {

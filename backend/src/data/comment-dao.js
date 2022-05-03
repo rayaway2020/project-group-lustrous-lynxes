@@ -1,5 +1,5 @@
-import { Comment, Song, User } from "./schema.js";
-import { retrieveSong } from "./song-dao.js";
+import { Comment, Song, User } from './schema.js';
+import { retrieveSong } from './song-dao.js';
 
 async function retrieveComment(id) {
     return await Comment.findById(id);
@@ -14,15 +14,14 @@ async function retrieveSongComment(songId) {
     const dbSong = await retrieveSong(songId);
 
     return await Comment.find({
-        '_id': { $in: dbSong.comments }
+        _id: { $in: dbSong.comments },
     });
 }
 
 async function createComment(userId, songId, commentText) {
-
     const dbComment = new Comment({
         text: commentText,
-        owner: userId
+        owner: userId,
     });
     await dbComment.save();
 
@@ -32,7 +31,7 @@ async function createComment(userId, songId, commentText) {
     if (dbUser && dbSong) {
         dbUser.createdComments.push(dbComment._id);
         await dbUser.save();
-    
+
         dbSong.comments.push(dbComment._id);
         await dbSong.save();
     }
@@ -41,14 +40,12 @@ async function createComment(userId, songId, commentText) {
 }
 
 async function updateComment(comment) {
-
     const dbComment = await Comment.findById(comment._id);
     if (dbComment) {
-
         dbComment.text = comment.text;
         dbComment.likes = comment.likes;
 
-        await dbComment.save()
+        await dbComment.save();
         return true;
     }
 
@@ -65,5 +62,5 @@ export {
     retrieveSongComment,
     createComment,
     updateComment,
-    deleteComment
-}
+    deleteComment,
+};

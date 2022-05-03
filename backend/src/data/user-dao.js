@@ -5,19 +5,16 @@ async function retrieveUser(id) {
 }
 
 async function createUser(user) {
-
     const dbUser = new User(user);
     await dbUser.save();
-    
+
     return dbUser;
 }
 
 async function addLikedSong(userId, songId) {
-
     const dbUser = await User.findById(userId);
 
     if (dbUser) {
-
         dbUser.likedSongs.push(songId);
         await dbUser.save();
 
@@ -28,27 +25,23 @@ async function addLikedSong(userId, songId) {
 }
 
 async function removeLikedSong(userId, index) {
-
     const dbUser = await User.findById(userId);
 
     if (dbUser) {
         dbUser.likedSongs.splice(index, 1);
         await dbUser.save();
-        
+
         return true;
     }
 
     return false;
 }
 
-
 async function addLikedPlaylist(userId, playlistId) {
-
     const dbUser = await User.findById(userId);
     const dbPlaylist = await Playlist.findById(playlistId);
 
     if (dbUser && dbPlaylist) {
-
         dbUser.likedPlaylists.push(playlistId);
         await dbUser.save();
 
@@ -62,14 +55,13 @@ async function addLikedPlaylist(userId, playlistId) {
 }
 
 async function removeLikedPlaylist(userId, playlistId) {
-
     const dbUser = await User.findById(userId);
     const dbPlaylist = await Playlist.findById(playlistId);
 
     if (dbUser && dbPlaylist) {
-        
-
-        const deletedPlaylist = dbUser.likedPlaylists.filter(id => (id != playlistId));
+        const deletedPlaylist = dbUser.likedPlaylists.filter(
+            id => id != playlistId
+        );
         dbUser.likedPlaylists = deletedPlaylist;
 
         await dbUser.save();
@@ -84,11 +76,9 @@ async function removeLikedPlaylist(userId, playlistId) {
 }
 
 async function updateUser(user) {
-
     const dbUser = await User.findById(user._id);
 
     if (dbUser) {
-
         dbUser.username = user.username;
         dbUser.email = user.email;
         dbUser.password = user.password;
@@ -101,7 +91,7 @@ async function updateUser(user) {
         dbUser.createdPlaylists = user.createdPlaylists;
 
         await dbUser.save();
-        
+
         return true;
     }
 }
@@ -113,5 +103,5 @@ export {
     removeLikedSong,
     addLikedPlaylist,
     removeLikedPlaylist,
-    updateUser
-}
+    updateUser,
+};

@@ -1,11 +1,12 @@
 import express from 'express';
-import { retrieveUser,
+import {
+    retrieveUser,
     createUser,
     addLikedSong,
     removeLikedSong,
     addLikedPlaylist,
     removeLikedPlaylist,
-    updateUser
+    updateUser,
 } from '../../data/user-dao.js';
 
 const router = express.Router();
@@ -30,7 +31,7 @@ router.post('/', async (req, res) => {
     res.status(201)
         .header('Location', `/api/users/${newUser._id}`)
         .json(newUser);
-})
+});
 
 // Modify One User
 router.put('/:id', async (req, res) => {
@@ -40,8 +41,8 @@ router.put('/:id', async (req, res) => {
     user._id = id;
 
     const success = await updateUser(user);
-    res.sendStatus(success ? 204: 404);
-})
+    res.sendStatus(success ? 204 : 404);
+});
 
 // Add Liked Song
 router.put('/addsong/:userId/:songId', async (req, res) => {
@@ -50,7 +51,7 @@ router.put('/addsong/:userId/:songId', async (req, res) => {
 
     const success = await addLikedSong(userId, songId);
 
-    res.sendStatus(success? 204: 404);
+    res.sendStatus(success ? 204 : 404);
 });
 
 // Remove Liked Song
@@ -60,7 +61,7 @@ router.put('/removesong/:userId/:songId', async (req, res) => {
 
     const success = await removeLikedSong(userId, songId);
 
-    res.sendStatus(success? 204: 404);
+    res.sendStatus(success ? 204 : 404);
 });
 
 // Add Liked Playlist
@@ -70,7 +71,7 @@ router.put('/addplaylist/:userId/:playlistId', async (req, res) => {
 
     const success = await addLikedPlaylist(userId, playlistId);
 
-    res.sendStatus(success? 204: 404);
+    res.sendStatus(success ? 204 : 404);
 });
 
 // Remove Liked Playlist
@@ -80,7 +81,7 @@ router.put('/removeplaylist/:userId/:playlistId', async (req, res) => {
 
     const success = await removeLikedPlaylist(userId, playlistId);
 
-    res.sendStatus(success? 204: 404);
+    res.sendStatus(success ? 204 : 404);
 });
 
 export default router;

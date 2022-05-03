@@ -14,11 +14,7 @@ async function retrieveSongList(playlistId) {
 
     const idList = dbPlaylist.songs;
 
-    return await Song.find({ _id: {$in: idList }})
+    return await Song.find({ _id: { $in: idList } });
 }
 
-export {
-    createSong,
-    retrieveSong,
-    retrieveSongList
-}
+export { createSong, retrieveSong, retrieveSongList };
