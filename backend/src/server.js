@@ -1,10 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import routes from '../src/routes/index.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 3001;
 
 const __filename = fileURLToPath(import.meta.url);

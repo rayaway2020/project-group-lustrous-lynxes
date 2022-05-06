@@ -1,11 +1,12 @@
 type SongItemProps = {
+  id: string
   index: number
   title: string
   cover: string
   duration: string
 }
 
-const SongItem = ({ index, title, cover, duration }: SongItemProps) => {
+const SongItem = ({ id, index, title, cover, duration }: SongItemProps) => {
   return (
     <div className="flex flex-row items-center gap-6">
       <div className="w-8 text-gray-600">

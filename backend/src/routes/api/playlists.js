@@ -9,11 +9,24 @@ import {
     updatePlaylist,
     deletePlaylist,
 } from '../../data/playlist-dao.js';
+import getAPIInstance from '../../util/youtube.js';
 
 const router = express.Router();
 
 // Retrieve one playlist
-router.get('/:id', async (req, res) => {
+router.get('/network/:id', async (req, res) => {
+    const id = req.params.id;
+    if (id === 'undefined') {
+        res.send({});
+    } else {
+        const api = await getAPIInstance();
+        api.getPlaylist(id).then(result => {
+            res.send(result);
+        });
+    }
+});
+
+router.get('/user/:id', async (req, res) => {
     const id = req.params.id;
 
     const playlist = await retrievePlaylist(id);

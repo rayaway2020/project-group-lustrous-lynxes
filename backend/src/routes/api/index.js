@@ -17,4 +17,7 @@ router.use('/songs', songs);
 import search from './search.js';
 router.use('/search', search);
 
+import recommend from './recommend.js';
+router.use('/recommend', recommend);
+
 export default router;

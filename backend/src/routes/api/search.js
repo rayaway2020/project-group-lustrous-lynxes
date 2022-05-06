@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     const searchQuery = req.query.search_query;
     const api = await getAPIInstance();
-    api.search(searchQuery, 'song').then(result => {
+    api.search(searchQuery, 'playlist').then(result => {
         res.send(result.content);
     });
 });
