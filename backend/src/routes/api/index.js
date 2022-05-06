@@ -14,4 +14,7 @@ router.use('/playlists', playlists);
 import songs from './songs.js';
 router.use('/songs', songs);
 
+import search from './search.js';
+router.use('/search', search);
+
 export default router;
