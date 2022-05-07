@@ -40,23 +40,79 @@ const Header = () => {
       </div>
       {/* search bar and avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
-        <div className="avatar">
           {/* <div className="w-12 rounded-full" >
             <img for="my-modal" className="cursor-pointer" src="https://api.lorem.space/image/face?hash=47449"/>
           </div> */}
           <label for="my-modal" class="btn modal-button w-12 rounded-full" >
-            <img for="my-modal" className="w-12" src="https://api.lorem.space/image/face?hash=47449"/>
+            <img className="" src="https://api.lorem.space/image/face?hash=47449"/>
           </label>
+      </div>
+
+    
+      <input type="checkbox" id="my-modal" class="modal-toggle" />
+      <div class="modal">
+        <label for="my-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <div class="hero h-1/2 w-2/3 bg-base-200 rounded-lg">
+          <div class="hero-content flex-col lg:flex-row-reverse">
+            <div class="text-center lg:text-left">
+              <h1 class="text-5xl font-bold">Login now!</h1>
+              <p class="py-6">Listening is everything, create an account to share your thoughts to others all over the world</p>
+            </div>
+            <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+              <div class="card-body">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">UserName</span>
+                </label>
+                <input type="text" placeholder="UserName" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Password</span>
+                </label>
+                <input type="text" placeholder="password" class="input input-bordered" />
+               <label class="label">
+                 <a href="#my-modal-2" class="label-text-alt link link-hover">Sign up for a new account?</a>
+               </label>
+              </div>
+              <div class="form-control mt-6">
+                <button class="btn btn-primary">Login</button>
+              </div>
+            </div>
+            </div>
+          </div>
         </div>
       </div>
-      <input type="checkbox" id="my-modal" class="modal-toggle" />
-
-      <div class="modal">
-        <div class="modal-box">
-          <h3 class="font-bold text-lg">Congratulations random Interner user!</h3>
-          <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-          <div class="modal-action">
-            <label for="my-modal" class="btn">Yay!</label>
+      
+      <div class="modal" id="my-modal-2">
+      <a for="my-modal" href="#" class="btn btn-sm btn-circle absolute right-2 top-2">✕</a>
+        <div class="hero h-1/2 w-2/3 bg-base-200 rounded-lg">
+          <div class="hero-content flex-col lg:flex-row-reverse">
+            <div class="text-center lg:text-left">
+              <h1 class="text-5xl font-bold">Sign Up!</h1>
+              <p class="py-6">Listening is everything, create an account to share your thoughts to others all over the world</p>
+            </div>
+            <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+              <div class="card-body">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">UserName</span>
+                </label>
+                <input type="text" placeholder="UserName" class="input input-bordered" />
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Password</span>
+                </label>
+                <input type="text" placeholder="password" class="input input-bordered" />
+               <label class="label">
+               </label>
+              </div>
+              <div class="form-control mt-6">
+                <button class="btn btn-primary">Login</button>
+              </div>
+            </div>
+            </div>
           </div>
         </div>
       </div>
