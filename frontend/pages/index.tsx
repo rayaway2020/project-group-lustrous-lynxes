@@ -8,13 +8,13 @@ const Home: NextPage = () => {
     fetch('http://localhost:3001/api/recommend')
       .then((res) => res.json())
       .then((data) => {
-        setPlaylists(data);
-        console.log(data);
+        setPlaylists(data)
+        console.log(data)
       })
   }, [])
   return (
     <>
-      <div className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto my-24">
+      <div className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
         {playlists?.map((playlist, i) => (
           <PlaylistRow
             key={i}

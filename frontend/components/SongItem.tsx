@@ -28,7 +28,7 @@ const SongItem = ({
       <img
         src={cover}
         alt={title}
-        className="object-cover w-8 h-8 rounded aspect-square"
+        className="aspect-square h-8 w-8 rounded object-cover"
       />
       <div className="flex-1 truncate">{title}</div>
       <div>{duration}</div>
