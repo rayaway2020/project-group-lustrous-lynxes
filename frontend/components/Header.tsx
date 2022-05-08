@@ -1,14 +1,14 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Axios from 'axios';
+import { userContext } from './Layout';
 
 
 const Header = () => {
-  const [username, setUsername] = useState("");
+  const {username, setUsername, token, setToken} =
+    useContext(userContext);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
-  const [token, setToken] = useState("");
 
   const goBack = () => {
     history.back()
@@ -25,7 +25,7 @@ const Header = () => {
       username: username,
       password: password,
       email: email
-    }).then((res) => {
+    }).then((res: any) => {
       if (res.status == 200) {
         alert("Successfully registered");
       } else {
@@ -38,7 +38,7 @@ const Header = () => {
     Axios.post("http://localhost:3001/api/auth/login", {
       username: username,
       password: password
-    }).then((res) => {
+    }).then((res: any) => {
       if (res.status == 200) {
         setToken(res.data);
         alert("Successfully logged in");
@@ -79,7 +79,7 @@ const Header = () => {
           {/* <div className="w-12 rounded-full" >
             <img for="my-modal" className="cursor-pointer" src="https://api.lorem.space/image/face?hash=47449"/>
           </div> */}
-          <label htmlFor ="my-modal" className="btn modal-button w-12 rounded-full" >
+          <label htmlFor ="my-modal" className="w-12 rounded-full btn modal-button" >
             <img className="" src="https://api.lorem.space/image/face?hash=47449"/>
           </label>
       </div>
@@ -87,15 +87,15 @@ const Header = () => {
     
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">
-        <label htmlFor ="my-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-        <div className="hero h-1/2 w-2/3 bg-base-200 rounded-lg">
-          <div className="hero-content flex-col lg:flex-row-reverse">
+        <label htmlFor ="my-modal" className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
+        <div className="w-2/3 rounded-lg hero h-1/2 bg-base-200">
+          <div className="flex-col hero-content lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               <h1 className="text-5xl font-bold">Login now!</h1>
               <p className="py-6">Listening is everything, create an account to share your thoughts to others all over the world</p>
             </div>
 
-            <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
               <div className="card-body">
               <div className="form-control">
                 <label className="label">UserName</label>
@@ -121,7 +121,7 @@ const Header = () => {
                </label>
               </div>
 
-              <div className="form-control mt-6">
+              <div className="mt-6 form-control">
                 <button className="btn btn-primary" onClick={login}>Login</button>
               </div>
             </div>
@@ -131,14 +131,14 @@ const Header = () => {
       </div>
       
       <div className="modal" id="my-modal-2">
-      <a href="#" className="btn btn-sm btn-circle absolute right-2 top-2">✕</a>
-        <div className="hero h-1/2 w-2/3 bg-base-200 rounded-lg">
-          <div className="hero-content flex-col lg:flex-row-reverse">
+      <a href="#" className="absolute btn btn-sm btn-circle right-2 top-2">✕</a>
+        <div className="w-2/3 rounded-lg hero h-1/2 bg-base-200">
+          <div className="flex-col hero-content lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               <h1 className="text-5xl font-bold">Sign Up!</h1>
               <p className="py-6">Listening is everything, create an account to share your thoughts to others all over the world</p>
             </div>
-            <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
               <div className="card-body">
                 <div className="form-control">
                   <label className="label">
@@ -173,7 +173,7 @@ const Header = () => {
                           setEmail(e.target.value);
                         }} />
                 </div>
-                <div className="form-control mt-6">
+                <div className="mt-6 form-control">
                   <button className="btn btn-primary" onClick={register}>Register</button>
                 </div>
             </div>
