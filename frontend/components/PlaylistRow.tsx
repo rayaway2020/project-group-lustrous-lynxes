@@ -11,9 +11,9 @@ const PlaylistRow = ({ title, items }: PlaylistRowProps) => {
       <div className="text-2xl font-semibold">{title}</div>
       <div className="grid grid-cols-5 gap-8">
         {items.map((item, i) => (
-          <PlaylistCard
+            <PlaylistCard
             key={i}
-            cover={item.thumbnails?.[2].url}
+            cover={item.thumbnail}
             title={item.title}
             subtitle={item.author}
             id={item.browseId}

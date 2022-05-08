@@ -1,28 +1,14 @@
 import express from 'express';
-import {
-    retrieveUser,
-    createUser,
-    addLikedSong,
-    removeLikedSong,
-    addLikedPlaylist,
-    removeLikedPlaylist,
-    updateUser,
-} from '../../data/user-dao.js';
-import jwt from 'jsonwebtoken';
-import { User } from '../../data/schema.js';
-import bcrypt from 'bcrypt';
+import verify from './verifyToken.js';
+import { User } from '../../db/schema.js';
 
 const router = express.Router();
 
-const SECRET = 'lsnfile38r2cjsod39uri4gnug';
-
 router.use(express.json());
 
-// Retrieve One User
-router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    const user = await retrieveUser(id);
+// User Information
+router.get('/:id', verify, async (req, res) => {
+    const user = await User.findById(req.params.id);
 
     if (user) {
         res.json(user);
@@ -31,17 +17,8 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create One User
-router.post('/', async (req, res) => {
-    const newUser = await createUser(req.body);
-
-    res.status(201)
-        .header('Location', `/api/users/${newUser._id}`)
-        .json(newUser);
-});
-
 // Modify One User
-router.put('/:id', async (req, res) => {
+router.put('/:id', verify, async (req, res) => {
     const id = req.params.id;
 
     const user = req.body;
@@ -52,27 +29,40 @@ router.put('/:id', async (req, res) => {
 });
 
 // Add Liked Song
-router.put('/addsong/:userId/:songId', async (req, res) => {
-    const userId = req.params.userId;
-    const songId = req.params.songId;
+router.put('/addsong', verify, async (req, res) => {
+    const userId = req.query.userId;
+    const songId = req.query.songId;
+    
+    const dbUser = await User.findById(userId);
+    if (dbUser) {
+        dbUser.likedSongs.push(songId);
+        await dbUser.save();
 
-    const success = await addLikedSong(userId, songId);
+        return res.status(200);
+    }
 
-    res.sendStatus(success ? 204 : 404);
+    return res.status(400).send(err);
 });
 
 // Remove Liked Song
-router.put('/removesong/:userId/:songId', async (req, res) => {
-    const userId = req.params.userId;
-    const songId = req.params.songId;
+router.put('/removesong', verify, async (req, res) => {
+    const userId = req.query.userId;
+    const songId = req.query.songId;
 
-    const success = await removeLikedSong(userId, songId);
+    const dbUser = await User.findById(userId);
 
-    res.sendStatus(success ? 204 : 404);
+    if (dbUser) {
+        dbUser.likedSongs.splice(index, 1);
+        await dbUser.save();
+
+        return res.status(200);
+    }
+
+    return res.status(400).send(err);
 });
 
 // Add Liked Playlist
-router.put('/addplaylist/:userId/:playlistId', async (req, res) => {
+router.put('/addplaylist', verify, async (req, res) => {
     const userId = req.params.userId;
     const playlistId = req.params.playlistId;
 
@@ -82,7 +72,7 @@ router.put('/addplaylist/:userId/:playlistId', async (req, res) => {
 });
 
 // Remove Liked Playlist
-router.put('/removeplaylist/:userId/:playlistId', async (req, res) => {
+router.put('/removeplaylist', async (req, res) => {
     const userId = req.params.userId;
     const playlistId = req.params.playlistId;
 
@@ -95,62 +85,6 @@ router.put('/removeplaylist/:userId/:playlistId', async (req, res) => {
 router.get('/', async (req, res) => {
     const users = await User.find();
     res.send(users);
-});
-
-//register a user
-router.post('/register', async (req, res) => {
-    // console.log(req.body);
-    const user = await User.create({
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-    });
-    res.send(user);
-});
-
-//login
-router.post('/login', async (req, res) => {
-    // console.log(req.body);
-    const user = await User.findOne({
-        email: req.body.email,
-    });
-    if (!user) {
-        return res.status(422).send({
-            message: 'Email does not exist',
-        });
-    }
-    const isPasswordValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-    );
-    if (!isPasswordValid) {
-        return res.status(422).send({
-            message: 'Incorrect passward',
-        });
-    }
-    //create a token
-    const token = jwt.sign(
-        {
-            id: String(user._id),
-        },
-        SECRET
-    );
-
-    res.send({
-        user,
-        token,
-    });
-});
-
-const auth = async (req, res, next) => {
-    const raw = String(req.headers.authorization).split(' ').pop();
-    const { id } = jwt.verify(raw, SECRET);
-    req.user = await User.findById(id);
-    next();
-};
-
-router.get('/:id/username', auth, async (req, res) => {
-    res.send(req.user.username);
 });
 
 export default router;

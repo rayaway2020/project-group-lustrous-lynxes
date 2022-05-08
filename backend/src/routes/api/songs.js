@@ -1,17 +1,11 @@
 import express from 'express';
-import {
-    createSong,
-    retrieveSong,
-    retrieveSongList,
-} from '../../data/song-dao.js';
+import { Song } from '../../data/schema';
 
 const router = express.Router();
 
 //Retrieve one song
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    const song = await retrieveSong(id);
+    const song = await Song.findById(req.params.id);
 
     if (song) {
         res.json(song);
@@ -20,16 +14,12 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-//Retrieve song list for a playlist
-router.get('/playlist/:playlistId', async (req, res) => {
-    const playlistId = req.params.playlistId;
-
-    res.json(await retrieveSongList(playlistId));
-});
 
 //Create One Song
 router.post('/', async (req, res) => {
-    const newSong = await createSong(req.body);
+    const newSong = new Song({
+        _id: req.body.videoId
+    });
 
     res.statusCode(201)
         .header('Location', `/api/songs/${newSong._id}`)

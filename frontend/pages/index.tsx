@@ -8,7 +8,8 @@ const Home: NextPage = () => {
     fetch('http://localhost:3001/api/recommend')
       .then((res) => res.json())
       .then((data) => {
-        setPlaylists(data)
+        setPlaylists(data);
+        console.log(data);
       })
   }, [])
   return (

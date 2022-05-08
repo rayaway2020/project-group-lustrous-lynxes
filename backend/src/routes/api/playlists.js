@@ -1,15 +1,7 @@
 import express from 'express';
-import {
-    createPlaylist,
-    retrievePlaylist,
-    addToPlaylist,
-    deleteFromPlaylist,
-    retrieveTrendingPlaylist,
-    retrieveLatestPlaylist,
-    updatePlaylist,
-    deletePlaylist,
-} from '../../data/playlist-dao.js';
+import verify from './verifyToken.js';
 import getAPIInstance from '../../util/youtube.js';
+import { Playlist } from '../../db/schema.js';
 
 const router = express.Router();
 
@@ -38,18 +30,8 @@ router.get('/user/:id', async (req, res) => {
     }
 });
 
-// Retrieve trending playlists
-router.get('/trending/', async (req, res) => {
-    res.json(await retrieveTrendingPlaylist());
-});
-
-// Retrieve latest playlists
-router.get('/latest/', async (req, res) => {
-    res.json(await retrieveLatestPlaylist());
-});
-
 // Create a playlist by a user
-router.post('/', async (req, res) => {
+router.post('/', verify, async (req, res) => {
     const newPlaylist = await createPlaylist(
         req.body.userId,
         req.body.playlist
@@ -88,10 +70,10 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete one playlist
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verify, async (req, res) => {
     const id = req.params.id;
 
-    await deletePlaylist(id);
+    await Playlist.deleteOne({ _id: id });
 
     res.sendStatus(204);
 });
