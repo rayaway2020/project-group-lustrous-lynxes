@@ -4,9 +4,9 @@ import Playbar from './Playbar'
 const Layout = ({ children }: any) => {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       {children}
-      <Playbar />
+      {/* <Playbar /> */}
     </>
   )
 }
