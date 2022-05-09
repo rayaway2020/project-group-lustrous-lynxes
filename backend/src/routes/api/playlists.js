@@ -1,15 +1,7 @@
 import express from 'express';
-import {
-    createPlaylist,
-    retrievePlaylist,
-    addToPlaylist,
-    deleteFromPlaylist,
-    retrieveTrendingPlaylist,
-    retrieveLatestPlaylist,
-    updatePlaylist,
-    deletePlaylist,
-} from '../../data/playlist-dao.js';
+import verify from './verifyToken.js';
 import getAPIInstance from '../../util/youtube.js';
+import { User, Playlist } from '../../db/schema.js';
 
 const router = express.Router();
 
@@ -26,10 +18,14 @@ router.get('/network/:id', async (req, res) => {
     }
 });
 
-router.get('/user/:id', async (req, res) => {
-    const id = req.params.id;
+router.get('/user/liked/:userId', verify, async (req, res) => {
+    const dbUser = await User.findById(req.params.userId);
 
-    const playlist = await retrievePlaylist(id);
+    if (db) {
+        const playlist = dbUser.likedPlaylist;
+        
+    }
+    
 
     if (playlist) {
         res.json(playlist);
@@ -38,18 +34,23 @@ router.get('/user/:id', async (req, res) => {
     }
 });
 
-// Retrieve trending playlists
-router.get('/trending/', async (req, res) => {
-    res.json(await retrieveTrendingPlaylist());
-});
+router.get('/user/owned/:userId', verify, async (req, res) => {
+    const dbUser = await User.findById(req.params.userId);
 
-// Retrieve latest playlists
-router.get('/latest/', async (req, res) => {
-    res.json(await retrieveLatestPlaylist());
+    if (db) {
+        const playlist = dbUser.ownedPlaylist;
+    }
+    
+
+    if (playlist) {
+        res.json(playlist);
+    } else {
+        res.statusCode(404);
+    }
 });
 
 // Create a playlist by a user
-router.post('/', async (req, res) => {
+router.post('/', verify, async (req, res) => {
     const newPlaylist = await createPlaylist(
         req.body.userId,
         req.body.playlist
@@ -60,7 +61,7 @@ router.post('/', async (req, res) => {
         .json(newPlaylist);
 });
 
-router.put('/addSong/:playlistId/:songId', async (req, res) => {
+router.put('/add', async (req, res) => {
     const success = await addToPlaylist(
         req.params.songId,
         req.params.playlistId
@@ -69,7 +70,7 @@ router.put('/addSong/:playlistId/:songId', async (req, res) => {
     res.sendStatus(success ? 204 : 404);
 });
 
-router.put('/deleteSong/:playlistId/:index', async (req, res) => {
+router.put('/delete', async (req, res) => {
     const success = await deleteFromPlaylist(
         req.params.index,
         req.params.playlistId
@@ -88,10 +89,10 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete one playlist
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verify, async (req, res) => {
     const id = req.params.id;
 
-    await deletePlaylist(id);
+    await Playlist.deleteOne({ _id: id });
 
     res.sendStatus(204);
 });

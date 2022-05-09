@@ -2,27 +2,21 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import routes from '../src/routes/index.js';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import 'dotenv/config';
 
 const app = express();
+const PORT = 3001;
+
 app.use(cors());
-const port = process.env.PORT || 3001;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', routes);
 
-app.get('/', (req, res) => res.send('Hello World!'));
-
 mongoose
-    .connect('mongodb://localhost:27017/MusicApp', { useNewUrlParser: true })
+    .connect(
+        'mongodb+srv://admin0:UUYVpH6WbZ7iwx4@cluster0.1buxm.mongodb.net/lustrous-lynxes?retryWrites=true&w=majority',
+        { useNewUrlParser: true }
+    )
     .then(() =>
-        app.listen(port, () =>
-            console.log(`App server listening on port ${port}!`)
-        )
-    );
+        app.listen(PORT, () => console.log(`Server running on port ${PORT}!`))
+    )
+    .catch(err => console.log(err.message));

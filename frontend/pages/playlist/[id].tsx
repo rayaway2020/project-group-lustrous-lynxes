@@ -1,8 +1,9 @@
 import type { NextPage } from 'next'
 import SongItem from '../../components/SongItem'
 import PlaylistHeader from '../../components/PlaylistHeader'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { playbarContext } from '../../components/Layout'
 
 const Playlist: NextPage = () => {
   const router = useRouter()
@@ -17,13 +18,12 @@ const Playlist: NextPage = () => {
   >()
   const [songs, setSongs] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
+  const { setCurrentSong, setPlaying } = useContext(playbarContext)
 
   useEffect(() => {
     fetch('http://localhost:3001/api/playlists/network/' + router.query.id)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-
         setSongs(data.content)
         const tem: {
           title: string
@@ -58,6 +58,14 @@ const Playlist: NextPage = () => {
                 cover={item.thumbnails.url || info?.cover}
                 duration={item.duration}
                 id={item.videoId}
+                onClick={() => {
+                  if (!item.thumbnails.url) {
+                    item.thumbnails.url = info?.cover
+                  }
+                  setCurrentSong(item)
+                  setPlaying(true)
+                  console.log(item.videoId)
+                }}
               />
             ))}
           </div>

@@ -5,9 +5,6 @@ const router = express.Router();
 import users from './users.js';
 router.use('/users', users);
 
-import comments from './comments.js';
-router.use('/comments', comments);
-
 import playlists from './playlists.js';
 router.use('/playlists', playlists);
 
@@ -19,5 +16,8 @@ router.use('/search', search);
 
 import recommend from './recommend.js';
 router.use('/recommend', recommend);
+
+import auth from './auth.js';
+router.use('/auth', auth);
 
 export default router;
