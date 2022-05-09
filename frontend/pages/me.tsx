@@ -65,6 +65,14 @@ const me: NextPage = () => {
         </div>
       </div>
       <section className="flex flex-col w-full max-w-screen-xl gap-12 px-6 mx-auto my-24">
+        <div className="flex flex-row items-center gap-2">
+          <img
+            className="object-cover w-12 h-12 rounded-full"
+            src="https://api.lorem.space/image/face?hash=47449"
+          />
+          <h1 className="text-3xl font-bold">Username's playlist</h1>
+        </div>
+
         <div className="flex flex-row justify-between gap-6">
           {/* cover of favorite song */}
           <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl">
