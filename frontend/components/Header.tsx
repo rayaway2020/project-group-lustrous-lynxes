@@ -100,7 +100,7 @@ const Header = () => {
           <a href="/">Home</a>
         </div>
         <div className="cursor-pointer">
-          <a href="#">Discovery</a>
+          <a href="/search">Discovery</a>
         </div>
         <div className="cursor-pointer">
           <a href="/me">Playlist</a>
