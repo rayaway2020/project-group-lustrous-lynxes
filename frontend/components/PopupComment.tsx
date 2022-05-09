@@ -2,7 +2,7 @@ import Comment from './Comment'
 
 const PopupComment = () => {
   return (
-    <div className="flex flex-col h-screen gap-10 px-16 py-24 pt-8 overflow-y-auto">
+    <div className="flex flex-col h-full gap-10 px-16 py-24 pt-8 overflow-y-auto scrollbar-hide">
       {/* Avatar and Input*/}
       <div className="flex flex-row gap-4">
         <img
@@ -23,15 +23,17 @@ const PopupComment = () => {
       </div>
 
       {/* Comment from users */}
-      {[...Array(10)].map((_, i) => (
-        <Comment
-          username={'Username'}
-          date={'2020/07/21'}
-          content={'The just my first comment'}
-          like={false}
-          likecount={3}
-        />
-      ))}
+      <section className="flex flex-col gap-4">
+        {[...Array(10)].map((_, i) => (
+          <Comment
+            username={'Username'}
+            date={'2020/07/21'}
+            content={'The just my first comment'}
+            like={false}
+            likecount={3}
+          />
+        ))}
+      </section>
     </div>
   )
 }

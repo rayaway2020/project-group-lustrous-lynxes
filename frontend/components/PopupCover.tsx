@@ -2,11 +2,15 @@ import {
   ChevronDoubleLeftIcon,
   PlayIcon,
   ChevronDoubleRightIcon,
+  ChevronDownIcon,
 } from '@heroicons/react/solid'
 
 const PopupCover = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-6">
+    <div className="flex flex-col items-center justify-center h-full gap-6">
+      <div className="absolute left-24 top-10">
+        <ChevronDownIcon className="w-8 h-8 cursor-pointer" />
+      </div>
       <img
         src="https://stamp.fyi/avatar/hello"
         alt=""
