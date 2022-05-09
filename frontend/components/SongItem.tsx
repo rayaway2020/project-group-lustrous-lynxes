@@ -19,10 +19,11 @@ const SongItem = ({
   const minutes = Math.floor(mind / 60)
   const seconds = Math.ceil(mind % 60)
   return (
-    <div className="flex flex-row items-center gap-6" onClick={() => onClick()}>
-      <div className="w-8 text-gray-600">
-        {index > 10 ? index : `0${index}`}
-      </div>
+    <div
+      className="flex flex-row items-center gap-6 cursor-pointer"
+      onClick={() => onClick()}
+    >
+      <div className="w-8 text-gray-600">{index > 9 ? index : `0${index}`}</div>
       <img
         src={cover}
         alt={title}

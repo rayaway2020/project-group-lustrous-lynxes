@@ -45,8 +45,6 @@ const Comment = ({
         {/* reply, like and like count */}
         <div className="flex flex-row justify-between w-full">
           <div className="flex flex-row items-center gap-6">
-            <button className="bg-transparent border-transparent">reply</button>
-
             <button
               className="bg-transparent border-transparent"
               onClick={() => setLiked(!liked)}

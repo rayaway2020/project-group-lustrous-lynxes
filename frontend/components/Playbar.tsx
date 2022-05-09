@@ -12,7 +12,7 @@ import { useContext } from 'react'
 import { playbarContext } from './Layout'
 
 const Playbar = () => {
-  const { currentSong, setCurrentSong, isPlaying, setPlaying } =
+  const { currentSong, isPlaying, setPlaying, setPopupOpen } =
     useContext(playbarContext)
 
   return currentSong ? (
@@ -22,7 +22,7 @@ const Playbar = () => {
         <div className="flex flex-row items-center flex-1 gap-4">
           <img
             src={currentSong.thumbnails.url}
-            alt=""
+            alt={currentSong.name}
             className="object-cover w-10 h-10 rounded-full"
           />
           <div className="flex flex-col justify-between">
@@ -57,7 +57,14 @@ const Playbar = () => {
         <div className="flex flex-row items-center justify-end flex-1 gap-6">
           <CubeIcon className="w-6 h-6" />
           <VolumeUpIcon className="w-6 h-6" />
-          <ChevronUpIcon className="w-6 h-6" />
+          <ChevronUpIcon
+            className="w-6 h-6 cursor-pointer"
+            onClick={() => {
+              // prevent the body scroll
+              document.body.classList.add('overflow-hidden')
+              setPopupOpen(true)
+            }}
+          />
         </div>
       </div>
     </section>

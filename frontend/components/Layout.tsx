@@ -3,14 +3,15 @@ import Playbar from './Playbar'
 import ReactPlayer from 'react-player'
 import { useState } from 'react'
 import React from 'react'
+import Popup from './Popup'
 
 export const playbarContext = React.createContext<any>(undefined)
-
 export const userContext = React.createContext<any>(undefined)
 
 const Layout = ({ children }: any) => {
   const [currentSong, setCurrentSong] = useState<any | undefined>(undefined)
   const [isPlaying, setPlaying] = useState(true)
+  const [isPopupOpen, setPopupOpen] = useState(false)
 
   const [username, setUsername] = useState('')
   const [token, setToken] = useState<any>(undefined)
@@ -26,11 +27,18 @@ const Layout = ({ children }: any) => {
       ) : null}
       <userContext.Provider value={{ username, setUsername, token, setToken }}>
         <playbarContext.Provider
-          value={{ currentSong, setCurrentSong, isPlaying, setPlaying }}
+          value={{
+            currentSong,
+            setCurrentSong,
+            isPlaying,
+            setPlaying,
+            setPopupOpen,
+          }}
         >
           <Header />
           {children}
           <Playbar />
+          {isPopupOpen ? <Popup /> : null}
         </playbarContext.Provider>
       </userContext.Provider>
     </>
