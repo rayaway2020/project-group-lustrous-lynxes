@@ -1,45 +1,53 @@
-import {PlayIcon} from '@heroicons/react/solid'
+import { PlayIcon } from '@heroicons/react/solid'
 import PlaylistLikedSongItem from './PlaylistLikedSongItem'
-import PlaylistCard from './PlaylistCard'
+import { useEffect, useState } from 'react'
+import PlaylistRow from './PlaylistRow'
 
 const PlaylistLikedSongs = () => {
-    return (
-        <section className='flex flex-col gap-12'>
-            <div className="flex flex-row justify-between gap-6">
-                <div className="flex flex-col justify-between w-1/3 h-80 bg-sky-100 rounded-3xl p-8">
-                    <div>Description</div>
-                    <div className="flex flex-row justify-between">
-                        <div className="flex flex-col">
-                            <b>My Favorite Songs</b>
-                            <div>100 Songs</div>
-                        </div>
-                        <PlayIcon className="h-12 w-12" />
-                    </div>
-                </div>
+  const [playlist, setPlaylist] = useState<any | undefined>()
+  useEffect(() => {
+    fetch('http://localhost:3001/api/recommend')
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach((element: any) => {
+          if (element.title === 'Trending') {
+            element.title = 'Favorite'
+            setPlaylist(element)
+          }
+        })
+      })
+  }, [])
 
-                {/* Songs */}
-                <div className="flex flex-row flex-wrap w-2/3 h-80 bg-zinc-300 rounded-3xl p-2">
-                    <PlaylistLikedSongItem />
-                    <PlaylistLikedSongItem />
-                    <PlaylistLikedSongItem />
-                    <PlaylistLikedSongItem />
-                    <PlaylistLikedSongItem />
-                    <PlaylistLikedSongItem />
-                    <PlaylistLikedSongItem />
-                </div>
+  return (
+    <section className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
+      <div className="flex flex-row justify-between gap-6">
+        <div className="flex h-80 w-1/3 flex-col justify-between rounded-3xl bg-sky-50 p-8 transition duration-300 hover:drop-shadow-xl">
+          <div>Description</div>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col">
+              <b>My Favorite Songs</b>
+              <div>100 Songs</div>
             </div>
-            <div className='flex flex-col gap-4'>
-                <b>Favorite Albums</b>
-                <div className='flex flex-row flex-wrap gap-4 w-full bg-zinc-300 p-8'>
-                    <PlaylistCard />
-                    <PlaylistCard />
-                    <PlaylistCard />
-                    <PlaylistCard />
-                    <PlaylistCard />
-                </div>
-            </div>
-        </section>
-    )
+            <PlayIcon className="h-12 w-12" />
+          </div>
+        </div>
+
+        {/* Songs */}
+        <div className="flex h-80 w-2/3 flex-row flex-wrap p-2">
+          <PlaylistLikedSongItem
+            title={'Just the title'}
+            cover={
+              'https://p2.music.126.net/0jbv7CBVqdqHAb1guLX_pg==/109951167156624589.jpg?param=512y512'
+            }
+            duration={'00:00'}
+          />
+        </div>
+      </div>
+      {playlist && (
+        <PlaylistRow title={playlist.title} items={playlist.data.slice(0, 5)} />
+      )}
+    </section>
+  )
 }
 
 export default PlaylistLikedSongs
