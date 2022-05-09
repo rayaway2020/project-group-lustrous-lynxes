@@ -6,11 +6,11 @@ type SongItemProps = {
 
 const PlaylistLikedSongItem = ({ title, cover, duration }: SongItemProps) => {
   return (
-    <div className="flex h-20 w-72 flex-row items-start gap-3 rounded-xl p-4 transition duration-300 hover:bg-sky-50 hover:drop-shadow-md">
+    <div className="flex flex-row items-start h-20 gap-3 p-4 transition duration-300 w-72 rounded-xl hover:bg-sky-50">
       <img
         src={cover}
         alt={title}
-        className="aspect-square h-12 w-12 rounded object-contain"
+        className="object-contain w-12 h-12 rounded aspect-square"
       />
       <div className="flex flex-col">
         <b>{title}</b>
