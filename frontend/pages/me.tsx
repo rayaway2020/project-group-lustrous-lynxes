@@ -7,6 +7,7 @@ import PlaylistRow from '../components/PlaylistRow'
 const me: NextPage = () => {
   const [playlist, setPlaylist] = useState<any | undefined>()
   const [newPlaylist, setNewPlaylist] = useState('')
+  const [desc, setDesc] = useState('')
 
   useEffect(() => {
     fetch('http://localhost:3001/api/recommend')
@@ -37,10 +38,18 @@ const me: NextPage = () => {
           </h3>
           <input
             type="text"
-            placeholder="Type here"
+            placeholder="Playlist name"
             className="w-full my-4 input input-bordered"
             onChange={(e) => {
               setNewPlaylist(e.target.value)
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            className="w-full mb-4 input input-bordered"
+            onChange={(e) => {
+              setDesc(e.target.value)
             }}
           />
           <div className="flex flex-row items-center justify-center">
