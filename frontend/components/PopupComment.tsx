@@ -1,6 +1,23 @@
 import Comment from './Comment'
+import axios from 'axios';
+import { useState, useEffect} from 'react'
 
-const PopupComment = () => {
+interface PopUpCommentProps {
+  songID: string
+}
+
+const PopupComment = ( { songID }: PopUpCommentProps ) => {
+  const [comments, setComments] = useState<any[] | undefined>()
+  useEffect(() => {
+    axios.get('http://localhost:3001/api/songs/comments', { params : {
+      id: songID
+    }})
+      .then((res) => {
+        setComments(res.data)
+        console.log(res.data)
+      })
+  }, [])
+
   return (
     <div className="flex flex-col h-full gap-10 px-16 py-24 pt-8 overflow-y-auto scrollbar-hide">
       {/* Avatar and Input*/}
@@ -24,13 +41,13 @@ const PopupComment = () => {
 
       {/* Comment from users */}
       <section className="flex flex-col gap-4">
-        {[...Array(10)].map((_, i) => (
+        {comments?.map((comment, i) => (
           <Comment
-            username={'Username'}
-            date={'2020/07/21'}
-            content={'The just my first comment'}
+            username={comment.author}
+            date={comment.createdDates}
+            content={comment.content}
             like={false}
-            likecount={3}
+            likecount={comment.likes}
           />
         ))}
       </section>

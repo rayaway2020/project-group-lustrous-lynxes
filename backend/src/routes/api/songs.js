@@ -15,6 +15,23 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/comments', async (req, res) => {
+    const song = await Song.findById(req.query.id);
+
+    const idList = song.comments;
+
+    if (idList.length > 0) {
+        const all_comments = await Comment.find({
+            '_id': { $in: idList }
+        });
+    
+        res.json(all_comments);
+    } else {
+        res.send("Empty")
+    }
+    
+});
+
 //Create One Song
 router.post('/', async (req, res) => {
     const newSong = new Song({
@@ -36,7 +53,7 @@ router.post('/comment', verify, async (req, res) => {
     try {
         const comment = new Comment({ author: author, content: content });
         await comment.save();
-        
+
         await Song.findOneAndUpdate(
             { _id: songId }, 
             { $push: { comments: comment._id } },
@@ -63,7 +80,7 @@ router.put('/comment/addlikes', async (req, res) => {
         res.json({ likes: likes });
     }
     catch {
-        err => res.send(err) 
+        res.json({});
     }
 });
 

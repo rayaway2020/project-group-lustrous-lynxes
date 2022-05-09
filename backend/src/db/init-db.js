@@ -32,4 +32,6 @@ async function init_playlist() {
     await Playlist.create(trendingData);
     await Playlist.create(forYouData);
     await Playlist.create(newReleaseData);
+
+    await new Song({ _id: "XZ868t23Pb4"}).save();
 }
