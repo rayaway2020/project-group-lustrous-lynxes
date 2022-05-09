@@ -9,11 +9,12 @@ export const playbarContext = React.createContext<any>(undefined)
 export const userContext = React.createContext<any>(undefined)
 
 const Layout = ({ children }: any) => {
-  const [currentSong, setCurrentSong] = useState<any | undefined>(undefined)
-  const [isPlaying, setPlaying] = useState(true)
+  const [currentSong, setCurrentSong] = useState<any | undefined>(undefined);
+  const [isPlaying, setPlaying] = useState(true);
 
-  const [username, setUsername] = useState('')
-  const [token, setToken] = useState<any>(undefined)
+  const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState<any>(undefined);
 
   return (
     <>
@@ -24,7 +25,7 @@ const Layout = ({ children }: any) => {
           className="fixed top-0 right-0 translate-x-full"
         />
       ) : null}
-      <userContext.Provider value={{ username, setUsername, token, setToken }}>
+      <userContext.Provider value={{ username, setUsername, userId, setUserId, token, setToken }}>
         <playbarContext.Provider
           value={{ currentSong, setCurrentSong, isPlaying, setPlaying }}
         >

@@ -52,8 +52,7 @@ const Header = () => {
     setFormErrors(validateRegister(formValues));
     setIsSubmit(true);
 
-    if(Object.keys(formErrors).length === 0 && isSubmit){
-      Axios.post('http://localhost:3001/api/auth/register', {
+    Axios.post('http://localhost:3001/api/auth/register', {
       username: username,
       password: password,
       email: email,
@@ -65,9 +64,6 @@ const Header = () => {
         alert('Registration failed')
       }
     })
-    }else{
-      setIsSubmit(false);
-    }
   }
 
   const login = () => {

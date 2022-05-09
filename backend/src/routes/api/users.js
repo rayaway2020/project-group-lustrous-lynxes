@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.use(express.json());
 
-// User Information
-router.get('/:id', verify, async (req, res) => {
-    const user = await User.findById(req.params.id);
+// Axios.post('http://localhost:3001/api/users', null, { params: { id }}).then(res => res.status))
+router.get('/', verify, async (req, res) => {
+    const user = await User.findById(req.query.id);
 
     if (user) {
         res.json(user);
@@ -18,8 +18,8 @@ router.get('/:id', verify, async (req, res) => {
 });
 
 // Modify One User
-router.put('/:id', verify, async (req, res) => {
-    const id = req.params.id;
+router.put('/', verify, async (req, res) => {
+    const id = req.query.id;
 
     const user = req.body;
     user._id = id;
