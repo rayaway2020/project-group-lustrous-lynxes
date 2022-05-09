@@ -1,7 +1,7 @@
 import express from 'express';
 import verify from './verifyToken.js';
 import getAPIInstance from '../../util/youtube.js';
-import { Playlist } from '../../db/schema.js';
+import { User, Playlist } from '../../db/schema.js';
 
 const router = express.Router();
 
@@ -18,10 +18,29 @@ router.get('/network/:id', async (req, res) => {
     }
 });
 
-router.get('/user/:id', async (req, res) => {
-    const id = req.params.id;
+router.get('/user/liked/:userId', verify, async (req, res) => {
+    const dbUser = await User.findById(req.params.userId);
 
-    const playlist = await retrievePlaylist(id);
+    if (db) {
+        const playlist = dbUser.likedPlaylist;
+        
+    }
+    
+
+    if (playlist) {
+        res.json(playlist);
+    } else {
+        res.statusCode(404);
+    }
+});
+
+router.get('/user/owned/:userId', verify, async (req, res) => {
+    const dbUser = await User.findById(req.params.userId);
+
+    if (db) {
+        const playlist = dbUser.ownedPlaylist;
+    }
+    
 
     if (playlist) {
         res.json(playlist);
@@ -42,7 +61,7 @@ router.post('/', verify, async (req, res) => {
         .json(newPlaylist);
 });
 
-router.put('/addSong/:playlistId/:songId', async (req, res) => {
+router.put('/add', async (req, res) => {
     const success = await addToPlaylist(
         req.params.songId,
         req.params.playlistId
@@ -51,7 +70,7 @@ router.put('/addSong/:playlistId/:songId', async (req, res) => {
     res.sendStatus(success ? 204 : 404);
 });
 
-router.put('/deleteSong/:playlistId/:index', async (req, res) => {
+router.put('/delete', async (req, res) => {
     const success = await deleteFromPlaylist(
         req.params.index,
         req.params.playlistId

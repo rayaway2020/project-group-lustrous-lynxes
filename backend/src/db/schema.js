@@ -26,7 +26,7 @@ const userSchema = new Schema({
         max: 1024
     },
     ownedPlaylist: [{ type: Schema.Types.ObjectId, ref: 'Playlist' }],
-    likedPlaylist: [{ type: Schema.Types.ObjectId, ref: 'SPlaylistong' }],
+    likedPlaylist: [{ type: Schema.Types.ObjectId, ref: 'Playlist' }],
     likedSongs: [{ type: Schema.Types.ObjectId, ref: 'Song' }]
 })
 export const User = mongoose.model('User', userSchema);

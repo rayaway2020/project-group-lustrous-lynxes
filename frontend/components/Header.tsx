@@ -4,7 +4,7 @@ import Axios from 'axios'
 import { userContext } from './Layout'
 
 const Header = () => {
-  const { username, setUsername, token, setToken } = useContext(userContext)
+  const { username, setUsername, userId, setUserId, token, setToken } = useContext(userContext)
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
@@ -16,7 +16,6 @@ const Header = () => {
   }
   const toHomepage = () => {}
   const toDiscover = () => {}
-  const toPlaylist = () => {}
 
   const register = () => {
     Axios.post('http://localhost:3001/api/auth/register', {
@@ -25,6 +24,7 @@ const Header = () => {
       email: email,
     }).then((res: any) => {
       if (res.status == 200) {
+        setUserId(res.data.user);
         alert('Successfully registered')
       } else {
         alert('Registration failed')
@@ -62,14 +62,14 @@ const Header = () => {
       </div>
       {/* tab section */}
       <div className="flex w-0 flex-1 flex-row items-center justify-center gap-6 text-lg font-semibold">
-        <div className="cursor-pointer" onClick={() => toHomepage()}>
-          Home
+        <div className="cursor-pointer">
+          <a href="/">Home</a>
         </div>
-        <div className="cursor-pointer" onClick={() => toDiscover()}>
-          Discovery
+        <div className="cursor-pointer">
+          <a href="#">Discovery</a>
         </div>
-        <div className="cursor-pointer" onClick={() => toPlaylist()}>
-          Playlist
+        <div className="cursor-pointer">
+          <a href="/me">Playlist</a>
         </div>
       </div>
       {/* search bar and avatar */}
