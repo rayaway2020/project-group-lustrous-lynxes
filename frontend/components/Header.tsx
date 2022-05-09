@@ -9,9 +9,8 @@ const Header = () => {
   const [email, setEmail] = useState('')
   const initialValues = {username: "", email: "", password: "" };
   const [formValues, setFormValues ] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState({ username: "", password: "", email: "" });
   const [isSubmit, setIsSubmit] = useState(false);
-  
 
   const goBack = () => {
     history.back()
@@ -19,8 +18,6 @@ const Header = () => {
   const goNext = () => {
     history.forward()
   }
-  const toHomepage = () => {}
-  const toDiscover = () => {}
 
   useEffect(() =>{
     console.log(formErrors)
@@ -29,23 +26,24 @@ const Header = () => {
     }
   },[formErrors]);
 
-  const validateRegister = (values) => {
-    const errors = {}
+  const validateRegister = (values: any) => {
+    const errors = { username: "", password: "", email: "" }
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
     if(!values.username){
       errors.username= "Username is required!";
     }
+
     if(!values.password){
       errors.password= "Password is required!";
-    } else if (values.password.length < 4){
-      errors.password = "Password must be more than 4 characters";
-    } else if (values.password.length > 10){
-      errors.password = "Password cannot exceed more than 10 characters";
+    } else if (values.password.length < 8){
+      errors.password = "Password must be at least 8 characters";
     }
+
     if(!values.email){
       errors.email = "Email is required!";
     } else if (!regex.test(values.email)){
-      error.email = "This is not a valid email format";
+      errors.email = "This is not a valid email format";
     }
     return errors;
   }
