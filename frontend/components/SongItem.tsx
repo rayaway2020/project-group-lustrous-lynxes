@@ -1,4 +1,5 @@
 type SongItemProps = {
+  id: string
   index: number
   title: string
   cover: string
@@ -7,6 +8,7 @@ type SongItemProps = {
 }
 
 const SongItem = ({
+  id,
   index,
   title,
   cover,
@@ -24,7 +26,7 @@ const SongItem = ({
       <img
         src={cover}
         alt={title}
-        className="object-cover w-12 h-12 rounded aspect-square"
+        className="object-cover w-8 h-8 rounded aspect-square"
       />
       <div className="flex-1 truncate">{title}</div>
       <div>{`${minutes}:${seconds}`}</div>
