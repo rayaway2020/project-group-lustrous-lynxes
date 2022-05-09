@@ -82,20 +82,20 @@ const Header = () => {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 m-auto flex max-w-screen-xl bg-white px-6 py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 flex max-w-screen-xl px-6 py-4 m-auto bg-white">
       {/* nav section */}
-      <div className="flex w-0 flex-1 flex-row items-center justify-start gap-4">
+      <div className="flex flex-row items-center justify-start flex-1 w-0 gap-4">
         <ChevronLeftIcon
-          className="h-8 w-8 cursor-pointer"
+          className="w-8 h-8 cursor-pointer"
           onClick={() => goBack()}
         />
         <ChevronRightIcon
-          className="h-8 w-8 cursor-pointer"
+          className="w-8 h-8 cursor-pointer"
           onClick={() => goNext()}
         />
       </div>
       {/* tab section */}
-      <div className="flex w-0 flex-1 flex-row items-center justify-center gap-6 text-lg font-semibold">
+      <div className="flex flex-row items-center justify-center flex-1 w-0 gap-6 text-lg font-semibold">
         <div className="cursor-pointer">
           <a href="/">Home</a>
         </div>
@@ -107,12 +107,12 @@ const Header = () => {
         </div>
       </div>
       {/*Avatar */}
-      <div className="flex w-0 flex-1 flex-row items-center justify-end gap-4">
+      <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
         <label
           htmlFor="logIn-modal"
         >
           <img
-            className="object-cover rounded-full w-12 h-12"
+            className="object-cover w-12 h-12 rounded-full"
             src="https://api.lorem.space/image/face?hash=47449"
           />
         </label>
@@ -122,12 +122,12 @@ const Header = () => {
       <div className="modal">
         <label
           htmlFor="logIn-modal"
-          className="btn btn-circle btn-sm absolute right-2 top-2"
+          className="absolute btn btn-circle btn-sm right-2 top-2"
         >
           ✕
         </label>
-        <div className="hero h-3/5 w-2/3 rounded-lg bg-base-200">
-          <div className="hero-content flex-col lg:flex-row-reverse">
+        <div className="w-2/3 rounded-lg hero h-3/5 bg-base-200">
+          <div className="flex-col hero-content lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               <h1 className="text-5xl font-bold">Login now!</h1>
               <p className="py-6">
@@ -136,7 +136,7 @@ const Header = () => {
               </p>
             </div>
 
-            <div className="card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl">
+            <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
               <div className="card-body">
                 <div className="form-control">
                   <label className="label">UserName</label>
@@ -168,7 +168,7 @@ const Header = () => {
                   </label>
                 </div>
 
-                <div className="form-control mt-6">
+                <div className="mt-6 form-control">
                   <label htmlFor="logIn-modal" className="btn btn-primary" onClick={login}>
                     LOGIN
                   </label>
@@ -183,13 +183,13 @@ const Header = () => {
       <div className="modal" id="register-modal">
         <label
           htmlFor="register-modal"
-          className="btn btn-circle btn-sm absolute right-2 top-2"
+          className="absolute btn btn-circle btn-sm right-2 top-2"
         >
           ✕
         </label>
 
-        <div className="hero h-2/3 w-2/3 rounded-lg bg-base-200">
-          <div className="hero-content flex-col lg:flex-row-reverse">
+        <div className="w-2/3 rounded-lg hero h-2/3 bg-base-200">
+          <div className="flex-col hero-content lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               <h1 className="text-5xl font-bold">Sign Up!</h1>
               <p className="py-6">
@@ -197,13 +197,13 @@ const Header = () => {
                 thoughts to others all over the world
               </p>
             </div>
-            <div className="card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl">
+            <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
               <div className="card-body">
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">UserName</span>
                   </label>
-                  <p className='label-text text-xs text-red-600 underline underline-offset-1'>{formErrors.username}</p>
+                  <p className='text-xs text-red-600 underline label-text underline-offset-1'>{formErrors.username}</p>
                   <input
                     type="text"
                     placeholder="UserName"
@@ -218,7 +218,7 @@ const Header = () => {
 
                 <div className="form-control">
                   <label className="label">Password</label>
-                  <p className='label-text text-xs text-red-600 underline underline-offset-1'>{formErrors.password}</p>
+                  <p className='text-xs text-red-600 underline label-text underline-offset-1'>{formErrors.password}</p>
                   <input
                     type="password"
                     placeholder="password"
@@ -235,7 +235,7 @@ const Header = () => {
                   <label className="label">
                     <span className="label-text">Email</span>
                   </label>
-                  <p className='label-text text-xs text-red-600 underline underline-offset-1'>{formErrors.email}</p>
+                  <p className='text-xs text-red-600 underline label-text underline-offset-1'>{formErrors.email}</p>
                   <input
                     type="text"
                     placeholder="email"
@@ -247,7 +247,7 @@ const Header = () => {
                     }}
                   />
                 </div>
-                <div className="form-control mt-6">
+                <div className="mt-6 form-control">
                   {/* <label htmlFor="register-modal" className="btn btn-primary" onClick={register}>
                     Register
                   </label> */}

@@ -3,7 +3,7 @@ type SongItemProps = {
   index: number
   title: string
   cover: string
-  duration: string
+  duration: number
   onClick: () => void
 }
 
@@ -15,23 +15,22 @@ const SongItem = ({
   duration,
   onClick,
 }: SongItemProps) => {
+  const mind = duration % (60 * 60)
+  const minutes = Math.floor(mind / 60)
+  const seconds = Math.ceil(mind % 60)
   return (
     <div
-      className="flex flex-row items-center gap-6"
-      onClick={() => {
-        onClick()
-      }}
+      className="flex flex-row items-center gap-6 cursor-pointer"
+      onClick={() => onClick()}
     >
-      <div className="w-8 text-gray-600">
-        {index > 10 ? index : `0${index}`}
-      </div>
+      <div className="w-8 text-gray-600">{index > 9 ? index : `0${index}`}</div>
       <img
         src={cover}
         alt={title}
-        className="aspect-square h-8 w-8 rounded object-cover"
+        className="object-cover w-8 h-8 rounded aspect-square"
       />
       <div className="flex-1 truncate">{title}</div>
-      <div>{duration}</div>
+      <div>{`${minutes}:${seconds}`}</div>
     </div>
   )
 }
