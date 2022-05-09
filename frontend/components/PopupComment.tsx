@@ -1,41 +1,38 @@
-import {useState, useEffect} from 'react'
-
-import PopupCommentAvatar from './PopupCommentAvatar'
-import PopupCommentInput from './PopupCommentInput'
-import PopupCommentContent from './PopupCommentContent'
-
-type avatarProp = {
-  avatar: string
-}
+import Comment from './Comment'
 
 const PopupComment = () => {
-  const [avatarInfo, setAvatarInfo] = useState<avatarProp>()
-
-  useEffect(() => {
-    setAvatarInfo({avatar: "https://p2.music.126.net/0jbv7CBVqdqHAb1guLX_pg==/109951167156624589.jpg?param=512y512"})
-  }, [])
-
   return (
-    <section className="rounded-t-2xl bg-slate-200 w-1/2">
-      <div className="pt-8 px-16 pb-80 flex flex-col gap-10">
-        {/* Avatar and Input*/}
-        <div className="flex flex-row items-center justify-start gap-6">
-          <PopupCommentAvatar {...avatarInfo} />
-          <PopupCommentInput />
-        </div>
-
-        {/* horizontal line */}
-        <div className="w-full">
-                <div className="border-t border-gray-400 border-dashed"></div>
-        </div>
-
-        {/* Content */}
-        <div className="flex flex-row place-items-start gap-6">
-          <PopupCommentAvatar {...avatarInfo} />
-          <PopupCommentContent />
-        </div>
+    <div className="flex flex-col h-screen gap-10 px-16 py-24 pt-8 overflow-y-auto">
+      {/* Avatar and Input*/}
+      <div className="flex flex-row gap-4">
+        <img
+          src="https://stamp.fyi/avatar/hello"
+          alt=""
+          className="w-12 h-12 rounded-full"
+        />
+        <input
+          type="text"
+          placeholder="Leave your comment here"
+          className="w-full input input-bordered"
+        />
       </div>
-    </section>
+
+      {/* horizontal line */}
+      <div className="w-full">
+        <div className="border-t border-gray-400 border-dashed"></div>
+      </div>
+
+      {/* Comment from users */}
+      {[...Array(10)].map((_, i) => (
+        <Comment
+          username={'Username'}
+          date={'2020/07/21'}
+          content={'The just my first comment'}
+          like={false}
+          likecount={3}
+        />
+      ))}
+    </div>
   )
 }
 

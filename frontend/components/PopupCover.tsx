@@ -1,18 +1,27 @@
+import {
+  ChevronDoubleLeftIcon,
+  PlayIcon,
+  ChevronDoubleRightIcon,
+} from '@heroicons/react/solid'
+
 const PopupCover = () => {
   return (
-    <section className="rounded-t-2xl bg-slate-200">
-      <div className="flex flex-col items-center justify-center gap-6 pt-8 pb-80 px-16">
-        <img
-          src="https://p2.music.126.net/0jbv7CBVqdqHAb1guLX_pg==/109951167156624589.jpg?param=512y512"
-          alt=""
-          className="bg-auto object-contain"
-        />
-        <div className="flex flex-col justify-between items-center">
-          <div>ビビっとラブ</div>
-          <div className="text-sm">CHiCO with HoneyWorks</div>
-        </div>
+    <div className="flex flex-col items-center justify-center h-screen gap-6">
+      <img
+        src="https://stamp.fyi/avatar/hello"
+        alt=""
+        className="object-contain w-64 h-64 bg-auto aspect-square rounded-xl"
+      />
+      <div className="flex flex-col items-center justify-between">
+        <div>ビビっとラブ</div>
+        <div className="text-sm">CHiCO with HoneyWorks</div>
       </div>
-    </section>
+      <div className="flex flex-row items-center justify-center gap-8">
+        <ChevronDoubleLeftIcon className="w-6 h-6" />
+        <PlayIcon className="w-10 h-10" />
+        <ChevronDoubleRightIcon className="w-6 h-6" />
+      </div>
+    </div>
   )
 }
 
