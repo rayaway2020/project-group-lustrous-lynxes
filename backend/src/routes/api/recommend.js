@@ -3,7 +3,7 @@ import {
     trendingData,
     forYouData,
     newReleaseData,
-} from '../../data/recommend-data.js';
+} from '../../db/recommend-data.js';
 
 const router = express.Router();
 

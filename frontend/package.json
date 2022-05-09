@@ -3,14 +3,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "format": "npx prettier --write ."
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
     "@tailwindcss/line-clamp": "^0.3.1",
+    "axios": "^0.27.2",
+    "daisyui": "^2.14.3",
     "next": "latest",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-player": "^2.10.0"
   },
   "devDependencies": {
     "@types/node": "17.0.4",
