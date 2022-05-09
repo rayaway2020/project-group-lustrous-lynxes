@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect} from 'react'
 import Axios from 'axios'
 import { userContext } from './Layout'
 
@@ -7,6 +7,11 @@ const Header = () => {
   const { username, setUsername, userId, setUserId, token, setToken } = useContext(userContext)
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const initialValues = {username: "", email: "", password: "" };
+  const [formValues, setFormValues ] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  
 
   const goBack = () => {
     history.back()
@@ -17,8 +22,40 @@ const Header = () => {
   const toHomepage = () => {}
   const toDiscover = () => {}
 
+  useEffect(() =>{
+    console.log(formErrors)
+    if(Object.keys(formErrors).length === 0 && isSubmit){
+      console.log(formValues)
+    }
+  },[formErrors]);
+
+  const validateRegister = (values) => {
+    const errors = {}
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if(!values.username){
+      errors.username= "Username is required!";
+    }
+    if(!values.password){
+      errors.password= "Password is required!";
+    } else if (values.password.length < 4){
+      errors.password = "Password must be more than 4 characters";
+    } else if (values.password.length > 10){
+      errors.password = "Password cannot exceed more than 10 characters";
+    }
+    if(!values.email){
+      errors.email = "Email is required!";
+    } else if (!regex.test(values.email)){
+      error.email = "This is not a valid email format";
+    }
+    return errors;
+  }
+
   const register = () => {
-    Axios.post('http://localhost:3001/api/auth/register', {
+    setFormErrors(validateRegister(formValues));
+    setIsSubmit(true);
+
+    if(Object.keys(formErrors).length === 0 && isSubmit){
+      Axios.post('http://localhost:3001/api/auth/register', {
       username: username,
       password: password,
       email: email,
@@ -30,6 +67,9 @@ const Header = () => {
         alert('Registration failed')
       }
     })
+    }else{
+      setIsSubmit(false);
+    }
   }
 
   const login = () => {
@@ -72,31 +112,27 @@ const Header = () => {
           <a href="/me">Playlist</a>
         </div>
       </div>
-      {/* search bar and avatar */}
+      {/*Avatar */}
       <div className="flex w-0 flex-1 flex-row items-center justify-end gap-4">
-        {/* <div className="w-12 rounded-full" >
-            <img for="my-modal" className="cursor-pointer" src="https://api.lorem.space/image/face?hash=47449"/>
-          </div> */}
         <label
-          htmlFor="my-modal"
-          className="modal-button btn w-12 rounded-full"
+          htmlFor="logIn-modal"
         >
           <img
-            className=""
+            className="object-cover rounded-full w-12 h-12"
             src="https://api.lorem.space/image/face?hash=47449"
           />
         </label>
       </div>
 
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <input type="checkbox" id="logIn-modal" className="modal-toggle" />
       <div className="modal">
         <label
-          htmlFor="my-modal"
+          htmlFor="logIn-modal"
           className="btn btn-circle btn-sm absolute right-2 top-2"
         >
           ✕
         </label>
-        <div className="hero h-1/2 w-2/3 rounded-lg bg-base-200">
+        <div className="hero h-3/5 w-2/3 rounded-lg bg-base-200">
           <div className="hero-content flex-col lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               <h1 className="text-5xl font-bold">Login now!</h1>
@@ -116,7 +152,7 @@ const Header = () => {
                     className="input input-bordered"
                     minLength={6}
                     onChange={(e) => {
-                      setUsername(e.target.value)
+                      setUsername(e.target.value);
                     }}
                   />
                 </div>
@@ -132,31 +168,33 @@ const Header = () => {
                     }}
                   />
                   <label className="label">
-                    <a
-                      href="#my-modal-2"
-                      className="link link-hover label-text-alt"
-                    >
+                    <label htmlFor="register-modal" className="btn btn-link btn-xs" onClick={login}>
                       Sign up for a new account?
-                    </a>
+                    </label>
                   </label>
                 </div>
 
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary" onClick={login}>
-                    Login
-                  </button>
+                  <label htmlFor="logIn-modal" className="btn btn-primary" onClick={login}>
+                    LOGIN
+                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="modal" id="my-modal-2">
-        <a href="#" className="btn btn-circle btn-sm absolute right-2 top-2">
+      
+      <input type="checkbox" id="register-modal" className="modal-toggle" />
+      <div className="modal" id="register-modal">
+        <label
+          htmlFor="register-modal"
+          className="btn btn-circle btn-sm absolute right-2 top-2"
+        >
           ✕
-        </a>
-        <div className="hero h-1/2 w-2/3 rounded-lg bg-base-200">
+        </label>
+
+        <div className="hero h-2/3 w-2/3 rounded-lg bg-base-200">
           <div className="hero-content flex-col lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               <h1 className="text-5xl font-bold">Sign Up!</h1>
@@ -171,24 +209,30 @@ const Header = () => {
                   <label className="label">
                     <span className="label-text">UserName</span>
                   </label>
+                  <p className='label-text text-xs text-red-600 underline underline-offset-1'>{formErrors.username}</p>
                   <input
                     type="text"
                     placeholder="UserName"
                     className="input input-bordered"
+                    value = { formValues.username}
                     onChange={(e) => {
                       setUsername(e.target.value)
+                      formValues.username=e.target.value;
                     }}
                   />
                 </div>
 
                 <div className="form-control">
                   <label className="label">Password</label>
+                  <p className='label-text text-xs text-red-600 underline underline-offset-1'>{formErrors.password}</p>
                   <input
                     type="password"
                     placeholder="password"
                     className="input input-bordered"
+                    value = { formValues.password}
                     onChange={(e) => {
                       setPassword(e.target.value)
+                      formValues.password=(e.target.value)
                     }}
                   />
                 </div>
@@ -197,24 +241,34 @@ const Header = () => {
                   <label className="label">
                     <span className="label-text">Email</span>
                   </label>
+                  <p className='label-text text-xs text-red-600 underline underline-offset-1'>{formErrors.email}</p>
                   <input
                     type="text"
                     placeholder="email"
                     className="input input-bordered"
+                    value = { formValues.email}
                     onChange={(e) => {
                       setEmail(e.target.value)
+                      formValues.email=(e.target.value)
                     }}
                   />
                 </div>
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary" onClick={register}>
+                  {/* <label htmlFor="register-modal" className="btn btn-primary" onClick={register}>
                     Register
-                  </button>
+                  </label> */}
+                  <label className="btn btn-primary" onClick={register}>
+                    Register
+                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {/* <div>
+          {Object.keys(formErrors).length === 0 && isSubmit ? (<div className='ui message success'>Signed In successfully</div>
+          ) : (<div className='ui message success'>Not yet sign in</div>)}
+        </div> */}
       </div>
     </header>
   )
