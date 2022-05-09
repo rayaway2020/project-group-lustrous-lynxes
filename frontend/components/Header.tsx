@@ -72,26 +72,22 @@ const Header = () => {
           Playlist
         </div>
       </div>
-      {/* search bar and avatar */}
+      {/*Avatar */}
       <div className="flex w-0 flex-1 flex-row items-center justify-end gap-4">
-        {/* <div className="w-12 rounded-full" >
-            <img for="my-modal" className="cursor-pointer" src="https://api.lorem.space/image/face?hash=47449"/>
-          </div> */}
         <label
-          htmlFor="my-modal"
-          className="modal-button btn w-12 rounded-full"
+          htmlFor="logIn-modal"
         >
           <img
-            className=""
+            className="object-cover rounded-full w-12 h-12"
             src="https://api.lorem.space/image/face?hash=47449"
           />
         </label>
       </div>
 
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <input type="checkbox" id="logIn-modal" className="modal-toggle" />
       <div className="modal">
         <label
-          htmlFor="my-modal"
+          htmlFor="logIn-modal"
           className="btn btn-circle btn-sm absolute right-2 top-2"
         >
           ✕
@@ -132,30 +128,32 @@ const Header = () => {
                     }}
                   />
                   <label className="label">
-                    <a
-                      href="#my-modal-2"
-                      className="link link-hover label-text-alt"
-                    >
+                    <label htmlFor="register-modal" className="btn btn-link btn-xs" onClick={login}>
                       Sign up for a new account?
-                    </a>
+                    </label>
                   </label>
                 </div>
 
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary" onClick={login}>
-                    Login
-                  </button>
+                  <label htmlFor="logIn-modal" className="btn btn-primary" onClick={login}>
+                    LOGIN
+                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="modal" id="my-modal-2">
-        <a href="#" className="btn btn-circle btn-sm absolute right-2 top-2">
+      
+      <input type="checkbox" id="register-modal" className="modal-toggle" />
+      <div className="modal" id="register-modal">
+        <label
+          htmlFor="register-modal"
+          className="btn btn-circle btn-sm absolute right-2 top-2"
+        >
           ✕
-        </a>
+        </label>
+
         <div className="hero h-1/2 w-2/3 rounded-lg bg-base-200">
           <div className="hero-content flex-col lg:flex-row-reverse">
             <div className="text-center lg:text-left">
@@ -207,9 +205,9 @@ const Header = () => {
                   />
                 </div>
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary" onClick={register}>
+                  <label htmlFor="register-modal" className="btn btn-primary" onClick={register}>
                     Register
-                  </button>
+                  </label>
                 </div>
               </div>
             </div>
