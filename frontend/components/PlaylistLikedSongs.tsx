@@ -19,21 +19,21 @@ const PlaylistLikedSongs = () => {
   }, [])
 
   return (
-    <section className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto my-24">
+    <section className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
       <div className="flex flex-row justify-between gap-6">
-        <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl">
+        <div className="flex h-80 w-1/3 flex-col justify-between rounded-3xl bg-sky-50 p-8 transition duration-300 hover:drop-shadow-xl">
           <div>Description</div>
           <div className="flex flex-row justify-between">
             <div className="flex flex-col">
               <b>My Favorite Songs</b>
               <div>100 Songs</div>
             </div>
-            <PlayIcon className="w-12 h-12" />
+            <PlayIcon className="h-12 w-12" />
           </div>
         </div>
 
         {/* Songs */}
-        <div className="flex flex-row flex-wrap w-2/3 p-2 h-80">
+        <div className="flex h-80 w-2/3 flex-row flex-wrap p-2">
           <PlaylistLikedSongItem
             title={'Just the title'}
             cover={
