@@ -11,54 +11,17 @@ router.get('/', verify, async (req, res) => {
     const user = await User.findById(req.query.id);
 
     if (user) {
-        res.json(user);
+        res.send({
+            username: user.username,
+            email: user.email,
+            thumbnail: user.thumbnail + user.username,
+            ownedPlaylist: user.ownedPlaylist,
+            likedPlaylist: user.likedPlaylist,
+            likedSongs: user.likedSongs
+        });
     } else {
         res.statusCode(404);
     }
-});
-
-// Modify One User
-router.put('/', verify, async (req, res) => {
-    const id = req.query.id;
-
-    const user = req.body;
-    user._id = id;
-
-    const success = await updateUser(user);
-    res.sendStatus(success ? 204 : 404);
-});
-
-// Add Liked Song
-router.put('/addsong', verify, async (req, res) => {
-    const userId = req.query.userId;
-    const songId = req.query.songId;
-    
-    const dbUser = await User.findById(userId);
-    if (dbUser) {
-        dbUser.likedSongs.push(songId);
-        await dbUser.save();
-
-        return res.status(200);
-    }
-
-    return res.status(400).send(err);
-});
-
-// Remove Liked Song
-router.put('/removesong', verify, async (req, res) => {
-    const userId = req.query.userId;
-    const songId = req.query.songId;
-
-    const dbUser = await User.findById(userId);
-
-    if (dbUser) {
-        dbUser.likedSongs.splice(index, 1);
-        await dbUser.save();
-
-        return res.status(200);
-    }
-
-    return res.status(400).send(err);
 });
 
 // Add Liked Playlist

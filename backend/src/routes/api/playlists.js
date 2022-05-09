@@ -18,79 +18,30 @@ router.get('/network/:id', async (req, res) => {
     }
 });
 
-router.get('/user/liked/:userId', verify, async (req, res) => {
-    const dbUser = await User.findById(req.params.userId);
-
-    if (db) {
-        const playlist = dbUser.likedPlaylist;
-        
-    }
-    
-
-    if (playlist) {
-        res.json(playlist);
-    } else {
-        res.statusCode(404);
-    }
-});
-
-router.get('/user/owned/:userId', verify, async (req, res) => {
-    const dbUser = await User.findById(req.params.userId);
-
-    if (db) {
-        const playlist = dbUser.ownedPlaylist;
-    }
-    
-
-    if (playlist) {
-        res.json(playlist);
-    } else {
-        res.statusCode(404);
-    }
-});
-
-// Create a playlist by a user
+//Create a Playlist
 router.post('/', verify, async (req, res) => {
-    const newPlaylist = await createPlaylist(
-        req.body.userId,
-        req.body.playlist
-    );
+    const title = req.body.natitleme;
+    const description = req.body.description;
+    const author = req.body.username;
+     
+    const playlist = new Playlist({
+        browseId: browseId,
+        title: title,
+        description: description,
+        author: author
+    });
 
-    res.status(201)
-        .header('Location', `/api/playlists/${newPlaylist._id}`)
-        .json(newPlaylist);
-});
+    try {
+        await playlist.save();
+        res.json(playlist);
+    } catch {
+        err => res.send(err);
+    }
+})
 
-router.put('/add', async (req, res) => {
-    const success = await addToPlaylist(
-        req.params.songId,
-        req.params.playlistId
-    );
-
-    res.sendStatus(success ? 204 : 404);
-});
-
-router.put('/delete', async (req, res) => {
-    const success = await deleteFromPlaylist(
-        req.params.index,
-        req.params.playlistId
-    );
-
-    res.sendStatus(success ? 204 : 404);
-});
-
-router.put('/:id', async (req, res) => {
-    const id = req.params.id;
-    const playlist = req.body;
-    playlist._id = id;
-    const success = await updatePlaylist(playlist);
-
-    res.sendStatus(success ? 204 : 404);
-});
-
-// Delete one playlist
-router.delete('/:id', verify, async (req, res) => {
-    const id = req.params.id;
+//Delete one playlist
+router.delete('/', verify, async (req, res) => {
+    const id = req.query.id;
 
     await Playlist.deleteOne({ _id: id });
 
