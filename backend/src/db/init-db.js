@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { User, Song, Playlist } from './schema.js';
+import { User, Song, Playlist, Comment } from './schema.js';
 import { trendingData, forYouData, newReleaseData } from './recommend-data.js'
 
 main();
@@ -26,6 +26,7 @@ async function clearDatabase() {
     await User.deleteMany({});
     await Playlist.deleteMany({});
     await Song.deleteMany({});
+    await Comment.deleteMany({});
 }
 
 async function init_playlist() {

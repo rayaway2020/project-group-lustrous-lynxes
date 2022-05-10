@@ -1,5 +1,6 @@
+import { HeartIcon } from '@heroicons/react/solid'
 import {
-  HeartIcon,
+  HeartIcon as HeartIconOutlined,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
   ChevronUpIcon,
@@ -8,12 +9,18 @@ import {
   VolumeUpIcon,
   StopIcon,
 } from '@heroicons/react/outline'
-import { useContext } from 'react'
+import { useState, useContext } from 'react'
 import { playbarContext } from './Layout'
 
-const Playbar = () => {
+interface PlaybarProps {
+  like: boolean
+}
+
+const Playbar = ( { like }: PlaybarProps) => {
   const { currentSong, isPlaying, setPlaying, setPopupOpen } =
     useContext(playbarContext)
+
+  const [liked, setLiked] = useState(like);
 
   return currentSong ? (
     <section className="fixed bottom-0 left-0 right-0 z-50 max-w-screen-xl px-6 m-auto bg-white ">
@@ -31,7 +38,14 @@ const Playbar = () => {
               {currentSong.author.name || 'unknown'}
             </div>
           </div>
-          <HeartIcon className="w-6 h-6" />
+          {liked ? 
+            <HeartIcon className="w-6 h-6" onClick={() => {
+              
+              setLiked(!liked)
+            }} /> 
+            : 
+            <HeartIconOutlined className="w-6 h-6" onClick={() => setLiked(!liked)} />
+          }
         </div>
         {/* control bar */}
         <div className="flex flex-row items-center justify-center flex-1 gap-8">

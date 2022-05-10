@@ -36,6 +36,7 @@ const commentSchema = new Schema({
     author: String,
     content: String,
     likes: { type: Number, default: 0 },
+    likedUsers: [{ type: String, ref: 'User', default: [] }],
     createdDate: { type: Date, default: Date.now }
 })
 export const Comment = mongoose.model('Comment', commentSchema);

@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
 
 //Add a comment
 router.post('/comment', verify, async (req, res) => {
-    const songId = req.query.songId;
+    const songId = req.body.songId;
     const author = req.body.username;
     const content = req.body.content;
 
@@ -74,15 +74,23 @@ router.post('/comment', verify, async (req, res) => {
 });
 
 router.put('/comment/addlikes', async (req, res) => {
-    const id = req.query.commentId;
+    const id = req.body.commentId;
+    const user = req.body.userId;
 
     try {
         const dbComment = await Comment.findById(id);
         const likes = dbComment.likes + 1;
+        const userList = dbComment.likedUsers;
+        userList.push(user);
+        
     
         await Comment.updateOne(
             { _id: id }, 
-            { likes: likes }
+            {
+                $set: { 
+                    "likes": likes, "likedUsers": userList 
+                }
+            },
         )
         
         res.json({ likes: likes });
@@ -93,15 +101,23 @@ router.put('/comment/addlikes', async (req, res) => {
 });
 
 router.put('/comment/cancellikes', async (req, res) => {
-    const id = req.query.commentId;
+    const id = req.body.commentId;
+    const user = req.body.userId;
 
     try {
         const dbComment = await Comment.findById(id);
-        const likes = dbComment.likes - 1;
+        const likes = dbComment.likes > 0? dbComment.likes - 1: 0;
+        const userList = dbComment.likedUsers;
+        userList.filter(u => u !== user);
     
         await Comment.updateOne(
             { _id: id }, 
-            { likes: likes }
+            {
+                $set: { 
+                    likes: likes, likedUsers: userList 
+                }
+            }
+            
         )
         
         res.json({ likes: likes });
@@ -112,7 +128,7 @@ router.put('/comment/cancellikes', async (req, res) => {
 });
 
 //Get all Liked song of a user
-//await Axios.put("http://localhost:3001/api/songs/user/liked", { headers: { auth-token: token}}, { params: { id: id }}).then(res => res.status)
+//await Axios.put("http://localhost:3001/api/songs/add", { headers: { auth-token: token}}, { params: { id: id }}).then(res => res.status)
 
 // Add Liked Song
 router.put('/add', verify, async (req, res) => {
