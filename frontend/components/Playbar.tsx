@@ -63,8 +63,7 @@ const Playbar = ( { like }: PlaybarProps) => {
                 }
               }).then(res => {
                 setLiked(!liked)
-              })
-              setLiked(!liked)
+              }).catch(err => alert("Access Denied"))
             }} />
           }
         </div>
