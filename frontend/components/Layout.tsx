@@ -37,7 +37,7 @@ const Layout = ({ children }: any) => {
         >
           <Header />
           {children}
-          <Playbar like={true} />
+          <Playbar like={false} />
           {isPopupOpen ? <Popup id={currentSong.videoId} /> : null}
         </playbarContext.Provider>
       </userContext.Provider>

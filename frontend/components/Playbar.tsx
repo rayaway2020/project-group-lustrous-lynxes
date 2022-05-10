@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/outline'
 import { useState, useContext } from 'react'
 import { playbarContext } from './Layout'
+import axios from 'axios'
 
 interface PlaybarProps {
   like: boolean
@@ -40,11 +41,31 @@ const Playbar = ( { like }: PlaybarProps) => {
           </div>
           {liked ? 
             <HeartIcon className="w-6 h-6" onClick={() => {
-              
-              setLiked(!liked)
+              axios.put("http://localhost:3001/api/songs/delete", {
+                userId: "627a3ab7a95dfce3afbf3fbf",
+                songId: currentSong.videoId
+              }, {
+                headers: {
+                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                }
+              }).then(res => {
+                setLiked(!liked)
+              })
             }} /> 
             : 
-            <HeartIconOutlined className="w-6 h-6" onClick={() => setLiked(!liked)} />
+            <HeartIconOutlined className="w-6 h-6" onClick={() => {
+              axios.put("http://localhost:3001/api/songs/add", {
+                userId: "627a3ab7a95dfce3afbf3fbf",
+                songId: currentSong.videoId
+              }, {
+                headers: {
+                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                }
+              }).then(res => {
+                setLiked(!liked)
+              })
+              setLiked(!liked)
+            }} />
           }
         </div>
         {/* control bar */}

@@ -108,13 +108,13 @@ router.put('/comment/cancellikes', async (req, res) => {
         const dbComment = await Comment.findById(id);
         const likes = dbComment.likes > 0? dbComment.likes - 1: 0;
         const userList = dbComment.likedUsers;
-        userList.filter(u => u !== user);
+        const deletedList = userList.filter(u => u !== user);
     
         await Comment.updateOne(
             { _id: id }, 
             {
                 $set: { 
-                    likes: likes, likedUsers: userList 
+                    likes: likes, likedUsers: deletedList 
                 }
             }
             
@@ -127,21 +127,20 @@ router.put('/comment/cancellikes', async (req, res) => {
     }
 });
 
-//Get all Liked song of a user
-//await Axios.put("http://localhost:3001/api/songs/add", { headers: { auth-token: token}}, { params: { id: id }}).then(res => res.status)
-
 // Add Liked Song
 router.put('/add', verify, async (req, res) => {
-    const userId = req.query.userId;
-    const songId = req.query.songId;
+    const userId = req.body.userId;
+    const songId = req.body.songId;
 
     try {
-        await User.findOneAndUpdate(
+        await User.updateOne(
             { _id: userId }, 
-            { $push: { likedSongs: [songId] } },
+            { $push: { likedSongs: songId } },
         );
 
-        res.sendStatus(200);
+        const newUser = await User.findById(userId);
+
+        res.json({likedSongs: newUser.likedSongs});
     } catch {err =>
         res.send(err);
     }
@@ -149,16 +148,21 @@ router.put('/add', verify, async (req, res) => {
 });
 
 router.put('/delete', verify, async (req, res) => {
-    const userId = req.query.userId;
-    const songId = req.query.songId;
+    const userId = req.body.userId;
+    const songId = req.body.songId;
+
+    const dbUser = await User.findById(userId);
+    const likedSongs = dbUser.likedSongs.filter(x => x !== songId);
 
     try {
-        await User.findOneAndUpdate(
+        await User.updateOne(
             { _id: userId }, 
-            { $pullAll: { likedSongs: [songId] } },
+            { likedSongs: likedSongs },
         );
 
-        res.sendStatus(200);
+        const newUser = await User.findById(userId);
+
+        res.json({likedSongs: newUser.likedSongs});
     } catch {err =>
         res.send(err);
     }
