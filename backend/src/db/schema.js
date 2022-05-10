@@ -28,6 +28,9 @@ export const User = mongoose.model('User', userSchema);
 
 const songSchema = new Schema({
     _id: { type: String, required: true },
+    title: String,
+    cover: String,
+    duration: Number,
     comments: [{ type: Schema.ObjectId, ref: 'Comment', default: [] }]
 })
 export const Song = mongoose.model('Song', songSchema);

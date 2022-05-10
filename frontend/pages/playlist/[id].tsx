@@ -14,6 +14,8 @@ const Playlist: NextPage = () => {
         cover: string
         owner: string
         description: string
+        like: boolean
+        browseId: string
       }
     | undefined
   >()
@@ -21,6 +23,7 @@ const Playlist: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { setCurrentSong, setPlaying } = useContext(playbarContext)
 
+  // Need to modify like status and browser ID, distinguish local and cloud playlist
   useEffect(() => {
     fetch('http://localhost:3001/api/playlists/network/' + router.query.id)
       .then((res) => res.json())
@@ -31,11 +34,15 @@ const Playlist: NextPage = () => {
           cover: string
           owner: string
           description: string
+          like: boolean
+          browseId: string
         } = {
           title: data.title,
           cover: data.thumbnails?.[2].url,
           owner: data.owner,
           description: data.dateYear,
+          like: false,
+          browseId: `${router.query.id}`
         }
         setInfo(tem)
         setIsLoading(false)
@@ -66,7 +73,10 @@ const Playlist: NextPage = () => {
                   setCurrentSong(item)
                   setPlaying(true)
                   axios.post('http://localhost:3001/api/songs/', {
-                    id: item.videoId
+                    id: item.videoId,
+                    title: item.name,
+                    cover: item.thumbnails.url || info?.cover,
+                    duration:item.duration
                   })
                   console.log(item.videoId)
                 }}

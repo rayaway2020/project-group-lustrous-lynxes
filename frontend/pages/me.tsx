@@ -1,25 +1,26 @@
 import { PlayIcon, PlusIcon } from '@heroicons/react/solid'
+import axios from 'axios'
 import type { NextPage } from 'next'
 import { useState, useEffect } from 'react'
-import PlaylistLikedSongItem from '../components/PlaylistLikedSongItem'
+import LibrarySongItem from '../components/LibrarySongItem'
 import PlaylistRow from '../components/PlaylistRow'
 
 const me: NextPage = () => {
-  const [playlist, setPlaylist] = useState<any | undefined>()
+  const [favoritePlaylist, setFavoritePlaylist] = useState<any | undefined>()
+  const [createdPlaylists, setCreatedPlaylists] = useState<any | undefined>()
+  const [likedSongs, setLikedSongs] = useState<any | undefined>()
+
   const [newPlaylist, setNewPlaylist] = useState('')
   const [desc, setDesc] = useState('')
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/recommend')
-      .then((res) => res.json())
-      .then((data) => {
-        data.forEach((element: any) => {
-          if (element.title === 'Trending') {
-            element.title = 'Favorite'
-            setPlaylist(element)
-          }
-        })
-      })
+    axios.get("http://localhost:3001/api/playlists/user/info", { params: {
+      userId: "627a76a742738d8f093d6fdc"
+    }}).then(res => {
+      setCreatedPlaylists(res.data.ownedPlaylist);
+      setFavoritePlaylist(res.data.favoritePlaylist);
+      setLikedSongs(res.data.likedSongs);
+    });
   }, [])
 
   return (
@@ -40,23 +41,41 @@ const me: NextPage = () => {
             type="text"
             placeholder="Playlist name"
             className="w-full my-4 input input-bordered"
+            value={newPlaylist}
             onChange={(e) => {
               setNewPlaylist(e.target.value)
             }}
           />
+
           <input
             type="text"
             placeholder="Description"
             className="w-full mb-4 input input-bordered"
+            value={desc}
             onChange={(e) => {
               setDesc(e.target.value)
             }}
           />
+
           <div className="flex flex-row items-center justify-center">
             <div
               className="px-4 py-2 rounded cursor-pointer bg-sky-100 hover:bg-slate-50"
               onClick={() => {
-                console.log(newPlaylist)
+                axios.post("http://localhost:3001/api/playlists", {
+                  userId: "627a76a742738d8f093d6fdc",
+                  title: newPlaylist,
+                  description: desc,
+                  author: "default_username"
+                }, {
+                  headers: {
+                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                  }
+                }).then(res => {
+                  setCreatedPlaylists(res.data.ownedPlaylist);
+                  setNewPlaylist("");
+                  setDesc("");
+                })
+                
               }}
             >
               Save
@@ -64,16 +83,18 @@ const me: NextPage = () => {
           </div>
         </div>
       </div>
+
       <section className="flex flex-col w-full max-w-screen-xl gap-12 px-6 mx-auto my-24">
         <div className="flex flex-row items-center gap-2">
           <img
             className="object-cover w-12 h-12 rounded-full"
             src="https://api.lorem.space/image/face?hash=47449"
           />
-          <h1 className="text-3xl font-bold">Username's playlist</h1>
+          <h1 className="text-3xl font-bold">Username's Library</h1>
         </div>
 
         <div className="flex flex-row justify-between gap-6">
+
           {/* cover of favorite song */}
           <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl">
             <div>Description</div>
@@ -85,24 +106,30 @@ const me: NextPage = () => {
               <PlayIcon className="w-12 h-12" />
             </div>
           </div>
+
           {/* Songs */}
           <div className="flex flex-row flex-wrap w-2/3 p-2 h-80">
-            <PlaylistLikedSongItem
-              title={'Just the title'}
-              cover={
-                'https://p2.music.126.net/0jbv7CBVqdqHAb1guLX_pg==/109951167156624589.jpg?param=512y512'
-              }
-              duration={'00:00'}
-            />
+            {likedSongs?.map((item: any, i: number) => (
+              <LibrarySongItem
+                title={item.title}
+                cover={item.cover}
+                duration={item.duration}
+              />
+            ))}
           </div>
         </div>
-        {/* other favorite playlist */}
-        {playlist && (
-          <PlaylistRow
-            title={playlist.title}
-            items={playlist.data.slice(0, 5)}
-          />
-        )}
+
+        {/* Created playlist */}
+        <PlaylistRow
+          title="Created"
+          items={createdPlaylists}
+        />
+
+         {/* Favorite playlist */}
+         <PlaylistRow
+          title="Favorite"
+          items={favoritePlaylist}
+        />
 
         {/* button for create new playlist */}
         <div className="flex flex-row items-center justify-center">

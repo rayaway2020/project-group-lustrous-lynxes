@@ -103,7 +103,7 @@ const Header = () => {
           <a href="/search">Discovery</a>
         </div>
         <div className="cursor-pointer">
-          <a href="/me">Playlist</a>
+          <a href="/me">Library</a>
         </div>
       </div>
       {/*Avatar */}

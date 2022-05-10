@@ -35,13 +35,19 @@ router.get('/comments', async (req, res) => {
 //Create One Song
 router.post('/', async (req, res) => {
     const id = req.body.id;
+    const title = req.body.title;
+    const cover = req.body.cover;
+    const duration = req.body.duration;
 
     //Check existing song
     const existSong = await Song.findById(id);
 
     if (existSong == null) {
         const newSong = new Song({
-            _id: id
+            _id: id,
+            title: title,
+            cover: cover,
+            duration: duration
         });
         await newSong.save();
         res.json(newSong);
