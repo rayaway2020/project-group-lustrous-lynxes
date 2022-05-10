@@ -4,6 +4,7 @@ import PlaylistHeader from '../../components/PlaylistHeader'
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { playbarContext } from '../../components/Layout'
+import axios from 'axios'
 
 const Playlist: NextPage = () => {
   const router = useRouter()
@@ -64,6 +65,9 @@ const Playlist: NextPage = () => {
                   }
                   setCurrentSong(item)
                   setPlaying(true)
+                  axios.post('http://localhost:3001/api/songs/', {
+                    id: item.videoId
+                  })
                   console.log(item.videoId)
                 }}
               />

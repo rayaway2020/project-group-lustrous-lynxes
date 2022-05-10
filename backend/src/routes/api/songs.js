@@ -27,20 +27,28 @@ router.get('/comments', async (req, res) => {
     
         res.json(all_comments);
     } else {
-        res.send("Empty")
+        res.json([]);
     }
     
 });
 
 //Create One Song
 router.post('/', async (req, res) => {
-    const newSong = new Song({
-        _id: req.body.videoId
-    });
+    const id = req.body.id;
 
-    await newSong.save();
+    //Check existing song
+    const existSong = await Song.findById(id);
 
-    res.json(newSong);
+    if (existSong == null) {
+        const newSong = new Song({
+            _id: id
+        });
+        await newSong.save();
+        res.json(newSong);
+    }
+    else {
+        res.json({});
+    }
 });
 
 //Add a comment

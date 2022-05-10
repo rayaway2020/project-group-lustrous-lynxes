@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { HeartIcon } from '@heroicons/react/solid'
 import { HeartIcon as HeartIconOutlined } from '@heroicons/react/outline'
+import axios from 'axios'
 
 type CommentProps = {
   username: string
@@ -51,7 +52,10 @@ const Comment = ({
             >
               {liked ? (
                 <div className="flex flex-row gap-1">
-                  <HeartIcon className="w-5 h-5" /> You like this
+                  {/* Need commentId */}
+                  <HeartIcon className="w-5 h-5" onClick={() => {
+                    
+                   }}/> You like this
                 </div>
               ) : (
                 'Like'
