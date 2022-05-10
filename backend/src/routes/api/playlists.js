@@ -133,6 +133,24 @@ router.post('/', verify, async (req, res) => {
     res.json(playlist);
 })
 
+// Create a system playlist
+router.post('/public', async (req, res) => {
+    const title = req.body.title;
+    const thumbnail = req.body.thumbnail;
+    const author = req.body.author;
+    const browseId = req.body.browseId;
+     
+    const playlist = await Playlist.create({
+        title: title,
+        author: author,
+        browseId: browseId,
+        thumbnail: thumbnail
+    });
+    
+    res.json(playlist);
+})
+
+
 // Like Playlist
 router.put('/add', verify, async (req, res) => {
     const userId = req.body.userId;

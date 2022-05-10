@@ -16,7 +16,7 @@ const PlaylistRow = ({ title, items }: PlaylistRowProps) => {
             cover={item.thumbnail}
             title={item.title}
             subtitle={item.author}
-            id={item.browseId}
+            id={item.browseId}            
           />
         ))}
       </div>

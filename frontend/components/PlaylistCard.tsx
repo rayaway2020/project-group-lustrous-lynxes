@@ -1,5 +1,6 @@
 import router from 'next/router'
 import Cover from './Cover'
+import axios from 'axios'
 
 interface PlaylistCardProps {
   id: string // playlist id
@@ -13,7 +14,15 @@ const PlaylistCard = ({ id, cover, title, subtitle }: PlaylistCardProps) => {
     <div
       className="flex flex-col"
       onClick={() => {
-        router.push(`/playlist/${id}`)
+        id != "" ?
+        axios.post("http://localhost:3001/api/playlists/public", {
+                title: title,
+                thumbnail: cover,
+                author: subtitle,
+                browseId: id
+        }) :
+        null
+        router.push(`/playlist/${id}`);
       }}
     >
       <Cover url={cover} alt={title} />
@@ -24,3 +33,5 @@ const PlaylistCard = ({ id, cover, title, subtitle }: PlaylistCardProps) => {
 }
 
 export default PlaylistCard
+
+
