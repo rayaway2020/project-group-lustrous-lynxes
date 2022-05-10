@@ -1,7 +1,7 @@
 import express from 'express';
 import verify from './verifyToken.js';
 import getAPIInstance from '../../util/youtube.js';
-import { User, Playlist } from '../../db/schema.js';
+import { User, Playlist, Song } from '../../db/schema.js';
 
 const router = express.Router();
 
@@ -18,79 +18,171 @@ router.get('/network/:id', async (req, res) => {
     }
 });
 
-router.get('/user/liked/:userId', verify, async (req, res) => {
-    const dbUser = await User.findById(req.params.userId);
+router.get('/user/info', async(req, res) => {
+    const userId = req.query.userId;
+    const dbUser = await User.findById(userId);
 
-    if (db) {
-        const playlist = dbUser.likedPlaylist;
-        
+    const result = {}
+
+    const favoriteList = dbUser?.likedPlaylist;
+    const ownedPlaylist = dbUser?.ownedPlaylist;
+    const likedSongs = dbUser?.likedSongs;
+
+    if (favoriteList) {
+        const all_playlists = await Playlist.find({
+            '_id': { $in: favoriteList }
+        });
+
+        result.favoriteList = all_playlists;
     }
+    else {
+        result.favoriteList = [];
+    }
+
+    if (ownedPlaylist) {
+        const all_playlists = await Playlist.find({
+            '_id': { $in: ownedPlaylist }
+        });
+
+        result.ownedPlaylist = all_playlists;
+    }
+    else {
+        result.ownedPlaylist = [];
+    }
+
+    if (likedSongs) {
+        const all_songs = await Song.find({
+            '_id': { $in: likedSongs }
+        });
+
+        result.likedSongs = all_songs;
+    }
+    else {
+        result.likedSongs = [];
+    }
+
+    res.json(result);
+
+})
+
+//Get all favorite playlist of a user
+router.get('/user/favorite', verify, async(req, res) => {
+    const userId = req.query.userId;
     
+    const dbUser = await User.findById(userId);
+    const favoriteList = dbUser.likedPlaylist;
 
-    if (playlist) {
-        res.json(playlist);
-    } else {
-        res.statusCode(404);
-    }
-});
-
-router.get('/user/owned/:userId', verify, async (req, res) => {
-    const dbUser = await User.findById(req.params.userId);
-
-    if (db) {
-        const playlist = dbUser.ownedPlaylist;
-    }
+    if (favoriteList.length > 0) {
+        const all_playlists = await Playlist.find({
+            '_id': { $in: favoriteList }
+        });
     
-
-    if (playlist) {
-        res.json(playlist);
+        res.json(all_playlists);
     } else {
-        res.statusCode(404);
+        res.json([]);
     }
-});
 
-// Create a playlist by a user
+})
+
+//Get all created playlist of a user
+router.get('/user/created', async(req, res) => {
+    const userId = req.query.userId;
+    
+    const dbUser = await User.findById(userId);
+    const ownedPlaylist = dbUser.ownedPlaylist;
+
+    if (ownedPlaylist.length > 0) {
+        const all_playlists = await Playlist.find({
+            '_id': { $in: ownedPlaylist }
+        });
+    
+        res.json(all_playlists);
+    } else {
+        res.json([]);
+    }
+})
+
+//Create a Playlist
 router.post('/', verify, async (req, res) => {
-    const newPlaylist = await createPlaylist(
-        req.body.userId,
-        req.body.playlist
-    );
+    const userId = req.body.userId;
+    const title = req.body.title;
+    const description = req.body.description;
+    const author = req.body.author;
 
-    res.status(201)
-        .header('Location', `/api/playlists/${newPlaylist._id}`)
-        .json(newPlaylist);
+    const dbUser = await User.findById(userId);
+     
+    const playlist = await Playlist.create({
+        title: title,
+        description: description,
+        author: author
+    });
+
+    const newPlaylistId = playlist._id;
+
+    const ownedPlaylists = dbUser.ownedPlaylist;
+    ownedPlaylists.push(newPlaylistId);
+        
+    
+    await User.updateOne(
+        { _id: userId }, 
+        {
+            ownedPlaylist: ownedPlaylists
+        },
+    )
+
+    res.json(playlist);
+})
+
+// Like Playlist
+router.put('/add', verify, async (req, res) => {
+    const userId = req.body.userId;
+    const browseId = req.body.browseId;
+    
+    const dbPlaylist = await Playlist.find({ browseId: browseId }).limit(1);
+    const dbPlayistId = dbPlaylist._id;
+
+    try {
+        await User.updateOne(
+            { _id: userId }, 
+            { $push: { likedPlaylist: dbPlayistId } },
+        );
+
+        const newUser = await User.findById(userId);
+
+        res.json({likedPlaylist: newUser.likedPlaylist});
+    } catch {err =>
+        res.send(err);
+    }
+
 });
 
-router.put('/add', async (req, res) => {
-    const success = await addToPlaylist(
-        req.params.songId,
-        req.params.playlistId
-    );
+// Unlike Playlist
+router.put('/delete', verify, async (req, res) => {
+    const userId = req.body.userId;
+    const browseId = req.body.browseId;
+    
+    const dbPlaylist = await Playlist.find({ browseId: browseId }).limit(1);
+    const dbPlayistId = dbPlaylist._id;
 
-    res.sendStatus(success ? 204 : 404);
+    try {
+        await User.updateOne(
+            { _id: userId }, 
+            { $push: { likedPlaylist: dbPlayistId } },
+        );
+
+        const newUser = await User.findById(userId);
+
+        res.json({likedPlaylist: newUser.likedPlaylist});
+    } catch {err =>
+        res.send(err);
+    }
+
 });
 
-router.put('/delete', async (req, res) => {
-    const success = await deleteFromPlaylist(
-        req.params.index,
-        req.params.playlistId
-    );
 
-    res.sendStatus(success ? 204 : 404);
-});
-
-router.put('/:id', async (req, res) => {
-    const id = req.params.id;
-    const playlist = req.body;
-    playlist._id = id;
-    const success = await updatePlaylist(playlist);
-
-    res.sendStatus(success ? 204 : 404);
-});
-
-// Delete one playlist
-router.delete('/:id', verify, async (req, res) => {
-    const id = req.params.id;
+//Delete one playlist
+router.delete('/', verify, async (req, res) => {
+    const id = req.query.id;
 
     await Playlist.deleteOne({ _id: id });
 

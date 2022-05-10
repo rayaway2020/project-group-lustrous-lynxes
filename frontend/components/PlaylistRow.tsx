@@ -10,7 +10,7 @@ const PlaylistRow = ({ title, items }: PlaylistRowProps) => {
     <div className="flex w-full flex-col gap-5">
       <div className="text-2xl font-semibold">{title}</div>
       <div className="grid grid-cols-5 gap-8">
-        {items.map((item, i) => (
+        {items?.map((item, i) => (
           <PlaylistCard
             key={i}
             cover={item.thumbnail}

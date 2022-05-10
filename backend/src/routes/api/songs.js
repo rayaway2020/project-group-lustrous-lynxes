@@ -1,11 +1,12 @@
 import express from 'express';
-import { Song, User } from '../../db/schema.js';
+import verify from './verifyToken.js';
+import { Song, User, Comment } from '../../db/schema.js';
 
 const router = express.Router();
 
 //Retrieve one song and comments
-router.get('/get/:id', async (req, res) => {
-    const song = await Song.findById(req.params.id);
+router.get('/', async (req, res) => {
+    const song = await Song.findById(req.query.id);
 
     if (song) {
         res.json(song);
@@ -14,29 +15,167 @@ router.get('/get/:id', async (req, res) => {
     }
 });
 
-router.get('/user/liked/:id', async (req, res) => {
-    const dbUser = await User.findById(req.params.id)
+router.get('/comments', async (req, res) => {
+    const song = await Song.findById(req.query.id);
+
+    const idList = song.comments;
+
+    if (idList.length > 0) {
+        const all_comments = await Comment.find({
+            '_id': { $in: idList }
+        });
     
-
-    const song = await Song.findById(req.params.id);
-
-    if (song) {
-        res.json(song);
+        res.json(all_comments);
     } else {
-        res.statusCode(404);
+        res.json([]);
     }
+    
 });
-
 
 //Create One Song
 router.post('/', async (req, res) => {
-    const newSong = new Song({
-        _id: req.body.videoId
-    });
+    const id = req.body.id;
+    const title = req.body.title;
+    const cover = req.body.cover;
+    const duration = req.body.duration;
 
-    res.statusCode(201)
-        .header('Location', `/api/songs/${newSong._id}`)
-        .json(newSong);
+    //Check existing song
+    const existSong = await Song.findById(id);
+
+    if (existSong == null) {
+        const newSong = new Song({
+            _id: id,
+            title: title,
+            cover: cover,
+            duration: duration
+        });
+        await newSong.save();
+        res.json(newSong);
+    }
+    else {
+        res.json({});
+    }
 });
+
+//Add a comment
+router.post('/comment', verify, async (req, res) => {
+    const songId = req.body.songId;
+    const author = req.body.username;
+    const content = req.body.content;
+
+
+    try {
+        const comment = new Comment({ author: author, content: content });
+        await comment.save();
+
+        await Song.findOneAndUpdate(
+            { _id: songId }, 
+            { $push: { comments: comment._id } },
+        );
+
+        res.json({ commendId: comment._id });
+    } catch {err =>
+        res.send(err);
+    }
+});
+
+router.put('/comment/addlikes', async (req, res) => {
+    const id = req.body.commentId;
+    const user = req.body.userId;
+
+    try {
+        const dbComment = await Comment.findById(id);
+        const likes = dbComment.likes + 1;
+        const userList = dbComment.likedUsers;
+        userList.push(user);
+        
+    
+        await Comment.updateOne(
+            { _id: id }, 
+            {
+                $set: { 
+                    "likes": likes, "likedUsers": userList 
+                }
+            },
+        )
+        
+        res.json({ likes: likes });
+    }
+    catch {
+        res.json({});
+    }
+});
+
+router.put('/comment/cancellikes', async (req, res) => {
+    const id = req.body.commentId;
+    const user = req.body.userId;
+
+    try {
+        const dbComment = await Comment.findById(id);
+        const likes = dbComment.likes > 0? dbComment.likes - 1: 0;
+        const userList = dbComment.likedUsers;
+        const deletedList = userList.filter(u => u !== user);
+    
+        await Comment.updateOne(
+            { _id: id }, 
+            {
+                $set: { 
+                    likes: likes, likedUsers: deletedList 
+                }
+            }
+            
+        )
+        
+        res.json({ likes: likes });
+    }
+    catch {
+        err => res.send(err) 
+    }
+});
+
+// Add Liked Song
+router.put('/add', verify, async (req, res) => {
+    const userId = req.body.userId;
+    const songId = req.body.songId;
+
+    try {
+        await User.updateOne(
+            { _id: userId }, 
+            { $push: { likedSongs: songId } },
+        );
+
+        const newUser = await User.findById(userId);
+
+        res.json({likedSongs: newUser.likedSongs});
+    } catch {err =>
+        res.send(err);
+    }
+
+});
+
+router.put('/delete', verify, async (req, res) => {
+    const userId = req.body.userId;
+    const songId = req.body.songId;
+
+    const dbUser = await User.findById(userId);
+    const likedSongs = dbUser.likedSongs.filter(x => x !== songId);
+
+    try {
+        await User.updateOne(
+            { _id: userId }, 
+            { likedSongs: likedSongs },
+        );
+
+        const newUser = await User.findById(userId);
+
+        res.json({likedSongs: newUser.likedSongs});
+    } catch {err =>
+        res.send(err);
+    }
+
+});
+
+
+
 
 export default router;

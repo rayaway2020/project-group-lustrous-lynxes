@@ -52,8 +52,7 @@ const Header = () => {
     setFormErrors(validateRegister(formValues));
     setIsSubmit(true);
 
-    if(Object.keys(formErrors).length === 0 && isSubmit){
-      Axios.post('http://localhost:3001/api/auth/register', {
+    Axios.post('http://localhost:3001/api/auth/register', {
       username: username,
       password: password,
       email: email,
@@ -65,9 +64,6 @@ const Header = () => {
         alert('Registration failed')
       }
     })
-    }else{
-      setIsSubmit(false);
-    }
   }
 
   const login = () => {
@@ -104,10 +100,10 @@ const Header = () => {
           <a href="/">Home</a>
         </div>
         <div className="cursor-pointer">
-          <a href="#">Discovery</a>
+          <a href="/search">Discovery</a>
         </div>
         <div className="cursor-pointer">
-          <a href="/me">Playlist</a>
+          <a href="/me">Library</a>
         </div>
       </div>
       {/*Avatar */}

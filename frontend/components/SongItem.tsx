@@ -30,7 +30,7 @@ const SongItem = ({
         className="object-cover w-8 h-8 rounded aspect-square"
       />
       <div className="flex-1 truncate">{title}</div>
-      <div>{`${minutes}:${seconds}`}</div>
+      <div>{`0:${minutes}:${seconds}`}</div>
     </div>
   )
 }

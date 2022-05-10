@@ -10,7 +10,7 @@ export default function verify(req, res, next) {
         const verified = jwt.verify(token, "gbf0wvx7AOqkU0p9p30mqHYC");
         req.user = verified;
         next();
-    } catch(err) {
-        res.status(400).send("Invalid Token");
+    } catch { err =>
+        res.status(400).send(err);
     }
 }

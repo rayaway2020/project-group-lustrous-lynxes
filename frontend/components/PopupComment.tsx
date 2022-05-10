@@ -1,6 +1,32 @@
 import Comment from './Comment'
+import axios from 'axios';
+import { useState, useEffect} from 'react'
 
-const PopupComment = () => {
+interface PopUpCommentProps {
+  songID: string
+}
+
+const PopupComment = ( { songID }: PopUpCommentProps ) => {
+  const [comments, setComments] = useState<any[] | undefined>()
+  const [newComment, setNewComment] = useState("")
+
+  const userId = "627a76a742738d8f093d6fdc";
+  const userId2 = "627a3d6ffa644f105d1c5ca1";
+
+  useEffect(() => {
+    fetchComment();
+  }, [])
+
+  function fetchComment() {
+    axios.get('http://localhost:3001/api/songs/comments', { params : {
+      id: songID
+    }})
+    .then((res) => {
+      setComments(res.data)
+      console.log(res.data)
+    })
+  }
+
   return (
     <div className="flex flex-col h-full gap-10 px-16 py-24 pt-8 overflow-y-auto scrollbar-hide">
       {/* Avatar and Input*/}
@@ -14,6 +40,27 @@ const PopupComment = () => {
           type="text"
           placeholder="Leave your comment here"
           className="w-full input input-bordered"
+          value={newComment}
+          onChange={(e) => {
+            setNewComment(e.target.value)
+            console.log(e.target.value)
+          }}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              axios.post("http://localhost:3001/api/songs/comment", {
+                songId: songID,
+                username: "default_name",
+                content: newComment
+              }, {
+                headers: {
+                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                }
+              }).then((res) => {
+                setNewComment("");
+                fetchComment();
+              })
+            }
+          }}
         />
       </div>
 
@@ -23,14 +70,16 @@ const PopupComment = () => {
       </div>
 
       {/* Comment from users */}
+      {/* Need to make change */}
       <section className="flex flex-col gap-4">
-        {[...Array(10)].map((_, i) => (
+        {comments?.map((comment, i) => (
           <Comment
-            username={'Username'}
-            date={'2020/07/21'}
-            content={'The just my first comment'}
-            like={false}
-            likecount={3}
+            id={comment._id}
+            username={comment.author}
+            date={comment.createdDates}
+            content={comment.content}
+            like={comment.likedUsers.includes(userId)}
+            likecount={comment.likes}
           />
         ))}
       </section>
