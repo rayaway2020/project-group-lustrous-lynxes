@@ -35,7 +35,7 @@ router.get('/songs', async (req, res) => {
                 ];
             }
         });
-        res.send(result.content);
+        res.send(raw);
     });
 });
 
