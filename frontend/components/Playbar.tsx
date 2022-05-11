@@ -42,11 +42,11 @@ const Playbar = ( { like }: PlaybarProps) => {
           {liked ? 
             <HeartIcon className="w-6 h-6" onClick={() => {
               axios.put("http://localhost:3001/api/songs/delete", {
-                userId: "627a76a742738d8f093d6fdc",
+                userId: "627b4044fbab35adfd534d77",
                 songId: currentSong.videoId
               }, {
                 headers: {
-                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o"
                 }
               }).then(res => {
                 setLiked(!liked)
@@ -55,11 +55,11 @@ const Playbar = ( { like }: PlaybarProps) => {
             : 
             <HeartIconOutlined className="w-6 h-6" onClick={() => {
               axios.put("http://localhost:3001/api/songs/add", {
-                userId: "627a76a742738d8f093d6fdc",
+                userId: "627b4044fbab35adfd534d77",
                 songId: currentSong.videoId
               }, {
                 headers: {
-                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o"
                 }
               }).then(res => {
                 setLiked(!liked)

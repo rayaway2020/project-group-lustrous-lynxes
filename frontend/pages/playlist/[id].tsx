@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { playbarContext } from '../../components/Layout'
 import axios from 'axios'
+import { UserAddIcon } from '@heroicons/react/outline'
 
 const Playlist: NextPage = () => {
   const router = useRouter()
@@ -13,9 +14,9 @@ const Playlist: NextPage = () => {
         title: string
         cover: string
         owner: string
-        description: string
         like: boolean
-        browseId: string
+        description: string
+        id: string
       }
     | undefined
   >()
@@ -23,30 +24,42 @@ const Playlist: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { setCurrentSong, setPlaying } = useContext(playbarContext)
 
-  // Need to modify like status and browser ID, distinguish local and cloud playlist
+  // API分辨是Id还是browserId
   useEffect(() => {
-    fetch('http://localhost:3001/api/playlists/network/' + router.query.id)
-      .then((res) => res.json())
-      .then((data) => {
-        setSongs(data.content)
-        const tem: {
-          title: string
-          cover: string
-          owner: string
-          description: string
-          like: boolean
-          browseId: string
-        } = {
-          title: data.title,
-          cover: data.thumbnails?.[2].url,
-          owner: data.owner,
-          description: data.dateYear,
-          like: false,
-          browseId: `${router.query.id}`
-        }
-        setInfo(tem)
-        setIsLoading(false)
-      })
+    axios.get("http://localhost:3001/api/playlists/network/", {
+      params: {
+        id: router.query.id,
+        userId: "627b4044fbab35adfd534d77"
+      }
+    }).then((res) => {
+      const data = res.data;
+      setSongs(data.playlist.content)
+      const tem: {
+        title: string
+        cover: string
+        owner: string
+        like: boolean
+        description: string
+        id: string
+      } = data.isUser? {
+        title: data.playlist.title,
+        cover: data.playlist.thumbnail,
+        owner: data.playlist.author,
+        like: data.like,
+        description: data.playlist.description,
+        id: data.playlist._id
+      }
+      : {
+        title: data.playlist.title,
+        cover: data.playlist.thumbnails?.[0].url,
+        owner: data.playlist.owner,
+        like: data.like,
+        description: data.playlist.dateYear,
+        id: data.id
+      }
+      setInfo(tem)
+      setIsLoading(false)
+    })
   }, [])
 
   return (

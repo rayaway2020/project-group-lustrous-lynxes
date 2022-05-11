@@ -1,26 +1,28 @@
+import { Playlist } from '../../db/schema.js';
 import express from 'express';
-import {
-    trendingData,
-    forYouData,
-    newReleaseData,
-} from '../../db/recommend-data.js';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    // the mock data
+    const Trending = await Playlist.find().sort({ title: 1 }).limit(5);
+
+    const ForYou = await Playlist.find().sort({ author: 1 }).limit(5);
+
+    const NewRelease = await Playlist.find().sort({ author: -1 }).limit(5);
+
+
     const raw = [
         {
             title: 'Trending',
-            data: trendingData,
+            data: Trending,
         },
         {
             title: 'For You',
-            data: forYouData,
+            data: ForYou,
         },
         {
             title: 'New Release',
-            data: newReleaseData,
+            data: NewRelease,
         },
     ];
     return res.status(200).json(raw);

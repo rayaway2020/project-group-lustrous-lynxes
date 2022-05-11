@@ -8,20 +8,21 @@ type PlayListHeaderProps = {
   cover: string
   title: string
   owner: string
-  description: string
   like: boolean
-  browseId: string
+  description: string
+  id:string
 }
 
 const PlayListHeader = ({
   cover,
   title,
   owner,
-  description,
   like,
-  browseId
+  description,
+  id
 }: PlayListHeaderProps) => {
   const [liked, setLiked] = useState(like);
+  const userId = "627b4044fbab35adfd534d77";
 
   return (
     <div className="flex h-80 w-full flex-row gap-8 rounded-2xl bg-gray-100 p-12">
@@ -42,13 +43,14 @@ const PlayListHeader = ({
           <span>Play</span>
         </div>
         <div className="flex w-min flex-row gap-2 rounded bg-white px-4 py-1" >
+          
           {liked? <HeartIcon className="h-6 w-6" onClick={() => {
-            axios.put("http://localhost:3001/api/playlists/add", {
-              userId: "627a76a742738d8f093d6fdc",
-              browseId: browseId
+            axios.put("http://localhost:3001/api/playlists/delete", {
+              userId: userId,
+              playlistId: id
             }, {
               headers: {
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o"
               }
             }).then(res => {
               setLiked(!liked)
@@ -56,12 +58,12 @@ const PlayListHeader = ({
           }} />
           : 
           <HeartIconOutlined className="h-6 w-6" onClick={() => {
-            axios.put("http://localhost:3001/api/playlists/delete", {
-              userId: "627a76a742738d8f093d6fdc",
-              browseId: browseId
+            axios.put("http://localhost:3001/api/playlists/add", {
+              userId: userId,
+              playlistId: id
             }, {
               headers: {
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o"
               }
             }).then(res => {
               setLiked(!liked)

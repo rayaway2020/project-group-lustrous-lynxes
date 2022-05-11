@@ -6,16 +6,27 @@ import { User, Playlist, Song } from '../../db/schema.js';
 const router = express.Router();
 
 // Retrieve one playlist
-router.get('/network/:id', async (req, res) => {
-    const id = req.params.id;
-    if (id === 'undefined') {
-        res.send({});
-    } else {
+router.get('/network', async (req, res) => {
+    const unknownTypeId = req.query.id;
+    const userId = req.query.userId;
+
+    const dbUser = await User.findById(userId);
+    const utubePlaylist = await Playlist.findOne({ browseId: unknownTypeId})
+
+    if (utubePlaylist != null) {
         const api = await getAPIInstance();
-        api.getPlaylist(id).then(result => {
-            res.send(result);
+        api.getPlaylist(unknownTypeId).then(result => {
+            const id = utubePlaylist._id;
+            res.json({isUser: false, id: id, like: dbUser.likedPlaylist.includes(id), playlist: result});
         });
     }
+    else {
+        const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId})
+        const id = dbPlaylist._id;
+
+        res.json({isUser: true, like: dbUser.likedPlaylist.includes(id), playlist: dbPlaylist})
+    }
+
 });
 
 router.get('/user/info', async(req, res) => {
@@ -66,7 +77,7 @@ router.get('/user/info', async(req, res) => {
 })
 
 //Get all favorite playlist of a user
-router.get('/user/favorite', verify, async(req, res) => {
+router.get('/user/favorite', async(req, res) => {
     const userId = req.query.userId;
     
     const dbUser = await User.findById(userId);
@@ -139,30 +150,35 @@ router.post('/public', async (req, res) => {
     const thumbnail = req.body.thumbnail;
     const author = req.body.author;
     const browseId = req.body.browseId;
-     
-    const playlist = await Playlist.create({
-        title: title,
-        author: author,
-        browseId: browseId,
-        thumbnail: thumbnail
-    });
+
+    const dbPlaylist = await Playlist.find({ browseId: browseId }).limit(1);
+
+    if (dbPlaylist.length != 0) {
+        res.json(dbPlaylist);
+    } else {
+        const playlist = await Playlist.create({
+            title: title,
+            author: author,
+            browseId: browseId,
+            thumbnail: thumbnail
+        });
     
-    res.json(playlist);
+        res.json(playlist);
+    }
+     
+    
 })
 
 
 // Like Playlist
 router.put('/add', verify, async (req, res) => {
     const userId = req.body.userId;
-    const browseId = req.body.browseId;
-    
-    const dbPlaylist = await Playlist.find({ browseId: browseId }).limit(1);
-    const dbPlayistId = dbPlaylist._id;
-
+    const playlistId = req.body.playlistId;
+        
     try {
         await User.updateOne(
             { _id: userId }, 
-            { $push: { likedPlaylist: dbPlayistId } },
+            { $push: { likedPlaylist: playlistId } },
         );
 
         const newUser = await User.findById(userId);
@@ -177,15 +193,15 @@ router.put('/add', verify, async (req, res) => {
 // Unlike Playlist
 router.put('/delete', verify, async (req, res) => {
     const userId = req.body.userId;
-    const browseId = req.body.browseId;
-    
-    const dbPlaylist = await Playlist.find({ browseId: browseId }).limit(1);
-    const dbPlayistId = dbPlaylist._id;
+    const playlistId = req.body.playlistId;
+
+    const dbUser = await User.findById(userId);
+    const likedPlaylist = dbUser.likedPlaylist.filter(x => x !== playlistId);
 
     try {
         await User.updateOne(
             { _id: userId }, 
-            { $push: { likedPlaylist: dbPlayistId } },
+            { likedPlaylist: likedPlaylist },
         );
 
         const newUser = await User.findById(userId);
