@@ -1,9 +1,10 @@
 import Header from './Header'
 import Playbar from './Playbar'
 import ReactPlayer from 'react-player'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 import Popup from './Popup'
+import axios from 'axios'
 
 export const playbarContext = React.createContext<any>(undefined)
 export const userContext = React.createContext<any>(undefined)
@@ -12,10 +13,20 @@ const Layout = ({ children }: any) => {
   const [currentSong, setCurrentSong] = useState<any | undefined>(undefined)
   const [isPlaying, setPlaying] = useState(true)
   const [isPopupOpen, setPopupOpen] = useState(false)
+  const [isLiked, setIsLiked] = useState(false);
 
   const [username, setUsername] = useState('')
   const [userId, setUserId] = useState('')
   const [token, setToken] = useState<any>(undefined)
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/api/songs/isliked", { params: {
+      userId: "627b4044fbab35adfd534d77",
+      songId: currentSong?.videoId
+    }}).then(res => {
+      res.data.liked? setIsLiked(true): setIsLiked(false);
+    });
+  }, [currentSong])
 
   return (
     <>
@@ -40,7 +51,7 @@ const Layout = ({ children }: any) => {
         >
           <Header />
           {children}
-          <Playbar like={false} />
+          <Playbar like={isLiked} />
           {isPopupOpen ? <Popup id={currentSong.videoId} /> : null}
         </playbarContext.Provider>
       </userContext.Provider>

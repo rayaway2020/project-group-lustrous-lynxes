@@ -10,7 +10,7 @@ const PopupComment = ( { songID }: PopUpCommentProps ) => {
   const [comments, setComments] = useState<any[] | undefined>()
   const [newComment, setNewComment] = useState("")
 
-  const userId = "627a76a742738d8f093d6fdc";
+  const userId = "627b4044fbab35adfd534d77";
   const userId2 = "627a3d6ffa644f105d1c5ca1";
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const PopupComment = ( { songID }: PopUpCommentProps ) => {
                 content: newComment
               }, {
                 headers: {
-                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
+                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o"
                 }
               }).then((res) => {
                 setNewComment("");

@@ -76,7 +76,7 @@ const newReleaseData = [
         browseId: 'VLPL3-sRm8xAzY9gpXTMGVHJWy_FMD67NBed',
         title: 'New Songs 2022 - Music Playlist 2022 - Latest Songs 2022 (New Music & New Hits)',
         author: 'AT Charts',
-        thumbnail: 'https://yt3.ggpht.com/J2pUCEWz6ygILkR75Bhg3G08xl9RXEEaX7XVgACVW1plk_7fgQmvLjOX3bZMY6iI6ngC-1mHA84=s1200'
+        thumbnail: 'https://yt3.ggpht.com/k_i4xqWFtLx6MKlEE9pan9SC0dTgENpTyYMJoNMSyqFzqfSqJGwJ2IzERUZQrFLaBoAqHHgS-UE=s192'
     },
     {
         browseId: 'VLPLaIn8MRmEiw7DsfRLGB6EWyKATuMzgo2F',

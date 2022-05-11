@@ -1,6 +1,7 @@
 import { PlayIcon, PlusIcon } from '@heroicons/react/solid'
 import axios from 'axios'
 import type { NextPage } from 'next'
+import router from 'next/router'
 import { useState, useEffect } from 'react'
 import LibrarySongItem from '../components/LibrarySongItem'
 import PlaylistRow from '../components/PlaylistRow'
@@ -14,17 +15,14 @@ const me: NextPage = () => {
   const [desc, setDesc] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/api/playlists/user/info', {
-        params: {
-          userId: '627a76a742738d8f093d6fdc',
-        },
-      })
-      .then((res) => {
-        setCreatedPlaylists(res.data.ownedPlaylist)
-        setFavoritePlaylist(res.data.favoritePlaylist)
-        setLikedSongs(res.data.likedSongs)
-      })
+    axios.get("http://localhost:3001/api/playlists/user/info", { params: {
+      userId: "627b4044fbab35adfd534d77"
+    }}).then(res => {
+      console.log(res.data)
+      setCreatedPlaylists(res.data.ownedPlaylist);
+      setFavoritePlaylist(res.data.favoriteList);
+      setLikedSongs(res.data.likedSongs);
+    });
   }, [])
 
   const createPlaylist = () => {
@@ -86,14 +84,27 @@ const me: NextPage = () => {
           />
 
           <div className="flex flex-row items-center justify-center">
-            <label htmlFor="playlist-create">
-              <div
-                className="px-4 py-2 rounded cursor-pointer bg-sky-100 hover:bg-slate-50"
-                onClick={createPlaylist}
-              >
-                Save
-              </div>
-            </label>
+            <div
+              className="px-4 py-2 rounded cursor-pointer bg-sky-100 hover:bg-slate-50"
+              onClick={() => {
+                axios.post("http://localhost:3001/api/playlists", {
+                  userId: "627b4044fbab35adfd534d77",
+                  title: newPlaylist,
+                  description: desc,
+                  author: "default_username"
+                }, {
+                  headers: {
+                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o"
+                  }
+                }).then(res => {
+                  setCreatedPlaylists(res.data.ownedPlaylist);
+                  setNewPlaylist("");
+                  setDesc("");
+                })
+              }}
+            >
+              Save
+            </div>
           </div>
         </div>
       </div>
@@ -114,7 +125,7 @@ const me: NextPage = () => {
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
                 <b>My Favorite Songs</b>
-                <div>100 Songs</div>
+                <div>{likedSongs?.length} Songs</div>
               </div>
               <PlayIcon className="w-12 h-12" />
             </div>
@@ -133,10 +144,16 @@ const me: NextPage = () => {
         </div>
 
         {/* Created playlist */}
-        <PlaylistRow title="Created" items={createdPlaylists} />
+        <PlaylistRow
+          title="Created Playlists"
+          items={createdPlaylists}
+        />
 
-        {/* Favorite playlist */}
-        <PlaylistRow title="Favorite" items={favoritePlaylist} />
+         {/* Favorite playlist */}
+         <PlaylistRow
+          title="Favorite Playlists"
+          items={favoritePlaylist}
+        />
 
         {/* button for create new playlist */}
         <div className="flex flex-row items-center justify-center">

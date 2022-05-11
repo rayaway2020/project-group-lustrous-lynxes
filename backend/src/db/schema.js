@@ -52,7 +52,7 @@ const playlistSchema = new Schema({
     author: String,
     description: String,
     likes: { type: Number, default: 0 },
-    songList: [{ type: Schema.Types.ObjectId, ref: 'Song' }]
+    content: [{ type: String, ref: 'Song' }]
 })
 export const Playlist = mongoose.model('Playlist', playlistSchema);
 

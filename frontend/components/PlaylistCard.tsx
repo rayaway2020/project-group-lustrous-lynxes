@@ -1,28 +1,36 @@
 import router from 'next/router'
 import Cover from './Cover'
 import axios from 'axios'
+import { useState } from 'react'
 
 interface PlaylistCardProps {
-  id: string // playlist id
+  id: string
+  browseId: string // playlist id
   cover: string
   title: string
   subtitle: string
 }
 
-const PlaylistCard = ({ id, cover, title, subtitle }: PlaylistCardProps) => {
+//需要进一步考虑edge cases
+const PlaylistCard = ({ id, browseId, cover, title, subtitle }: PlaylistCardProps) => {
+  const [playlistId, setPlaylistId] = useState(id)
   return (
     <div
       className="flex flex-col"
       onClick={() => {
-        id != "" ?
+        browseId !== "" ?
         axios.post("http://localhost:3001/api/playlists/public", {
                 title: title,
                 thumbnail: cover,
                 author: subtitle,
-                browseId: id
+                browseId: browseId
+        }).then(res => {
+          setPlaylistId(res.data._id);
+          //如果点击外部来源的歌单
+          router.push(`/playlist/${browseId}/`);
         }) :
-        null
-        router.push(`/playlist/${id}`);
+        //如果点击用户创造的歌单
+        router.push(`/playlist/${playlistId}/`);
       }}
     >
       <Cover url={cover} alt={title} />

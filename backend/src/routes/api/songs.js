@@ -32,6 +32,18 @@ router.get('/comments', async (req, res) => {
     
 });
 
+router.get('/isliked', async (req, res) => {
+    const songId = req.query.songId;
+    const user = await User.findById(req.query.userId);
+
+    if (user) {
+        const likedSongs = user.likedSongs;
+
+        res.json({ isLiked: likedSongs.includes(songId)});
+    }
+    
+})
+
 //Create One Song
 router.post('/', async (req, res) => {
     const id = req.body.id;
@@ -153,6 +165,7 @@ router.put('/add', verify, async (req, res) => {
 
 });
 
+//Delete like 
 router.put('/delete', verify, async (req, res) => {
     const userId = req.body.userId;
     const songId = req.body.songId;
