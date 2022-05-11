@@ -14,6 +14,7 @@ const Layout = ({ children }: any) => {
   const [isPopupOpen, setPopupOpen] = useState(false)
 
   const [username, setUsername] = useState('')
+  const [userId, setUserId] = useState('')
   const [token, setToken] = useState<any>(undefined)
 
   return (
@@ -22,10 +23,12 @@ const Layout = ({ children }: any) => {
         <ReactPlayer
           url={`https://www.youtube.com/watch?v=${currentSong.videoId}`}
           playing={isPlaying}
-          className="fixed top-0 right-0 translate-x-full"
+          className="fixed right-0 top-30"
         />
       ) : null}
-      <userContext.Provider value={{ username, setUsername, token, setToken }}>
+      <userContext.Provider
+        value={{ username, setUsername, userId, setUserId, token, setToken }}
+      >
         <playbarContext.Provider
           value={{
             currentSong,
