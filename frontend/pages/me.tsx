@@ -14,14 +14,42 @@ const me: NextPage = () => {
   const [desc, setDesc] = useState('')
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/playlists/user/info", { params: {
-      userId: "627a76a742738d8f093d6fdc"
-    }}).then(res => {
-      setCreatedPlaylists(res.data.ownedPlaylist);
-      setFavoritePlaylist(res.data.favoritePlaylist);
-      setLikedSongs(res.data.likedSongs);
-    });
+    axios
+      .get('http://localhost:3001/api/playlists/user/info', {
+        params: {
+          userId: '627a76a742738d8f093d6fdc',
+        },
+      })
+      .then((res) => {
+        setCreatedPlaylists(res.data.ownedPlaylist)
+        setFavoritePlaylist(res.data.favoritePlaylist)
+        setLikedSongs(res.data.likedSongs)
+      })
   }, [])
+
+  const createPlaylist = () => {
+    axios
+      .post(
+        'http://localhost:3001/api/playlists',
+        {
+          userId: '627a76a742738d8f093d6fdc',
+          title: newPlaylist,
+          description: desc,
+          author: 'default_username',
+        },
+        {
+          headers: {
+            'auth-token':
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA',
+          },
+        }
+      )
+      .then((res) => {
+        setCreatedPlaylists(res.data.ownedPlaylist)
+        setNewPlaylist('')
+        setDesc('')
+      })
+  }
 
   return (
     <>
@@ -58,28 +86,14 @@ const me: NextPage = () => {
           />
 
           <div className="flex flex-row items-center justify-center">
-            <div
-              className="px-4 py-2 rounded cursor-pointer bg-sky-100 hover:bg-slate-50"
-              onClick={() => {
-                axios.post("http://localhost:3001/api/playlists", {
-                  userId: "627a76a742738d8f093d6fdc",
-                  title: newPlaylist,
-                  description: desc,
-                  author: "default_username"
-                }, {
-                  headers: {
-                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA"
-                  }
-                }).then(res => {
-                  setCreatedPlaylists(res.data.ownedPlaylist);
-                  setNewPlaylist("");
-                  setDesc("");
-                })
-                
-              }}
-            >
-              Save
-            </div>
+            <label htmlFor="playlist-create">
+              <div
+                className="px-4 py-2 rounded cursor-pointer bg-sky-100 hover:bg-slate-50"
+                onClick={createPlaylist}
+              >
+                Save
+              </div>
+            </label>
           </div>
         </div>
       </div>
@@ -94,7 +108,6 @@ const me: NextPage = () => {
         </div>
 
         <div className="flex flex-row justify-between gap-6">
-
           {/* cover of favorite song */}
           <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl">
             <div>Description</div>
@@ -120,16 +133,10 @@ const me: NextPage = () => {
         </div>
 
         {/* Created playlist */}
-        <PlaylistRow
-          title="Created"
-          items={createdPlaylists}
-        />
+        <PlaylistRow title="Created" items={createdPlaylists} />
 
-         {/* Favorite playlist */}
-         <PlaylistRow
-          title="Favorite"
-          items={favoritePlaylist}
-        />
+        {/* Favorite playlist */}
+        <PlaylistRow title="Favorite" items={favoritePlaylist} />
 
         {/* button for create new playlist */}
         <div className="flex flex-row items-center justify-center">
