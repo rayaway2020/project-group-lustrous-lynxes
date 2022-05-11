@@ -3,6 +3,17 @@ import { useContext, useState, useEffect } from 'react'
 import Axios from 'axios'
 import { userContext } from './Layout'
 import { useRouter } from 'next/router'
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 const Header = () => {
   const router = useRouter()
@@ -17,7 +28,29 @@ const Header = () => {
     password: '',
     email: '',
   })
+
+  const [isRegister, setIsRegister] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false)
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const [showError, setShowError] = useState(false);
+
+  
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
   const goBack = () => {
     history.back()
@@ -137,6 +170,60 @@ const Header = () => {
           />
         </label>
       </div>
+      
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open form dialog
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        {isRegister? <DialogTitle>Register</DialogTitle> : <DialogTitle>Login</DialogTitle>}
+        <DialogContent>
+          
+          {isRegister? <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+            required
+          /> : null}
+          
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Username"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+          <TextField
+            error={showError}
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Password"
+            type="password"
+            fullWidth
+            onChange={(e) => setShowError(e.target.value.length <= 8)}
+            variant="standard"
+            required
+            helperText="Password should be greater than 7"
+          />
+        </DialogContent>
+        
+        {isRegister?(<DialogContentText onClick={() => setIsRegister(false)}>Click here to log in</DialogContentText>) : (<DialogContentText onClick={() => setIsRegister(true)}>Click here to register</DialogContentText>) }
+        
+
+        
+
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit" onClick={handleClose}>Submit</Button>
+        </DialogActions>
+      </Dialog>
 
       <input type="checkbox" id="logIn-modal" className="modal-toggle" />
       <div className="modal">
@@ -206,7 +293,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-
+      
       <input type="checkbox" id="register-modal" className="modal-toggle" />
       <div className="modal" id="register-modal">
         <label
