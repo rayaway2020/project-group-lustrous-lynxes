@@ -46,6 +46,35 @@ const Playbar = ({ like }: PlaybarProps) => {
               {playlist[currentSong].author.name || 'unknown'}
             </div>
           </div>
+        </div>
+        {/* control bar */}
+        <div className="flex flex-row items-center justify-center flex-1 gap-8">
+          <ChevronDoubleLeftIcon
+            className="w-6 h-6 cursor-pointer"
+            onClick={playPrev}
+          />
+          {isPlaying ? (
+            <StopIcon
+              className="w-8 h-8 cursor-pointer"
+              onClick={() => {
+                setPlaying(!isPlaying)
+              }}
+            />
+          ) : (
+            <PlayIcon
+              className="w-8 h-8 cursor-pointer"
+              onClick={() => {
+                setPlaying(!isPlaying)
+              }}
+            />
+          )}
+          <ChevronDoubleRightIcon
+            className="w-6 h-6 cursor-pointer"
+            onClick={playNext}
+          />
+        </div>
+        {/* play setting */}
+        <div className="flex flex-row items-center justify-end flex-1 gap-6">
           {liked ? (
             <HeartIcon
               className="w-6 h-6"
@@ -94,37 +123,6 @@ const Playbar = ({ like }: PlaybarProps) => {
               }}
             />
           )}
-        </div>
-        {/* control bar */}
-        <div className="flex flex-row items-center justify-center flex-1 gap-8">
-          <ChevronDoubleLeftIcon
-            className="w-6 h-6 cursor-pointer"
-            onClick={playPrev}
-          />
-          {isPlaying ? (
-            <StopIcon
-              className="w-8 h-8 cursor-pointer"
-              onClick={() => {
-                setPlaying(!isPlaying)
-              }}
-            />
-          ) : (
-            <PlayIcon
-              className="w-8 h-8 cursor-pointer"
-              onClick={() => {
-                setPlaying(!isPlaying)
-              }}
-            />
-          )}
-          <ChevronDoubleRightIcon
-            className="w-6 h-6 cursor-pointer"
-            onClick={playNext}
-          />
-        </div>
-        {/* play setting */}
-        <div className="flex flex-row items-center justify-end flex-1 gap-6">
-          <CubeIcon className="w-6 h-6" />
-          <VolumeUpIcon className="w-6 h-6" />
           <ChevronUpIcon
             className="w-6 h-6 cursor-pointer"
             onClick={() => {
