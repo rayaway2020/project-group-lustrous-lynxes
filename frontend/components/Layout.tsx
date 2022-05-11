@@ -10,29 +10,60 @@ export const playbarContext = React.createContext<any>(undefined)
 export const userContext = React.createContext<any>(undefined)
 
 const Layout = ({ children }: any) => {
-  const [currentSong, setCurrentSong] = useState<any | undefined>(undefined)
+  const [playlist, setPlaylist] = useState<any[] | undefined>(undefined)
+  const [currentSong, setCurrentSong] = useState<number | undefined>(undefined)
   const [isPlaying, setPlaying] = useState(true)
   const [isPopupOpen, setPopupOpen] = useState(false)
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false)
 
   const [username, setUsername] = useState('')
   const [userId, setUserId] = useState('')
   const [token, setToken] = useState<any>(undefined)
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/songs/isliked", { params: {
-      userId: "627b4044fbab35adfd534d77",
-      songId: currentSong?.videoId
-    }}).then(res => {
-      res.data.liked? setIsLiked(true): setIsLiked(false);
-    });
+    if (currentSong) {
+      axios
+        .get('http://localhost:3001/api/songs/isliked', {
+          params: {
+            userId: '627b4044fbab35adfd534d77',
+            songId: playlist?.[currentSong],
+          },
+        })
+        .then((res) => {
+          res.data.liked ? setIsLiked(true) : setIsLiked(false)
+        })
+    }
   }, [currentSong])
+
+  const playNext = () => {
+    if (!playlist || !currentSong) {
+      return
+    }
+    if (currentSong === playlist.length - 1) {
+      setCurrentSong(0)
+    } else {
+      setCurrentSong(currentSong + 1)
+    }
+    setPlaying(true)
+  }
+
+  const playPrev = () => {
+    if (!playlist || !currentSong) {
+      return
+    }
+    if (currentSong === 0) {
+      setCurrentSong(playlist.length - 1)
+    } else {
+      setCurrentSong(currentSong - 1)
+    }
+    setPlaying(true)
+  }
 
   return (
     <>
       {currentSong ? (
         <ReactPlayer
-          url={`https://www.youtube.com/watch?v=${currentSong.videoId}`}
+          url={`https://www.youtube.com/watch?v=${playlist?.[currentSong].videoId}`}
           playing={isPlaying}
           className="fixed top-0 right-0 translate-x-full"
         />
@@ -42,17 +73,23 @@ const Layout = ({ children }: any) => {
       >
         <playbarContext.Provider
           value={{
+            playlist,
             currentSong,
             setCurrentSong,
             isPlaying,
             setPlaying,
             setPopupOpen,
+            setPlaylist,
+            playNext,
+            playPrev,
           }}
         >
           <Header />
           {children}
           <Playbar like={isLiked} />
-          {isPopupOpen ? <Popup id={currentSong.videoId} /> : null}
+          {isPopupOpen && currentSong ? (
+            <Popup id={playlist?.[currentSong].videoId} />
+          ) : null}
         </playbarContext.Provider>
       </userContext.Provider>
     </>
