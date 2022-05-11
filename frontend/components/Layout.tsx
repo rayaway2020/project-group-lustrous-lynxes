@@ -23,7 +23,7 @@ const Layout = ({ children }: any) => {
         <ReactPlayer
           url={`https://www.youtube.com/watch?v=${currentSong.videoId}`}
           playing={isPlaying}
-          className="fixed right-0 top-30"
+          className="fixed top-0 right-0 translate-x-full"
         />
       ) : null}
       <userContext.Provider

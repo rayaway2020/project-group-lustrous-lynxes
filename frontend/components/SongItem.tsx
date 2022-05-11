@@ -15,9 +15,9 @@ const SongItem = ({
   duration,
   onClick,
 }: SongItemProps) => {
-  const mind = duration % (60 * 60)
+  const mind = duration / 1000
   const minutes = Math.floor(mind / 60)
-  const seconds = Math.ceil(mind % 60)
+  const seconds = Math.ceil(mind % 60) - 1
   return (
     <div
       className="flex flex-row items-center gap-6 cursor-pointer"
@@ -30,7 +30,7 @@ const SongItem = ({
         className="object-cover w-8 h-8 rounded aspect-square"
       />
       <div className="flex-1 truncate">{title}</div>
-      <div>{`0:${minutes}:${seconds}`}</div>
+      <div>{`${minutes}:${seconds}`}</div>
     </div>
   )
 }
