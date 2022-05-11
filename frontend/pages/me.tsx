@@ -25,6 +25,30 @@ const me: NextPage = () => {
     });
   }, [])
 
+  const createPlaylist = () => {
+    axios
+      .post(
+        'http://localhost:3001/api/playlists',
+        {
+          userId: '627a76a742738d8f093d6fdc',
+          title: newPlaylist,
+          description: desc,
+          author: 'default_username',
+        },
+        {
+          headers: {
+            'auth-token':
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mjc4ZWRiZDEzYjBiNTJmMTBkMzdmYzUiLCJpYXQiOjE2NTIwOTI0ODN9.ED_bdG5fEK36_VgzrIHkdgo80la3sRPyrG5Z0toA5mA',
+          },
+        }
+      )
+      .then((res) => {
+        setCreatedPlaylists(res.data.ownedPlaylist)
+        setNewPlaylist('')
+        setDesc('')
+      })
+  }
+
   return (
     <>
       <input type="checkbox" id="playlist-create" className="modal-toggle" />
@@ -95,7 +119,6 @@ const me: NextPage = () => {
         </div>
 
         <div className="flex flex-row justify-between gap-6">
-
           {/* cover of favorite song */}
           <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl">
             <div>Description</div>

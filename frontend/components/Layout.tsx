@@ -16,6 +16,7 @@ const Layout = ({ children }: any) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const [username, setUsername] = useState('')
+  const [userId, setUserId] = useState('')
   const [token, setToken] = useState<any>(undefined)
 
   useEffect(() => {
@@ -36,7 +37,9 @@ const Layout = ({ children }: any) => {
           className="fixed top-0 right-0 translate-x-full"
         />
       ) : null}
-      <userContext.Provider value={{ username, setUsername, token, setToken }}>
+      <userContext.Provider
+        value={{ username, setUsername, userId, setUserId, token, setToken }}
+      >
         <playbarContext.Provider
           value={{
             currentSong,

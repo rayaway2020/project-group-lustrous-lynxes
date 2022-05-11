@@ -1,16 +1,23 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { useContext, useState, useEffect} from 'react'
+import { useContext, useState, useEffect } from 'react'
 import Axios from 'axios'
 import { userContext } from './Layout'
+import { useRouter } from 'next/router'
 
 const Header = () => {
-  const { username, setUsername, userId, setUserId, token, setToken } = useContext(userContext)
+  const router = useRouter()
+  const { username, setUsername, userId, setUserId, token, setToken } =
+    useContext(userContext)
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
-  const initialValues = {username: "", email: "", password: "" };
-  const [formValues, setFormValues ] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({ username: "", password: "", email: "" });
-  const [isSubmit, setIsSubmit] = useState(false);
+  const initialValues = { username: '', email: '', password: '' }
+  const [formValues, setFormValues] = useState(initialValues)
+  const [formErrors, setFormErrors] = useState({
+    username: '',
+    password: '',
+    email: '',
+  })
+  const [isSubmit, setIsSubmit] = useState(false)
 
   const goBack = () => {
     history.back()
@@ -19,38 +26,38 @@ const Header = () => {
     history.forward()
   }
 
-  useEffect(() =>{
+  useEffect(() => {
     console.log(formErrors)
-    if(Object.keys(formErrors).length === 0 && isSubmit){
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
       console.log(formValues)
     }
-  },[formErrors]);
+  }, [formErrors])
 
   const validateRegister = (values: any) => {
-    const errors = { username: "", password: "", email: "" }
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const errors = { username: '', password: '', email: '' }
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
 
-    if(!values.username){
-      errors.username= "Username is required!";
+    if (!values.username) {
+      errors.username = 'Username is required!'
     }
 
-    if(!values.password){
-      errors.password= "Password is required!";
-    } else if (values.password.length < 8){
-      errors.password = "Password must be at least 8 characters";
+    if (!values.password) {
+      errors.password = 'Password is required!'
+    } else if (values.password.length < 8) {
+      errors.password = 'Password must be at least 8 characters'
     }
 
-    if(!values.email){
-      errors.email = "Email is required!";
-    } else if (!regex.test(values.email)){
-      errors.email = "This is not a valid email format";
+    if (!values.email) {
+      errors.email = 'Email is required!'
+    } else if (!regex.test(values.email)) {
+      errors.email = 'This is not a valid email format'
     }
-    return errors;
+    return errors
   }
 
   const register = () => {
-    setFormErrors(validateRegister(formValues));
-    setIsSubmit(true);
+    setFormErrors(validateRegister(formValues))
+    setIsSubmit(true)
 
     Axios.post('http://localhost:3001/api/auth/register', {
       username: username,
@@ -58,7 +65,7 @@ const Header = () => {
       email: email,
     }).then((res: any) => {
       if (res.status == 200) {
-        setUserId(res.data.user);
+        setUserId(res.data.user)
         alert('Successfully registered')
       } else {
         alert('Registration failed')
@@ -96,21 +103,34 @@ const Header = () => {
       </div>
       {/* tab section */}
       <div className="flex flex-row items-center justify-center flex-1 w-0 gap-6 text-lg font-semibold">
-        <div className="cursor-pointer">
-          <a href="/">Home</a>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            router.push('/')
+          }}
+        >
+          Home
         </div>
-        <div className="cursor-pointer">
-          <a href="/search">Discovery</a>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            router.push('/search')
+          }}
+        >
+          Discovery
         </div>
-        <div className="cursor-pointer">
-          <a href="/me">Library</a>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            router.push('/me')
+          }}
+        >
+          Library
         </div>
       </div>
       {/*Avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
-        <label
-          htmlFor="logIn-modal"
-        >
+        <label htmlFor="logIn-modal">
           <img
             className="object-cover w-12 h-12 rounded-full"
             src="https://api.lorem.space/image/face?hash=47449"
@@ -146,7 +166,7 @@ const Header = () => {
                     className="input input-bordered"
                     minLength={6}
                     onChange={(e) => {
-                      setUsername(e.target.value);
+                      setUsername(e.target.value)
                     }}
                   />
                 </div>
@@ -162,14 +182,22 @@ const Header = () => {
                     }}
                   />
                   <label className="label">
-                    <label htmlFor="register-modal" className="btn btn-link btn-xs" onClick={login}>
+                    <label
+                      htmlFor="register-modal"
+                      className="btn btn-link btn-xs"
+                      onClick={login}
+                    >
                       Sign up for a new account?
                     </label>
                   </label>
                 </div>
 
                 <div className="mt-6 form-control">
-                  <label htmlFor="logIn-modal" className="btn btn-primary" onClick={login}>
+                  <label
+                    htmlFor="logIn-modal"
+                    className="btn btn-primary"
+                    onClick={login}
+                  >
                     LOGIN
                   </label>
                 </div>
@@ -178,7 +206,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      
+
       <input type="checkbox" id="register-modal" className="modal-toggle" />
       <div className="modal" id="register-modal">
         <label
@@ -203,30 +231,34 @@ const Header = () => {
                   <label className="label">
                     <span className="label-text">UserName</span>
                   </label>
-                  <p className='text-xs text-red-600 underline label-text underline-offset-1'>{formErrors.username}</p>
+                  <p className="text-xs text-red-600 underline label-text underline-offset-1">
+                    {formErrors.username}
+                  </p>
                   <input
                     type="text"
                     placeholder="UserName"
                     className="input input-bordered"
-                    value = { formValues.username}
+                    value={formValues.username}
                     onChange={(e) => {
                       setUsername(e.target.value)
-                      formValues.username=e.target.value;
+                      formValues.username = e.target.value
                     }}
                   />
                 </div>
 
                 <div className="form-control">
                   <label className="label">Password</label>
-                  <p className='text-xs text-red-600 underline label-text underline-offset-1'>{formErrors.password}</p>
+                  <p className="text-xs text-red-600 underline label-text underline-offset-1">
+                    {formErrors.password}
+                  </p>
                   <input
                     type="password"
                     placeholder="password"
                     className="input input-bordered"
-                    value = { formValues.password}
+                    value={formValues.password}
                     onChange={(e) => {
                       setPassword(e.target.value)
-                      formValues.password=(e.target.value)
+                      formValues.password = e.target.value
                     }}
                   />
                 </div>
@@ -235,15 +267,17 @@ const Header = () => {
                   <label className="label">
                     <span className="label-text">Email</span>
                   </label>
-                  <p className='text-xs text-red-600 underline label-text underline-offset-1'>{formErrors.email}</p>
+                  <p className="text-xs text-red-600 underline label-text underline-offset-1">
+                    {formErrors.email}
+                  </p>
                   <input
                     type="text"
                     placeholder="email"
                     className="input input-bordered"
-                    value = { formValues.email}
+                    value={formValues.email}
                     onChange={(e) => {
                       setEmail(e.target.value)
-                      formValues.email=(e.target.value)
+                      formValues.email = e.target.value
                     }}
                   />
                 </div>
