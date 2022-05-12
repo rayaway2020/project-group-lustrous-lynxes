@@ -13,6 +13,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Tooltip from '@mui/material/Tooltip';
 
 
 const Header = () => {
@@ -44,6 +45,8 @@ const Header = () => {
 
   const [isInvalid, setIsInvalid] = useState(false);
   const [invalidError, setInvalidError] = useState('');
+
+  const [avatarTip, setAvatarTip] = useState ('Click to Log In/Register')
 
   const goBack = () => {
     history.back()
@@ -141,6 +144,8 @@ const Header = () => {
         //setUsername
         setToken(res.data)
         alert('Successfully logged in')
+        setAvatarTip('Hello username Click to log out')
+        //username needs to be put into the string
         handleClose()
       } else {
         setInvalidError('Incorrect Username or Password')
@@ -177,17 +182,19 @@ const Header = () => {
       </div>
       {/*Avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
-        {token? (
+        {/* {token? (
           <p>Hi {username} to log out</p>
         ) : ( <p> Log in</p>
-        )}
-        <label htmlFor="logIn-modal">
-          <img
-            className="object-cover w-12 h-12 rounded-full"
-            src="https://api.lorem.space/image/face?hash=47449"
-            onClick={handleOpen}
-          />
-        </label>
+        )} */}
+        <Tooltip title={avatarTip} placement="left" >
+          <label htmlFor="logIn-modal">
+            <img
+              className="object-cover w-12 h-12 rounded-full"
+              src="https://api.lorem.space/image/face?hash=47449"
+              onClick={handleOpen}
+            />
+          </label>
+        </Tooltip>
       </div>
       
       <Dialog open={dialogOpen} onClose={handleClose}>
