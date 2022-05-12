@@ -138,6 +138,7 @@ const Header = () => {
       password: password,
     }).then((res: any) => {
       if (res.status == 200) {
+        //setUsername
         setToken(res.data)
         alert('Successfully logged in')
         handleClose()
@@ -176,6 +177,10 @@ const Header = () => {
       </div>
       {/*Avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
+        {token? (
+          <p>Hi {username} to log out</p>
+        ) : ( <p> Log in</p>
+        )}
         <label htmlFor="logIn-modal">
           <img
             className="object-cover w-12 h-12 rounded-full"
