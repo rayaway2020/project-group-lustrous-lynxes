@@ -22,7 +22,7 @@ const userSchema = new Schema({
     thumbnail: { type: String, default: "https://stamp.fyi/avatar/" },
     ownedPlaylist: [{ type: String, ref: 'Playlist', default: [] }],
     likedPlaylist: [{ type: String, ref: 'Playlist', default: [] }],
-    likedSongs: [{ type: String, ref: 'Song' }]
+    likedSongs: [{ type: String, ref: 'Song', default: [] }]
 })
 export const User = mongoose.model('User', userSchema);
 

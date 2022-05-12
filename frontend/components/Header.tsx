@@ -13,6 +13,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import defaultAvatar from '../public/defaultAvatar.png'
 
 
 const Header = () => {
@@ -198,11 +199,7 @@ const Header = () => {
       {/*Avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
         <label htmlFor="logIn-modal">
-          <img
-            className="object-cover w-12 h-12 rounded-full"
-            src="https://api.lorem.space/image/face?hash=47449"
-            onClick={handleOpen}
-          />
+          <img src={defaultAvatar.src} className="object-cover w-12 h-12 rounded-full" onClick={handleOpen} />
         </label>
       </div>
       
