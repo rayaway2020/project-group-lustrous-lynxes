@@ -22,45 +22,58 @@ const Playlist: NextPage = () => {
   >()
   const [songs, setSongs] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
-  const { setCurrentSong, setPlaying } = useContext(playbarContext)
+  const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
 
   // API分辨是Id还是browserId
   useEffect(() => {
-    axios.get("http://localhost:3001/api/playlists/network/", {
-      params: {
-        id: router.query.id,
-        userId: "627b4044fbab35adfd534d77"
-      }
-    }).then((res) => {
-      const data = res.data;
-      setSongs(data.playlist.content)
-      const tem: {
-        title: string
-        cover: string
-        owner: string
-        like: boolean
-        description: string
-        id: string
-      } = data.isUser? {
-        title: data.playlist.title,
-        cover: data.playlist.thumbnail,
-        owner: data.playlist.author,
-        like: data.like,
-        description: data.playlist.description,
-        id: data.playlist._id
-      }
-      : {
-        title: data.playlist.title,
-        cover: data.playlist.thumbnails?.[0].url,
-        owner: data.playlist.owner,
-        like: data.like,
-        description: data.playlist.dateYear,
-        id: data.id
-      }
-      setInfo(tem)
-      setIsLoading(false)
-    })
-  }, [])
+    if (router.query.id) {
+      axios
+        .get('http://localhost:3001/api/playlists/network/', {
+          params: {
+            id: router.query.id,
+            userId: '627b4044fbab35adfd534d77',
+          },
+        })
+        .then((res) => {
+          const data = res.data
+          const raw = data.playlist.content.map(
+            (item: { thumbnails: { url: string | undefined } }) => {
+              if (!item.thumbnails.url) {
+                item.thumbnails.url = info?.cover
+              }
+              return item
+            }
+          )
+          setSongs(raw)
+          const tem: {
+            title: string
+            cover: string
+            owner: string
+            like: boolean
+            description: string
+            id: string
+          } = data.isUser
+            ? {
+                title: data.playlist.title,
+                cover: data.playlist.thumbnail,
+                owner: data.playlist.author,
+                like: data.like,
+                description: data.playlist.description,
+                id: data.playlist._id,
+              }
+            : {
+                title: data.playlist.title,
+                cover: data.playlist.thumbnails?.[0].url,
+                owner: data.playlist.owner,
+                like: data.like,
+                description: data.playlist.dateYear,
+                id: data.id,
+              }
+          setInfo(tem)
+          setIsLoading(false)
+        })
+    }
+  }, [router.query.id])
 
   return (
     <>
@@ -83,13 +96,14 @@ const Playlist: NextPage = () => {
                   if (!item.thumbnails.url) {
                     item.thumbnails.url = info?.cover
                   }
-                  setCurrentSong(item)
+                  setPlaylist(songs)
+                  setCurrentSong(i)
                   setPlaying(true)
                   axios.post('http://localhost:3001/api/songs/', {
                     id: item.videoId,
                     title: item.name,
                     cover: item.thumbnails.url || info?.cover,
-                    duration:item.duration
+                    duration: item.duration,
                   })
                   console.log(item.videoId)
                 }}
