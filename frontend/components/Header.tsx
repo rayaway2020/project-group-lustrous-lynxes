@@ -117,7 +117,7 @@ const Header = () => {
       }
       console.log("yay")
       handleClose()
-    }else{
+    } else{
       setFormErrors(errors)
       console.log(formErrors.email)
       console.log(formErrors.username)
@@ -170,12 +170,7 @@ const Header = () => {
       </div>
       {/* tab section */}
       <div className="flex flex-row items-center justify-center flex-1 w-0 gap-6 text-lg font-semibold">
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            router.push('/')
-          }}
-        >
+        <div className="cursor-pointer" onClick={() => { router.push('/') }}>
           Home
         </div>
         <div
@@ -255,8 +250,19 @@ const Header = () => {
           />
         </DialogContent>
         
-        {isRegister?(<DialogContentText fontWeight= 'bold' fontStyle= 'oblique' textAlign='center' color='red' onClick={switchDialog}>Already got an account? Click here to log in</DialogContentText>) 
-        : (<DialogContentText onClick={switchDialog}>Sign up for an new account?</DialogContentText>) }
+        {isRegister? (
+        <DialogContentText fontWeight= 'bold' 
+                           fontStyle= 'oblique' 
+                           textAlign='center' 
+                           color='red' 
+                           onClick={switchDialog}>
+          Already got an account? Click here to log in
+        </DialogContentText>) 
+        : (
+        <DialogContentText onClick={switchDialog}>
+          Sign up for an new account?
+        </DialogContentText>
+        )}
         
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

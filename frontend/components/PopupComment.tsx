@@ -10,7 +10,7 @@ const PopupComment = ( { songID }: PopUpCommentProps ) => {
   const [comments, setComments] = useState<any[] | undefined>()
   const [newComment, setNewComment] = useState("")
 
-  const userId = "627b4044fbab35adfd534d77";
+  const userId = "627ce8e7a27332aa9d3e8d77";
   const userId2 = "627a3d6ffa644f105d1c5ca1";
 
   useEffect(() => {

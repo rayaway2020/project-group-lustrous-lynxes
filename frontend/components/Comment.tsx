@@ -28,7 +28,7 @@ const Comment = ({
   var dateTime = date + ' ' + time
 
   //Temporary
-  const userId = "627b4044fbab35adfd534d77";
+  const userId = "627ce8e7a27332aa9d3e8d77";
 
   const [liked, setLiked] = useState(like)
   const [likeCount, setLikeCount] = useState(likecount)

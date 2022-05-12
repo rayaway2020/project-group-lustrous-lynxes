@@ -47,7 +47,7 @@ const me: NextPage = () => {
 
   useEffect(() => {
     axios.get("http://localhost:3001/api/playlists/user/info", { params: {
-      userId: "627b4044fbab35adfd534d77"
+      userId: "627ce8e7a27332aa9d3e8d77"
     }}).then(res => {
       console.log(res.data)
       setCreatedPlaylists(res.data.ownedPlaylist);
@@ -119,7 +119,7 @@ const me: NextPage = () => {
               className="px-4 py-2 rounded cursor-pointer bg-sky-100 hover:bg-slate-50"
               onClick={() => {
                 axios.post("http://localhost:3001/api/playlists", {
-                  userId: "627b4044fbab35adfd534d77",
+                  userId: "627ce8e7a27332aa9d3e8d77",
                   title: newPlaylist,
                   description: desc,
                   author: "default_username"
