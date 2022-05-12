@@ -178,12 +178,14 @@ const me: NextPage = () => {
         <PlaylistRow
           title="Created Playlists"
           items={createdPlaylists}
+          knowId={true}
         />
 
          {/* Favorite playlist */}
          <PlaylistRow
           title="Favorite Playlists"
           items={favoritePlaylist}
+          knowId={true}
         />
 
         {/* button for create new playlist */}

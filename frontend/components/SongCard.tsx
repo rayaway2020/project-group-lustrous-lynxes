@@ -1,18 +1,26 @@
 import Cover from './Cover'
+import axios from 'axios'
+
 
 interface SongCardProps {
-  id: string // playlist id
+  id: string // video id
   cover: string
   title: string
   subtitle: string
+  duration: number
 }
 
-const SongCard = ({ id, cover, title, subtitle }: SongCardProps) => {
+const SongCard = ({ id, cover, title, subtitle, duration }: SongCardProps) => {
   return (
     <div
       className="flex flex-col"
       onClick={() => {
-        // display songs now
+        axios.post('http://localhost:3001/api/songs/', {
+          id: id,
+          title: title,
+          cover: cover,
+          duration: duration,
+        })
       }}
     >
       <Cover url={cover} alt={title} />

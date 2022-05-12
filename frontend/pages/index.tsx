@@ -21,6 +21,7 @@ const Home: NextPage = () => {
             key={i}
             title={playlist.title}
             items={playlist.data.slice(0, 5)}
+            knowId={true}
           />
         ))}
       </div>

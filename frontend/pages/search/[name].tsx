@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -12,20 +13,14 @@ const SearchResult: NextPage = () => {
 
   useEffect(() => {
     if (router.query.name) {
-      setIsLoading(true)
-      Promise.all([
-        fetch(
-          `http://localhost:3001/api/search/playlists?search_query=${router.query.name}`
-        ).then((res) => res.json()),
-        fetch(
-          `http://localhost:3001/api/search/songs?search_query=${router.query.name}`
-        ).then((res) => res.json()),
-      ]).then((value: any[]) => {
-        console.log(value)
-        // only show the first ten playlists or songs
-        setPlaylists(value[0].slice(0, 10))
-        setSongs(value[1].slice(0, 10))
-        setIsLoading(false)
+      setIsLoading(true);
+      axios.get("http://localhost:3001/api/search", { params: {
+        search: router.query.name
+      }}).then(res => {
+        const data = res.data;
+        setSongs(data.songs);
+        setPlaylists(data.playlists);
+        setIsLoading(false);
       })
     }
   }, [router.query.name])
@@ -43,7 +38,7 @@ const SearchResult: NextPage = () => {
           </div>
         ) : (
           <>
-            {playlists && <PlaylistRow title={'Playlist:'} items={playlists} />}
+            {playlists && <PlaylistRow title={'Playlist:'} items={playlists} knowId={false}/>}
             {songs && <SonglistRow title={'Song:'} items={songs} />}
           </>
         )}

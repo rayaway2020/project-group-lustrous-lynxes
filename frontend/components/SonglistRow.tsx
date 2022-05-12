@@ -1,21 +1,22 @@
-import PlaylistCard from './PlaylistCard'
+import SongCard from './SongCard'
 
-interface PlaylistRowProps {
+interface SonglistRowProps {
   title: string
   items: any[]
 }
 
-const PlaylistRow = ({ title, items }: PlaylistRowProps) => {
+const SonglistRow = ({ title, items }: SonglistRowProps) => {
   return (
     <div className="flex flex-col w-full gap-5">
       <div className="text-2xl font-semibold">{title}</div>
       <div className="grid grid-cols-5 gap-8">
         {items?.map((item, i) => (
-          <PlaylistCard
+          <SongCard
             key={i}
-            cover={item.thumbnails[0].url}
-            title={item.name}
-            subtitle={item.author?.name || 'unknown'}
+            cover={item.thumbnail}
+            title={item.title}
+            subtitle={item.artist || 'unknown'}
+            duration={item.duration}
             id={item.videoId}
           />
         ))}
@@ -24,4 +25,4 @@ const PlaylistRow = ({ title, items }: PlaylistRowProps) => {
   )
 }
 
-export default PlaylistRow
+export default SonglistRow

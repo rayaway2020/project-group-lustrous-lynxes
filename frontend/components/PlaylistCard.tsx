@@ -21,6 +21,7 @@ const PlaylistCard = ({
   subtitle,
 }: PlaylistCardProps) => {
   const [playlistId, setPlaylistId] = useState(id)
+  
   return (
     <div
       className="flex flex-col"
