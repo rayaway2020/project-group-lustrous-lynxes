@@ -170,7 +170,12 @@ const Header = () => {
       </div>
       {/* tab section */}
       <div className="flex flex-row items-center justify-center flex-1 w-0 gap-6 text-lg font-semibold">
-        <div className="cursor-pointer" onClick={() => { router.push('/') }}>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            router.push('/')
+          }}
+        >
           Home
         </div>
         <div
