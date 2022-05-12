@@ -98,7 +98,8 @@ const me: NextPage = () => {
 
         <div className="flex flex-row justify-between gap-6">
           {/* cover of favorite song */}
-          <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl">
+          <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl cursor-pointer"
+                onClick={()=> {router.push('/favourites')}}>
             <div>Description</div>
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
