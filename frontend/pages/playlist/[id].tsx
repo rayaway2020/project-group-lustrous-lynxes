@@ -3,9 +3,10 @@ import SongItem from '../../components/SongItem'
 import PlaylistHeader from '../../components/PlaylistHeader'
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { playbarContext } from '../../components/Layout'
+import { userContext, playbarContext } from '../../components/Layout'
 import axios from 'axios'
 import { UserAddIcon } from '@heroicons/react/outline'
+
 
 const Playlist: NextPage = () => {
   const router = useRouter()
@@ -20,6 +21,8 @@ const Playlist: NextPage = () => {
       }
     | undefined
   >()
+  const { username, setUsername, userId, setUserId, token, setToken } =
+  useContext(userContext)
   const [songs, setSongs] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
@@ -31,12 +34,12 @@ const Playlist: NextPage = () => {
         .get('http://localhost:3001/api/playlists/network/', {
           params: {
             id: router.query.id,
-            userId: '627ce8e7a27332aa9d3e8d77',
+            userId: userId,
           },
         })
         .then((res) => {
           const data = res.data
-          const raw = data.playlist.content.map(
+          const raw = data.playlist.content?.map(
             (item: { thumbnails: { url: string | undefined } }) => {
               if (!item.thumbnails.url) {
                 item.thumbnails.url = info?.cover

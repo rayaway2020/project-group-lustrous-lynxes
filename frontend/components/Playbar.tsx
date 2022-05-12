@@ -10,7 +10,7 @@ import {
   StopIcon,
 } from '@heroicons/react/outline'
 import { useState, useContext } from 'react'
-import { playbarContext } from './Layout'
+import { userContext, playbarContext } from './Layout'
 import axios from 'axios'
 
 interface PlaybarProps {
@@ -27,6 +27,8 @@ const Playbar = ({ like }: PlaybarProps) => {
     playNext,
     playPrev,
   } = useContext(playbarContext)
+
+  const { userId, token } = useContext(userContext)
 
   const [liked, setLiked] = useState(like)
 
@@ -83,13 +85,12 @@ const Playbar = ({ like }: PlaybarProps) => {
                   .put(
                     'http://localhost:3001/api/songs/delete',
                     {
-                      userId: '627ce8e7a27332aa9d3e8d77',
+                      userId: userId,
                       songId: playlist[currentSong].videoId,
                     },
                     {
                       headers: {
-                        'auth-token':
-                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o',
+                        'auth-token': token,
                       },
                     }
                   )
@@ -101,25 +102,25 @@ const Playbar = ({ like }: PlaybarProps) => {
           ) : (
             <HeartIconOutlined
               className="w-6 h-6"
-              onClick={() => {
-                axios
-                  .put(
-                    'http://localhost:3001/api/songs/add',
-                    {
-                      userId: '627ce8e7a27332aa9d3e8d77',
-                      songId: playlist[currentSong].videoId,
+              onClick={() => { token ? axios
+                .put(
+                  'http://localhost:3001/api/songs/add',
+                  {
+                    userId: userId,
+                    songId: playlist[currentSong].videoId,
+                  },
+                  {
+                    headers: {
+                      'auth-token': token,
                     },
-                    {
-                      headers: {
-                        'auth-token':
-                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o',
-                      },
-                    }
-                  )
-                  .then((res) => {
-                    setLiked(!liked)
-                  })
-                  .catch((err) => alert('Access Denied'))
+                  }
+                )
+                .then((res) => {
+                  setLiked(!liked)
+                })
+                .catch((err) => alert('Access Denied')) :
+                alert("Please log in");
+                
               }}
             />
           )}

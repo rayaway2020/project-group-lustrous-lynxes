@@ -1,17 +1,19 @@
 import Comment from './Comment'
 import axios from 'axios';
-import { useState, useEffect} from 'react'
+import { useContext, useState, useEffect} from 'react'
+import { userContext } from './Layout'
+
 
 interface PopUpCommentProps {
   songID: string
 }
 
 const PopupComment = ( { songID }: PopUpCommentProps ) => {
+  const { username, setUsername, userId, setUserId, token, setToken } =
+  useContext(userContext)
+  
   const [comments, setComments] = useState<any[] | undefined>()
   const [newComment, setNewComment] = useState("")
-
-  const userId = "627ce8e7a27332aa9d3e8d77";
-  const userId2 = "627a3d6ffa644f105d1c5ca1";
 
   useEffect(() => {
     fetchComment();
@@ -45,21 +47,22 @@ const PopupComment = ( { songID }: PopUpCommentProps ) => {
             setNewComment(e.target.value)
             console.log(e.target.value)
           }}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
+          onKeyPress={(e) => { token ?
+            (e.key === 'Enter'? 
               axios.post("http://localhost:3001/api/songs/comment", {
                 songId: songID,
-                username: "default_name",
+                username: username,
                 content: newComment
               }, {
                 headers: {
-                  "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o"
+                  "auth-token": token
                 }
               }).then((res) => {
                 setNewComment("");
                 fetchComment();
               })
-            }
+             : null)
+            : alert("Please log in first");
           }}
         />
       </div>
@@ -75,7 +78,7 @@ const PopupComment = ( { songID }: PopUpCommentProps ) => {
         {comments?.map((comment, i) => (
           <Comment
             id={comment._id}
-            username={comment.author}
+            author={comment.author}
             date={comment.createdDates}
             content={comment.content}
             like={comment.likedUsers.includes(userId)}

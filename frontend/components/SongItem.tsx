@@ -1,12 +1,8 @@
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
 import { Divider, ListItem, Menu, MenuItem } from '@mui/material'
-import { useState } from 'react'
-
-const playlists = [
-  'Add to the playlist 1',
-  'Add to the playlist 2',
-  'Add to the playlist 3',
-]
+import { useContext, useState } from 'react'
+import { userContext } from './Layout'
+import axios from 'axios'
 
 type SongItemProps = {
   id: string
@@ -27,6 +23,11 @@ const SongItem = ({
 }: SongItemProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(1)
+  const [playlists, setPlaylists] = useState([])
+
+  const { userId, token } = useContext(userContext)
+
+
   const open = Boolean(anchorEl)
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
@@ -36,7 +37,11 @@ const SongItem = ({
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number
-  ) => {
+  ) => { token ? 
+    axios.get("http://localhost:3001/playlists/user/favorite", { params: {
+      userId: userId
+    }}).then(res => setPlaylists(res.data)) : null
+
     setSelectedIndex(index)
     setAnchorEl(null)
   }
@@ -87,7 +92,7 @@ const SongItem = ({
             selected={selectedIndex === 0}
             onClick={(event: any) => handleMenuItemClick(event, 0)}
           >
-            {'Like this song'}
+            {'Choose the playlist'}
           </MenuItem>
           <Divider sx={{ my: 0.5 }} />
           {playlists.map((option, index) => (

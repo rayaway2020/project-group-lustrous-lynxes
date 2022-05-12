@@ -4,7 +4,9 @@ import {
 } from '@heroicons/react/outline'
 import { HeartIcon } from '@heroicons/react/solid'
 import axios from 'axios'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { userContext } from './Layout'
+
 
 type PlayListHeaderProps = {
   cover: string
@@ -23,8 +25,11 @@ const PlayListHeader = ({
   description,
   id,
 }: PlayListHeaderProps) => {
+
+  const { username, setUsername, userId, setUserId, token, setToken } =
+    useContext(userContext)
+  
   const [liked, setLiked] = useState(like)
-  const userId = '627ce8e7a27332aa9d3e8d77'
 
   return (
     <div className="flex flex-row w-full gap-8 p-12 bg-gray-100 h-80 rounded-2xl">
@@ -49,7 +54,7 @@ const PlayListHeader = ({
             {liked ? (
               <HeartIcon
                 className="w-6 h-6"
-                onClick={() => {
+                onClick={() => { 
                   axios
                     .put(
                       'http://localhost:3001/api/playlists/delete',
@@ -59,8 +64,7 @@ const PlayListHeader = ({
                       },
                       {
                         headers: {
-                          'auth-token':
-                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o',
+                          'auth-token': token,
                         },
                       }
                     )
@@ -73,7 +77,7 @@ const PlayListHeader = ({
             ) : (
               <HeartIconOutlined
                 className="w-6 h-6"
-                onClick={() => {
+                onClick={() => { token ? 
                   axios
                     .put(
                       'http://localhost:3001/api/playlists/add',
@@ -83,8 +87,7 @@ const PlayListHeader = ({
                       },
                       {
                         headers: {
-                          'auth-token':
-                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdiNDA0NGZiYWIzNWFkZmQ1MzRkNzciLCJpYXQiOjE2NTIyNDUyMTN9.08SvFVUJsx_-HEJtmVfRHBBt2c68frJEWFAxDQDHu3o',
+                          'auth-token': token,
                         },
                       }
                     )
@@ -92,6 +95,8 @@ const PlayListHeader = ({
                       setLiked(!liked)
                     })
                     .catch((err) => alert('Access Denied'))
+                    :
+                    alert("Please log in");
                 }}
               />
             )}

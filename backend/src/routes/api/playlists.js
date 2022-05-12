@@ -9,23 +9,37 @@ const router = express.Router();
 router.get('/network', async (req, res) => {
     const unknownTypeId = req.query.id;
     const userId = req.query.userId;
-
-    const dbUser = await User.findById(userId);
+    const info = {id: "", playlist: [], like: false, isUser: false }
     const utubePlaylist = await Playlist.findOne({ browseId: unknownTypeId})
 
-    if (utubePlaylist != null) {
-        const api = await getAPIInstance();
-        api.getPlaylist(unknownTypeId).then(result => {
-            const id = utubePlaylist._id;
-            res.json({isUser: false, id: id, like: dbUser.likedPlaylist.includes(id), playlist: result});
-        });
+    if (userId) {
+        const dbUser = await User.findOne({ _id: userId});
+        if (utubePlaylist) {
+            info.id = utubePlaylist._id;
+            const api = await getAPIInstance();
+            info.playlist = await api.getPlaylist(unknownTypeId);
+            console.log(dbUser);
+            info.like = dbUser.likedPlaylist.includes(utubePlaylist._id);
+        }
+        else {
+            const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId})
+            info.id = dbPlaylist._id;
+            info.isUser = true;
+            info.like = dbUser.likedPlaylist.includes(dbPlaylist._id);
+        }
+    } else {
+        if (utubePlaylist) {
+            info.id = utubePlaylist._id;
+            const api = await getAPIInstance();
+            info.playlist = await api.getPlaylist(unknownTypeId);
+        } else {
+            const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId});
+            info.id = dbPlaylist._id;
+            info.isUser = true;
+        }
     }
-    else {
-        const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId})
-        const id = dbPlaylist._id;
 
-        res.json({isUser: true, like: dbUser.likedPlaylist.includes(id), playlist: dbPlaylist})
-    }
+    res.json(info);
 
 });
 
@@ -121,28 +135,33 @@ router.post('/', verify, async (req, res) => {
     const author = req.body.author;
 
     const dbUser = await User.findById(userId);
-     
-    const playlist = await Playlist.create({
-        title: title,
-        description: description,
-        author: author
-    });
 
-    const newPlaylistId = playlist._id;
+    if (dbUser) {
+        const playlist = await Playlist.create({
+            title: title,
+            description: description,
+            author: author
+        });
+    
+        const newPlaylistId = playlist._id;
 
-    const ownedPlaylists = dbUser.ownedPlaylist;
-    ownedPlaylists.push(newPlaylistId);
+        const ownedPlaylists = dbUser.ownedPlaylist;
+        ownedPlaylists.push(newPlaylistId);
+        await User.updateOne(
+            { _id: userId }, 
+            {
+                ownedPlaylist: ownedPlaylists
+            },
+        )
+    
+        res.json(playlist);
+    }
+})
+    
+    
         
     
-    await User.updateOne(
-        { _id: userId }, 
-        {
-            ownedPlaylist: ownedPlaylists
-        },
-    )
-
-    res.json(playlist);
-})
+    
 
 // Create a system playlist
 router.post('/public', async (req, res) => {

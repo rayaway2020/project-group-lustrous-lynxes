@@ -13,13 +13,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import defaultAvatar from '../public/defaultAvatar.png'
+import Tooltip from '@mui/material/Tooltip';
 
 
 const Header = () => {
   const router = useRouter()
   const { username, setUsername, userId, setUserId, token, setToken } =
     useContext(userContext)
+  
+  const [formUsername, setFormUsername] = useState('');
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
@@ -38,24 +40,15 @@ const Header = () => {
     setDialogOpen(false);
     resetValues()
   }
-  const handleClickOpen = () => {
-    setDialogOpen(true);
-  };
+
   const [emailError, setEmailError] = useState(false);
   const [userNameError, setUserNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-// const style = {
-//   position: 'absolute' as 'absolute',
-//   top: '50%',
-//   left: '50%',
-//   transform: 'translate(-50%, -50%)',
-//   width: 400,
-//   bgcolor: 'background.paper',
-//   border: '2px solid #000',
-//   boxShadow: 24,
-//   p: 4,
-// };
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [invalidError, setInvalidError] = useState('');
+
+  const [avatarTip, setAvatarTip] = useState ('Click to Log In/Register')
 
   const goBack = () => {
     history.back()
@@ -66,12 +59,14 @@ const Header = () => {
 
   const resetValues = () => {
     setEmail('')
-    setUsername('')
+    setFormUsername('')
     setPassword('')
     setEmailError(false)
     setUserNameError(false)
     setPasswordError(false)
     setFormErrors(initialValues)
+    setInvalidError('')
+    setIsInvalid(false)
   }
 
   const switchDialog = () => {
@@ -83,7 +78,9 @@ const Header = () => {
     setEmailError(false)
     setUserNameError(false)
     setPasswordError(false)
-    // console.log("new turn")
+    setFormErrors(initialValues)
+    setInvalidError('')
+    setIsInvalid(false)
     const errors = {email: '', username: '', password: ''}
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
 
@@ -97,7 +94,7 @@ const Header = () => {
       }
     }
 
-    if (!username) {
+    if (!formUsername) {
       errors.username = 'Username is required!'
       setUserNameError(true)
     }
@@ -107,7 +104,7 @@ const Header = () => {
       setPasswordError(true)
     } else if (password.length < 8) {
       errors.password = 'Password must be at least 8 characters'
-            setPasswordError(true)
+      setPasswordError(true)
     }
 
     if (errors.email == '' && errors.username == '' && errors.password == ''){
@@ -116,41 +113,46 @@ const Header = () => {
       }else{
         login()
       }
-      console.log("yay")
-      handleClose()
     } else{
       setFormErrors(errors)
-      console.log(formErrors.email)
-      console.log(formErrors.username)
-      console.log(formErrors.password )
     }
   }
 
   const register = () => {
     Axios.post('http://localhost:3001/api/auth/register', {
-      username: username,
+      username: formUsername,
       password: password,
       email: email,
     }).then((res: any) => {
       if (res.status == 200) {
         setUserId(res.data.user)
         alert('Successfully registered')
+        handleClose()
       } else {
+        setInvalidError('Registration failed')
+        setIsInvalid(true)
         alert('Registration failed')
       }
     })
+    
   }
   
   const login = () => {
     Axios.post('http://localhost:3001/api/auth/login', {
-      username: username,
+      username: formUsername,
       password: password,
     }).then((res: any) => {
       if (res.status == 200) {
-        setToken(res.data)
+        setToken(res.data.token);
+        setUserId(res.data.user);
+        setUsername(formUsername);
         alert('Successfully logged in')
-        //Direct to new page
+        setAvatarTip(`Hello ${username}  Click to log out`)
+        //username needs to be put into the string
+        handleClose()
       } else {
+        setInvalidError('Incorrect Username or Password')
+        setIsInvalid(true)
         alert('Incorrect Username or Password')
       }
     })
@@ -179,28 +181,24 @@ const Header = () => {
         >
           Home
         </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            router.push('/search')
-          }}
-        >
+        <div className="cursor-pointer" onClick={() => {router.push('/search')}}>
           Discovery
         </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            router.push('/me')
-          }}
-        >
+        <div className="cursor-pointer" onClick={() => { router.push('/me')}}>
           Library
         </div>
       </div>
       {/*Avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
-        <label htmlFor="logIn-modal">
-          <img src={defaultAvatar.src} className="object-cover w-12 h-12 rounded-full" onClick={handleOpen} />
-        </label>
+        <Tooltip title={avatarTip} placement="left" >
+          <label htmlFor="logIn-modal">
+            <img
+              className="object-cover w-12 h-12 rounded-full"
+              src={ username ? `https://stamp.fyi/avatar/${username}` : ""}
+              onClick={handleOpen}
+            />
+          </label>
+        </Tooltip>
       </div>
       
       <Dialog open={dialogOpen} onClose={handleClose}>
@@ -231,9 +229,9 @@ const Header = () => {
             type="text"
             fullWidth
             variant="standard"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setFormUsername(e.target.value)}
             helperText={formErrors.username}
-            value = {username}
+            value = {formUsername}
             required
           />
           <TextField
@@ -264,6 +262,13 @@ const Header = () => {
         <DialogContentText onClick={switchDialog}>
           Sign up for an new account?
         </DialogContentText>
+        )}
+
+        {isInvalid? (
+          <DialogContentText onClick={switchDialog}>
+            {invalidError}
+          </DialogContentText>)
+          : ( <></>
         )}
         
         <DialogActions>
