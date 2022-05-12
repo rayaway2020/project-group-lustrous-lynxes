@@ -5,6 +5,13 @@ import router from 'next/router'
 import { useState, useEffect } from 'react'
 import LibrarySongItem from '../components/LibrarySongItem'
 import PlaylistRow from '../components/PlaylistRow'
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const me: NextPage = () => {
   const [favoritePlaylist, setFavoritePlaylist] = useState<any | undefined>()
@@ -13,6 +20,30 @@ const me: NextPage = () => {
 
   const [newPlaylist, setNewPlaylist] = useState('')
   const [desc, setDesc] = useState('')
+  const [isListNameError, setIsListNameError] = useState(false)
+  const [listNameError, setListNameError] = useState('')
+
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsListNameError(false)
+    setListNameError('')
+    setNewPlaylist('')
+    setDesc('')
+    setOpen(false);
+  };
+  const handleSave = () => {
+    if(newPlaylist == ''){
+      setIsListNameError(true)
+      setListNameError('Playlist name is required')
+    }else{
+      createPlaylist()
+      handleClose()
+    }
+  }
 
   useEffect(() => {
     axios.get("http://localhost:3001/api/playlists/user/info", { params: {
@@ -51,7 +82,7 @@ const me: NextPage = () => {
 
   return (
     <>
-      <input type="checkbox" id="playlist-create" className="modal-toggle" />
+      {/* <input type="checkbox" id="playlist-create" className="modal-toggle" />
       <div className="modal">
         <div className="relative modal-box">
           <label
@@ -107,7 +138,7 @@ const me: NextPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <section className="flex flex-col w-full max-w-screen-xl gap-12 px-6 mx-auto my-24">
         <div className="flex flex-row items-center gap-2">
@@ -157,12 +188,55 @@ const me: NextPage = () => {
 
         {/* button for create new playlist */}
         <div className="flex flex-row items-center justify-center">
-          <label htmlFor="playlist-create">
+          {/* <label htmlFor="playlist-create">
             <div className="flex flex-row items-center justify-around px-4 py-2 my-8 rounded cursor-pointer bg-sky-100 hover:bg-slate-50">
               <PlusIcon className="w-4 h-4 mr-2" />
               Create
             </div>
-          </label>
+          </label> */}
+          <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+              Create
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Create my own list</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  To cutomized your own list, please enter the name and description for this list.
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  error={isListNameError}
+                  margin="dense"
+                  id="name"
+                  label="Playlist name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  onChange={(e) => setNewPlaylist(e.target.value)}
+                  helperText={listNameError}
+                  value={newPlaylist}
+                  
+                  required
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Description"
+                  type="text"
+                  fullWidth
+                  onChange={(e) => setDesc(e.target.value)}
+                  variant="standard"
+                  value={desc}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleSave}>Save</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </div>
       </section>
     </>
