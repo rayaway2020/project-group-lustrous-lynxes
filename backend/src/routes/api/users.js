@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.use(express.json());
 
-// Axios.post('http://localhost:3001/api/users', null, { params: { id }}).then(res => res.status))
 router.get('/', verify, async (req, res) => {
     const user = await User.findById(req.query.id);
 
@@ -44,10 +43,5 @@ router.put('/removeplaylist', async (req, res) => {
     res.sendStatus(success ? 204 : 404);
 });
 
-//find a user
-router.get('/', async (req, res) => {
-    const users = await User.find();
-    res.send(users);
-});
 
 export default router;

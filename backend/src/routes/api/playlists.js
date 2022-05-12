@@ -12,32 +12,37 @@ router.get('/network', async (req, res) => {
     const info = {id: "", playlist: [], like: false, isUser: false }
     const utubePlaylist = await Playlist.findOne({ browseId: unknownTypeId})
 
-    if (userId) {
-        const dbUser = await User.findOne({ _id: userId});
-        if (utubePlaylist) {
-            info.id = utubePlaylist._id;
-            const api = await getAPIInstance();
-            info.playlist = await api.getPlaylist(unknownTypeId);
-            console.log(dbUser);
-            info.like = dbUser.likedPlaylist.includes(utubePlaylist._id);
-        }
-        else {
-            const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId})
-            info.id = dbPlaylist._id;
-            info.isUser = true;
-            info.like = dbUser.likedPlaylist.includes(dbPlaylist._id);
-        }
-    } else {
-        if (utubePlaylist) {
-            info.id = utubePlaylist._id;
-            const api = await getAPIInstance();
-            info.playlist = await api.getPlaylist(unknownTypeId);
+    try {
+        if (userId) {
+            const dbUser = await User.findOne({ _id: userId});
+            if (utubePlaylist) {
+                info.id = utubePlaylist._id;
+                const api = await getAPIInstance();
+                info.playlist = await api.getPlaylist(unknownTypeId);
+                console.log(dbUser);
+                info.like = dbUser.likedPlaylist.includes(utubePlaylist._id);
+            }
+            else {
+                const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId})
+                info.id = dbPlaylist._id;
+                info.isUser = true;
+                info.like = dbUser.likedPlaylist.includes(dbPlaylist._id);
+            }
         } else {
-            const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId});
-            info.id = dbPlaylist._id;
-            info.isUser = true;
+            if (utubePlaylist) {
+                info.id = utubePlaylist._id;
+                const api = await getAPIInstance();
+                info.playlist = await api.getPlaylist(unknownTypeId);
+            } else {
+                const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId});
+                info.id = dbPlaylist._id;
+                info.isUser = true;
+            }
         }
+    } catch {
+        err => res.json(err);
     }
+    
 
     res.json(info);
 

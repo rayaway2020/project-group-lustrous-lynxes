@@ -2,9 +2,10 @@ import type { NextPage } from 'next'
 import SongItem from '../components/SongItem'
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { playbarContext } from '../components/Layout'
+import { userContext, playbarContext } from '../components/Layout'
 import axios from 'axios'
 import FavouriteHeader from '../components/FavouritesHeader'
+import { UserAddIcon } from '@heroicons/react/outline'
 
 const Favourites: NextPage = () => {
   const router = useRouter()
@@ -18,18 +19,24 @@ const Favourites: NextPage = () => {
       }
     | undefined
   >()
+  const { username, setUsername, userId, setUserId, token, setToken } =
+    useContext(userContext)
   const [songs, setSongs] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
 
   useEffect(() => {
     setInfo({   title: 'My favourite songs',
-                cover: '',
-                owner: 'My username',
-                description: 'Mock description for my favourite list',
-                id: 'clever thing'
+                cover: 'https://i.pinimg.com/736x/8d/64/e9/8d64e974c73f8cb168958407dc79eb17.jpg',
+                owner: username,
+                description: 'This is all your favorite songs!',
+                id: 'id'
             })
+    axios.get("http://localhost:3001/api/songs/favorite", { params: {
+      userId: userId
+    }}).then(res => setSongs(res.data))
     }
+    
   , [])
 
   return (
@@ -45,24 +52,14 @@ const Favourites: NextPage = () => {
               <SongItem
                 key={i}
                 index={i + 1}
-                title={item.name}
-                cover={item.thumbnails.url || info?.cover}
+                title={item.title}
+                cover={item.cover}
                 duration={item.duration}
-                id={item.videoId}
+                id={item._id}
                 onClick={() => {
-                  if (!item.thumbnails.url) {
-                    item.thumbnails.url = info?.cover
-                  }
                   setPlaylist(songs)
                   setCurrentSong(i)
                   setPlaying(true)
-                  axios.post('http://localhost:3001/api/songs/', {
-                    id: item.videoId,
-                    title: item.name,
-                    cover: item.thumbnails.url || info?.cover,
-                    duration: item.duration,
-                  })
-                  console.log(item.videoId)
                 }}
               />
             ))}

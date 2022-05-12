@@ -15,6 +15,27 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/favorite', async (req, res) => {
+    const userId = req.query.userId;
+    const dbUser = await User.findById(userId);
+
+    if (dbUser) {
+        const songIdList = dbUser.likedSongs;
+        if (songIdList.length > 0) {
+            const songList = await Song.find({
+                '_id': { $in: songIdList }
+            });
+        
+            res.json(songList);
+        } else {
+            res.json([]);
+        }
+    } else {
+        res.json([])
+    }
+    
+});
+
 router.get('/comments', async (req, res) => {
     const song = await Song.findById(req.query.id);
 
