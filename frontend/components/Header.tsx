@@ -37,24 +37,13 @@ const Header = () => {
     setDialogOpen(false);
     resetValues()
   }
-  const handleClickOpen = () => {
-    setDialogOpen(true);
-  };
+
   const [emailError, setEmailError] = useState(false);
   const [userNameError, setUserNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-// const style = {
-//   position: 'absolute' as 'absolute',
-//   top: '50%',
-//   left: '50%',
-//   transform: 'translate(-50%, -50%)',
-//   width: 400,
-//   bgcolor: 'background.paper',
-//   border: '2px solid #000',
-//   boxShadow: 24,
-//   p: 4,
-// };
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [invalidError, setInvalidError] = useState('');
 
   const goBack = () => {
     history.back()
@@ -71,6 +60,8 @@ const Header = () => {
     setUserNameError(false)
     setPasswordError(false)
     setFormErrors(initialValues)
+    setInvalidError('')
+    setIsInvalid(false)
   }
 
   const switchDialog = () => {
@@ -82,7 +73,9 @@ const Header = () => {
     setEmailError(false)
     setUserNameError(false)
     setPasswordError(false)
-    // console.log("new turn")
+    setFormErrors(initialValues)
+    setInvalidError('')
+    setIsInvalid(false)
     const errors = {email: '', username: '', password: ''}
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
 
@@ -106,7 +99,7 @@ const Header = () => {
       setPasswordError(true)
     } else if (password.length < 8) {
       errors.password = 'Password must be at least 8 characters'
-            setPasswordError(true)
+      setPasswordError(true)
     }
 
     if (errors.email == '' && errors.username == '' && errors.password == ''){
@@ -115,13 +108,8 @@ const Header = () => {
       }else{
         login()
       }
-      console.log("yay")
-      handleClose()
     } else{
       setFormErrors(errors)
-      console.log(formErrors.email)
-      console.log(formErrors.username)
-      console.log(formErrors.password )
     }
   }
 
@@ -134,10 +122,14 @@ const Header = () => {
       if (res.status == 200) {
         setUserId(res.data.user)
         alert('Successfully registered')
+        handleClose()
       } else {
+        setInvalidError('Registration failed')
+        setIsInvalid(true)
         alert('Registration failed')
       }
     })
+    
   }
   
   const login = () => {
@@ -148,8 +140,10 @@ const Header = () => {
       if (res.status == 200) {
         setToken(res.data)
         alert('Successfully logged in')
-        //Direct to new page
+        handleClose()
       } else {
+        setInvalidError('Incorrect Username or Password')
+        setIsInvalid(true)
         alert('Incorrect Username or Password')
       }
     })
@@ -173,20 +167,10 @@ const Header = () => {
         <div className="cursor-pointer" onClick={() => { router.push('/') }}>
           Home
         </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            router.push('/search')
-          }}
-        >
+        <div className="cursor-pointer" onClick={() => {router.push('/search')}}>
           Discovery
         </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            router.push('/me')
-          }}
-        >
+        <div className="cursor-pointer" onClick={() => { router.push('/me')}}>
           Library
         </div>
       </div>
@@ -262,6 +246,13 @@ const Header = () => {
         <DialogContentText onClick={switchDialog}>
           Sign up for an new account?
         </DialogContentText>
+        )}
+
+        {isInvalid? (
+          <DialogContentText onClick={switchDialog}>
+            {invalidError}
+          </DialogContentText>)
+          : ( <></>
         )}
         
         <DialogActions>
