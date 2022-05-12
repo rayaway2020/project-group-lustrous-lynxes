@@ -82,7 +82,6 @@ const Playlist: NextPage = () => {
           {/* header section */}
           {info && <PlaylistHeader {...info} />}
           {/* playlist section */}
-          {/* todo this bg color need to be updated */}
           <div className="flex flex-col gap-4 px-12 py-8 rounded-2xl bg-slate-50">
             {songs?.map((item: any, i: number) => (
               <SongItem
