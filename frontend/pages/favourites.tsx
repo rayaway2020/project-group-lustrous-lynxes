@@ -19,25 +19,33 @@ const Favourites: NextPage = () => {
       }
     | undefined
   >()
-  const { username, setUsername, userId, setUserId, token, setToken } =
-    useContext(userContext)
+  const { userInfo } = useContext(userContext)
   const [songs, setSongs] = useState<any>()
+  const [options, setOptions] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
 
   useEffect(() => {
     setInfo({   title: 'My favourite songs',
                 cover: 'https://i.pinimg.com/736x/8d/64/e9/8d64e974c73f8cb168958407dc79eb17.jpg',
-                owner: username,
+                owner: userInfo.username,
                 description: 'This is all your favorite songs!',
                 id: 'id'
             })
     axios.get("http://localhost:3001/api/songs/favorite", { params: {
-      userId: userId
+      userId: userInfo.userId
     }}).then(res => setSongs(res.data))
-    }
-    
-  , [])
+    axios.get("http://localhost:3001/api/playlists/user/created", { params: {
+              userId: userInfo.id
+            }}).then(res => {
+              const data = res.data.map((item: any) => ({
+                title: item.title,
+                id: item._id
+              }))
+              setOptions(data);
+            }
+          )
+  }, [])
 
   return (
     <>
@@ -55,6 +63,7 @@ const Favourites: NextPage = () => {
                 title={item.title}
                 cover={item.cover}
                 duration={item.duration}
+                options={options}
                 id={item._id}
                 onClick={() => {
                   setPlaylist(songs)

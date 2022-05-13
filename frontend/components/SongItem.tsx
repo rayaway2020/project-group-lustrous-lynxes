@@ -10,6 +10,7 @@ type SongItemProps = {
   title: string
   cover: string
   duration: number
+  options: any
   onClick: () => void
 }
 
@@ -19,17 +20,14 @@ const SongItem = ({
   title,
   cover,
   duration,
+  options,
   onClick,
 }: SongItemProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(1)
   const { playlist, currentSong } = useContext(playbarContext)
-  const [playlists, setPlaylists] = useState([{
-    id: "",
-    title: ""
-  }])
 
-  const { userId, token } = useContext(userContext)
+  const { userInfo } = useContext(userContext)
 
 
   const open = Boolean(anchorEl)
@@ -42,7 +40,7 @@ const SongItem = ({
     setAnchorEl(null)
     axios.put("http://localhost:3001/api/playlists/addsong", {
       songId: playlist?.[currentSong].videoId,
-      playlistId: playlists[index].id
+      playlistId: options[index].id
     })
   }
 
@@ -77,19 +75,9 @@ const SongItem = ({
           onClick={(event: React.MouseEvent<HTMLElement>) => {
             event.stopPropagation()
             setAnchorEl(event.currentTarget)
-            token ? 
-            axios.get("http://localhost:3001/api/playlists/user/created", { params: {
-              userId: userId
-            }}).then(res => {
-              const data = res.data.map((item: any) => ({
-                title: item.title,
-                id: item._id
-              }))
-              console.log(data)
-              setPlaylists(data)
-              }
-            ) 
-            : null
+            userInfo.token ? 
+            null
+            : alert("Log in to see your playlists")
 
           }}
         >
@@ -113,7 +101,7 @@ const SongItem = ({
           </MenuItem>
           <Divider sx={{ my: 0.5 }} />
           {/* Dropdown options */}
-          {playlists.map((option, index) => (
+          {options?.map((option: any, index: number) => (
             <MenuItem
               key={index+1}
               selected={index + 1 === selectedIndex}

@@ -22,6 +22,7 @@ const Playlist: NextPage = () => {
   >()
   const { userInfo } = useContext(userContext)
   const [songs, setSongs] = useState<any>()
+  const [options, setOptions] = useState([{title: "", id: ""}])
   const [isLoading, setIsLoading] = useState(true)
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
 
@@ -44,7 +45,7 @@ const Playlist: NextPage = () => {
               }
               return item
             }
-          )
+          );
           setSongs(raw)
           const tem: {
             title: string
@@ -68,6 +69,16 @@ const Playlist: NextPage = () => {
                 id: data.id,
               }
           setInfo(tem)
+          axios.get("http://localhost:3001/api/playlists/user/created", { params: {
+              userId: userInfo.id
+            }}).then(res => {
+              const data = res.data.map((item: any) => ({
+                title: item.title,
+                id: item._id
+              }))
+              setOptions(data);
+            }
+          ) 
           setIsLoading(false)
         })
     }
@@ -89,6 +100,7 @@ const Playlist: NextPage = () => {
                 cover={item.thumbnails.url || info?.cover}
                 duration={item.duration}
                 id={item.videoId}
+                options={options}
                 onClick={() => {
                   if (!item.thumbnails.url) {
                     item.thumbnails.url = info?.cover
@@ -102,7 +114,6 @@ const Playlist: NextPage = () => {
                     cover: item.thumbnails.url || info?.cover,
                     duration: item.duration,
                   })
-                  console.log(item.videoId)
                 }}
               />
             ))}
