@@ -161,12 +161,7 @@ router.post('/', verify, async (req, res) => {
     
         res.json(playlist);
     }
-})
-    
-    
-        
-    
-    
+})    
 
 // Create a system playlist
 router.post('/public', async (req, res) => {
@@ -193,6 +188,21 @@ router.post('/public', async (req, res) => {
     
 })
 
+//Add a song to playlist
+router.put('/addsong', async(req, res) => {
+    const songId = req.body.songId;
+    const playlistId = req.body.playlistId;
+
+    const dbPlaylist = await Playlist.findById(playlistId);
+    if (dbPlaylist) {
+        await Playlist.updateOne(
+            {_id: playlistId},
+            { $push: { content: songId } },
+        );
+        
+        res.sendStatus(200);
+    }
+})
 
 // Like Playlist
 router.put('/add', verify, async (req, res) => {

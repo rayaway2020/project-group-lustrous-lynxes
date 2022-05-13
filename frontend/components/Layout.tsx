@@ -18,14 +18,14 @@ const Layout = ({ children }: any) => {
 
   const [username, setUsername] = useState('')
   const [userId, setUserId] = useState('')
-  const [token, setToken] = useState<any>(undefined)
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     if (currentSong) {
       axios
         .get('http://localhost:3001/api/songs/isliked', {
           params: {
-            userId: '627cfa9dd845ea0253f2f223',
+            userId: userId,
             songId: playlist?.[currentSong],
           },
         })

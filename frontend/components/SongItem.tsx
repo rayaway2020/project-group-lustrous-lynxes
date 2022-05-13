@@ -1,7 +1,7 @@
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
 import { Divider, ListItem, Menu, MenuItem } from '@mui/material'
 import { useContext, useState } from 'react'
-import { userContext } from './Layout'
+import { userContext, playbarContext } from './Layout'
 import axios from 'axios'
 
 type SongItemProps = {
@@ -23,27 +23,27 @@ const SongItem = ({
 }: SongItemProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(1)
-  const [playlists, setPlaylists] = useState([])
+  const { playlist, currentSong } = useContext(playbarContext)
+  const [playlists, setPlaylists] = useState([{
+    id: "",
+    title: ""
+  }])
 
   const { userId, token } = useContext(userContext)
 
 
   const open = Boolean(anchorEl)
-  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation()
-    setAnchorEl(event.currentTarget)
-  }
-
+  
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number
-  ) => { token ? 
-    axios.get("http://localhost:3001/playlists/user/favorite", { params: {
-      userId: userId
-    }}).then(res => setPlaylists(res.data)) : null
-
+  ) => { 
     setSelectedIndex(index)
     setAnchorEl(null)
+    axios.put("http://localhost:3001/api/playlists/addsong", {
+      songId: playlist?.[currentSong].videoId,
+      playlistId: playlists[index].id
+    })
   }
 
   const handleClose = () => {
@@ -74,7 +74,24 @@ const SongItem = ({
           aria-controls="lock-menu"
           aria-label="when device is locked"
           aria-expanded={open ? 'true' : undefined}
-          onClick={handleClickListItem}
+          onClick={(event: React.MouseEvent<HTMLElement>) => {
+            event.stopPropagation()
+            setAnchorEl(event.currentTarget)
+            token ? 
+            axios.get("http://localhost:3001/api/playlists/user/created", { params: {
+              userId: userId
+            }}).then(res => {
+              const data = res.data.map((item: any) => ({
+                title: item.title,
+                id: item._id
+              }))
+              console.log(data)
+              setPlaylists(data)
+              }
+            ) 
+            : null
+
+          }}
         >
           <DotsHorizontalIcon className="w-6 h-6" />
         </ListItem>
@@ -95,13 +112,14 @@ const SongItem = ({
             {'Choose the playlist'}
           </MenuItem>
           <Divider sx={{ my: 0.5 }} />
+          {/* Dropdown options */}
           {playlists.map((option, index) => (
             <MenuItem
-              key={option}
+              key={index+1}
               selected={index + 1 === selectedIndex}
               onClick={(event: any) => handleMenuItemClick(event, index)}
             >
-              {option}
+              {option.title}
             </MenuItem>
           ))}
         </Menu>
