@@ -15,14 +15,12 @@ const Playlist: NextPage = () => {
         title: string
         cover: string
         owner: string
-        like: boolean
         description: string
         id: string
       }
     | undefined
   >()
-  const { username, setUsername, userId, setUserId, token, setToken } =
-  useContext(userContext)
+  const { userInfo } = useContext(userContext)
   const [songs, setSongs] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
@@ -34,7 +32,7 @@ const Playlist: NextPage = () => {
         .get('http://localhost:3001/api/playlists/network/', {
           params: {
             id: router.query.id,
-            userId: userId,
+            userId: userInfo.id,
           },
         })
         .then((res) => {
@@ -52,7 +50,6 @@ const Playlist: NextPage = () => {
             title: string
             cover: string
             owner: string
-            like: boolean
             description: string
             id: string
           } = data.isUser
@@ -60,7 +57,6 @@ const Playlist: NextPage = () => {
                 title: data.playlist.title,
                 cover: data.playlist.thumbnail,
                 owner: data.playlist.author,
-                like: data.like,
                 description: data.playlist.description,
                 id: data.playlist._id,
               }
@@ -68,7 +64,6 @@ const Playlist: NextPage = () => {
                 title: data.playlist.title,
                 cover: data.playlist.thumbnails?.[0].url,
                 owner: data.playlist.owner,
-                like: data.like,
                 description: data.playlist.dateYear,
                 id: data.id,
               }

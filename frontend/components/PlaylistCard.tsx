@@ -11,7 +11,6 @@ interface PlaylistCardProps {
   subtitle: string
 }
 
-//需要进一步考虑edge cases
 // update: type of id and browseId
 const PlaylistCard = ({
   id,

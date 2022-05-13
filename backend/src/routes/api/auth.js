@@ -40,7 +40,14 @@ router.post('/login', async (req, res) => {
 
     //Create and sign a token
     const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
-    res.header('auth-token', token).send({ user: user._id, token: token });
+    res.json({ 
+        username: user.username,
+        id: user._id, 
+        token: token,
+        likedSongs: user.likedSongs,
+        likedPlaylists: user.likedPlaylist,
+        createdPlaylist: user.ownedPlaylist
+    });
 
 });
 

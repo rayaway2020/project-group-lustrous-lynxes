@@ -16,24 +16,29 @@ const Layout = ({ children }: any) => {
   const [isPopupOpen, setPopupOpen] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
 
-  const [username, setUsername] = useState('')
-  const [userId, setUserId] = useState('')
-  const [token, setToken] = useState('')
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    id: "",
+    token: "",
+    likedSongs: [""],
+    likedPlaylist: [""],
+    createdPlaylist: [""]
+  })
 
-  useEffect(() => {
-    if (currentSong) {
-      axios
-        .get('http://localhost:3001/api/songs/isliked', {
-          params: {
-            userId: userId,
-            songId: playlist?.[currentSong],
-          },
-        })
-        .then((res) => {
-          res.data.liked ? setIsLiked(true) : setIsLiked(false)
-        })
-    }
-  }, [currentSong])
+  // useEffect(() => {
+  //   if (currentSong) {
+  //     axios
+  //       .get('http://localhost:3001/api/songs/isliked', {
+  //         params: {
+  //           userId: userId,
+  //           songId: playlist?.[currentSong],
+  //         },
+  //       })
+  //       .then((res) => {
+  //         res.data.liked ? setIsLiked(true) : setIsLiked(false)
+  //       })
+  //   }
+  // }, [currentSong])
 
   const playNext = () => {
     if (!playlist || !currentSong) {
@@ -69,7 +74,7 @@ const Layout = ({ children }: any) => {
         />
       ) : null}
       <userContext.Provider
-        value={{ username, setUsername, userId, setUserId, token, setToken }}
+        value={{ userInfo, setUserInfo }}
       >
         <playbarContext.Provider
           value={{

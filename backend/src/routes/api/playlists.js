@@ -215,9 +215,7 @@ router.put('/add', verify, async (req, res) => {
             { $push: { likedPlaylist: playlistId } },
         );
 
-        const newUser = await User.findById(userId);
-
-        res.json({likedPlaylist: newUser.likedPlaylist});
+        res.json({});
     } catch {err =>
         res.send(err);
     }
@@ -238,9 +236,7 @@ router.put('/delete', verify, async (req, res) => {
             { likedPlaylist: likedPlaylist },
         );
 
-        const newUser = await User.findById(userId);
-
-        res.json({likedPlaylist: newUser.likedPlaylist});
+        res.json({});
     } catch {err =>
         res.send(err);
     }

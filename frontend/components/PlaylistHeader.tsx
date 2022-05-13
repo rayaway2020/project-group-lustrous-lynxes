@@ -12,7 +12,6 @@ type PlayListHeaderProps = {
   cover: string
   title: string
   owner: string
-  like: boolean
   description: string
   id: string
 }
@@ -21,15 +20,11 @@ const PlayListHeader = ({
   cover,
   title,
   owner,
-  like,
   description,
   id,
 }: PlayListHeaderProps) => {
 
-  const { username, setUsername, userId, setUserId, token, setToken } =
-    useContext(userContext)
-  
-  const [liked, setLiked] = useState(like)
+  const { userInfo, setUserInfo } = useContext(userContext)
 
   return (
     <div className="flex flex-row w-full gap-8 p-12 bg-gray-100 h-80 rounded-2xl">
@@ -51,7 +46,8 @@ const PlayListHeader = ({
             <span>Play</span>
           </div>
           <div className="flex flex-row gap-2 px-4 py-1 bg-white rounded w-min">
-            {liked ? (
+            {console.log(userInfo)}
+            {userInfo.likedPlaylist.includes(id) ? (
               <HeartIcon
                 className="w-6 h-6"
                 onClick={() => { 
@@ -59,42 +55,42 @@ const PlayListHeader = ({
                     .put(
                       'http://localhost:3001/api/playlists/delete',
                       {
-                        userId: userId,
+                        userId: userInfo.id,
                         playlistId: id,
                       },
                       {
                         headers: {
-                          'auth-token': token,
+                          'auth-token': userInfo.token,
                         },
                       }
                     )
                     .then((res) => {
-                      setLiked(!liked)
+                      const temp = userInfo.likedPlaylist.filter((x: any) => x != id);
+                      setUserInfo({...userInfo, likedPlaylist: temp})
                     })
-                    .catch((err) => alert('Access Denied'))
                 }}
               />
             ) : (
               <HeartIconOutlined
                 className="w-6 h-6"
-                onClick={() => { token ? 
+                onClick={() => { userInfo.token ? 
                   axios
                     .put(
                       'http://localhost:3001/api/playlists/add',
                       {
-                        userId: userId,
+                        userId: userInfo.id,
                         playlistId: id,
                       },
                       {
                         headers: {
-                          'auth-token': token,
+                          'auth-token': userInfo.token,
                         },
                       }
                     )
                     .then((res) => {
-                      setLiked(!liked)
+                      const temp = [...userInfo.likedPlaylist, id]
+                      setUserInfo({...userInfo, likedPlaylist: temp})
                     })
-                    .catch((err) => alert('Access Denied'))
                     :
                     alert("Please log in");
                 }}

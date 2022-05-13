@@ -28,9 +28,7 @@ const Playbar = ({ like }: PlaybarProps) => {
     playPrev,
   } = useContext(playbarContext)
 
-  const { userId, token } = useContext(userContext)
-
-  const [liked, setLiked] = useState(like)
+  const { userInfo, setUserInfo } = useContext(userContext)
 
   return currentSong ? (
     <section className="fixed bottom-0 left-0 right-0 z-50 max-w-screen-xl px-6 m-auto bg-white ">
@@ -75,9 +73,10 @@ const Playbar = ({ like }: PlaybarProps) => {
             onClick={playNext}
           />
         </div>
+        
         {/* play setting */}
         <div className="flex flex-row items-center justify-end flex-1 gap-6">
-          {liked ? (
+          {userInfo.likedSongs.includes(playlist[currentSong].videoId) ? (
             <HeartIcon
               className="w-6 h-6"
               onClick={() => {
@@ -85,42 +84,41 @@ const Playbar = ({ like }: PlaybarProps) => {
                   .put(
                     'http://localhost:3001/api/songs/delete',
                     {
-                      userId: userId,
+                      userId: userInfo.id,
                       songId: playlist[currentSong].videoId,
                     },
                     {
                       headers: {
-                        'auth-token': token,
+                        'auth-token': userInfo.token,
                       },
                     }
                   )
                   .then((res) => {
-                    setLiked(!liked)
-                  })
+                    const temp = userInfo.likedSongs.filter((x: any) => x != playlist[currentSong].videoId);
+                    setUserInfo({...userInfo, likedSongs: temp})
+                  });
               }}
             />
           ) : (
             <HeartIconOutlined
               className="w-6 h-6"
-              onClick={() => { token ? axios
+              onClick={() => { userInfo.token ? axios
                 .put(
                   'http://localhost:3001/api/songs/add',
                   {
-                    userId: userId,
+                    userId: userInfo.id,
                     songId: playlist[currentSong].videoId,
                   },
                   {
                     headers: {
-                      'auth-token': token,
+                      'auth-token': userInfo.token,
                     },
                   }
-                )
-                .then((res) => {
-                  setLiked(!liked)
-                })
-                .catch((err) => alert('Access Denied')) :
+                ).then((res: any) => {
+                  const temp = [...userInfo.likedSongs, playlist[currentSong].videoId]
+                  setUserInfo({...userInfo, likedSongs: temp})
+                }) :
                 alert("Please log in");
-                
               }}
             />
           )}

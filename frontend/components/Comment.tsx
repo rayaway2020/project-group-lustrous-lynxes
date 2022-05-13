@@ -28,8 +28,7 @@ const Comment = ({
     today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()
   var dateTime = date + ' ' + time
 
-  const { userId, setUserId, token, setToken } =
-    useContext(userContext)
+  const { userInfo } = useContext(userContext)
 
   const [liked, setLiked] = useState(like)
   const [likeCount, setLikeCount] = useState(likecount)
@@ -57,7 +56,7 @@ const Comment = ({
               <HeartIcon className="w-6 h-6" onClick={() => {
                 axios.put('http://localhost:3001/api/songs/comment/cancellikes', {
                     commentId: id,
-                    userId: userId
+                    userId: userInfo.id
                   }).then((res) => {
                     setLikeCount(res.data.likes);
                     setLiked(!liked);
@@ -67,7 +66,7 @@ const Comment = ({
               <HeartIconOutlined className="w-6 h-6" onClick={() => {
                 axios.put('http://localhost:3001/api/songs/comment/addlikes', {
                     commentId: id,
-                    userId: userId
+                    userId: userInfo.id
                   }).then((res) => {
                     setLikeCount(res.data.likes);
                     setLiked(!liked);

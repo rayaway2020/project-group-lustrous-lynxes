@@ -9,8 +9,7 @@ interface PopUpCommentProps {
 }
 
 const PopupComment = ( { songID }: PopUpCommentProps ) => {
-  const { username, setUsername, userId, setUserId, token, setToken } =
-  useContext(userContext)
+  const { userInfo } = useContext(userContext)
   
   const [comments, setComments] = useState<any[] | undefined>()
   const [newComment, setNewComment] = useState("")
@@ -47,15 +46,15 @@ const PopupComment = ( { songID }: PopUpCommentProps ) => {
             setNewComment(e.target.value)
             console.log(e.target.value)
           }}
-          onKeyPress={(e) => { token ?
+          onKeyPress={(e) => { userInfo.token ?
             (e.key === 'Enter'? 
               axios.post("http://localhost:3001/api/songs/comment", {
                 songId: songID,
-                username: username,
+                username: userInfo.username,
                 content: newComment
               }, {
                 headers: {
-                  "auth-token": token
+                  "auth-token": userInfo.token
                 }
               }).then((res) => {
                 setNewComment("");
@@ -81,7 +80,7 @@ const PopupComment = ( { songID }: PopUpCommentProps ) => {
             author={comment.author}
             date={comment.createdDates}
             content={comment.content}
-            like={comment.likedUsers.includes(userId)}
+            like={comment.likedUsers.includes(userInfo.id)}
             likecount={comment.likes}
           />
         ))}

@@ -18,14 +18,12 @@ import Tooltip from '@mui/material/Tooltip';
 
 const Header = () => {
   const router = useRouter()
-  const { username, setUsername, userId, setUserId, token, setToken } =
-    useContext(userContext)
+  const { userInfo, setUserInfo } = useContext(userContext)
   
   const [formUsername, setFormUsername] = useState('');
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
-  const initialValues = { email: '', username: '', password: '' }
   const [formErrors, setFormErrors] = useState({
     email: '',
     username: '',
@@ -64,7 +62,7 @@ const Header = () => {
     setEmailError(false)
     setUserNameError(false)
     setPasswordError(false)
-    setFormErrors(initialValues)
+    setFormErrors({ email: '', username: '', password: '' })
     setInvalidError('')
     setIsInvalid(false)
   }
@@ -78,7 +76,7 @@ const Header = () => {
     setEmailError(false)
     setUserNameError(false)
     setPasswordError(false)
-    setFormErrors(initialValues)
+    setFormErrors({ email: '', username: '', password: '' })
     setInvalidError('')
     setIsInvalid(false)
     const errors = {email: '', username: '', password: ''}
@@ -125,7 +123,6 @@ const Header = () => {
       email: email,
     }).then((res: any) => {
       if (res.status == 200) {
-        setUserId(res.data.user)
         alert('Successfully registered')
         handleClose()
       } else {
@@ -143,9 +140,14 @@ const Header = () => {
       password: password,
     }).then((res: any) => {
       if (res.status == 200) {
-        setToken(res.data.token);
-        setUserId(res.data.user);
-        setUsername(formUsername);
+        setUserInfo({
+          username: res.data.username,
+          id: res.data.id,
+          token: res.data.token,
+          likedSongs: res.data.likedSongs,
+          likedPlaylist: res.data.likedPlaylists,
+          createdPlaylist: res.data.createdPlaylist
+        })
         alert('Successfully logged in')
         handleClose()
       } else {
@@ -188,11 +190,11 @@ const Header = () => {
       </div>
       {/*Avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
-        <Tooltip title={username ? `Hello ${username}, click to log out` : "Click here to register/log in" } placement="left" >
+        <Tooltip title={userInfo.username ? `Hello ${userInfo.username}, click to log out` : "Click here to register/log in" } placement="left" >
           <label htmlFor="logIn-modal">
             <img
               className="object-cover w-12 h-12 rounded-full"
-              src={ username ? `https://stamp.fyi/avatar/${username}` : "https://stamp.fyi/avatar/hello"}
+              src={ userInfo.username ? `https://stamp.fyi/avatar/${userInfo.username}` : "https://stamp.fyi/avatar/hello"}
               onClick={handleOpen}
             />
           </label>

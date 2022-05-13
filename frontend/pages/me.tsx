@@ -15,11 +15,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 const me: NextPage = () => {
-  const { username, setUsername, userId, setUserId, token, setToken } =
-    useContext(userContext)
+  const { userInfo, setUserInfo } = useContext(userContext)
 
   const [favoritePlaylist, setFavoritePlaylist] = useState<any | undefined>()
-  const [createdPlaylists, setCreatedPlaylists] = useState<any | undefined>()
+  const [createdPlaylist, setCreatedPlaylist] = useState<any | undefined>()
   const [likedSongs, setLikedSongs] = useState<any | undefined>()
 
   const [newPlaylist, setNewPlaylist] = useState('')
@@ -50,12 +49,11 @@ const me: NextPage = () => {
   }
 
   useEffect(() => {
-    token ? 
+    userInfo.token ? 
     axios.get("http://localhost:3001/api/playlists/user/info", { params: {
-      userId: userId
+      userId: userInfo.id
     }}).then(res => {
-      console.log(res.data)
-      setCreatedPlaylists(res.data.ownedPlaylist);
+      setCreatedPlaylist(res.data.ownedPlaylist);
       setFavoritePlaylist(res.data.favoriteList);
       setLikedSongs(res.data.likedSongs);
     })
@@ -67,19 +65,20 @@ const me: NextPage = () => {
       .post(
         'http://localhost:3001/api/playlists',
         {
-          userId: userId,
+          userId: userInfo.id,
           title: newPlaylist,
           description: desc,
-          author: username,
+          author: userInfo.username,
         },
         {
           headers: {
-            'auth-token': token,
+            'auth-token': userInfo.token,
           },
         }
       )
       .then((res) => {
-        setCreatedPlaylists(res.data.ownedPlaylist)
+        setUserInfo({...userInfo, createdPlaylist: userInfo.createdPlaylist.push(res.data._id)})
+        setCreatedPlaylist([...createdPlaylist, res.data])
         setNewPlaylist('')
         setDesc('')
       })
@@ -91,9 +90,9 @@ const me: NextPage = () => {
         <div className="flex flex-row items-center gap-2">
           <img
             className="object-cover w-12 h-12 rounded-full"
-            src={username? `https://stamp.fyi/avatar/${username}`: ""}
+            src={userInfo.username? `https://stamp.fyi/avatar/${userInfo.username}`: "https://stamp.fyi/avatar/hello"}
           />
-          <h1 className="text-3xl font-bold">{username}'s Library</h1>
+          <h1 className="text-3xl font-bold">{userInfo.username}'s Library</h1>
         </div>
 
         <div className="flex flex-row justify-between gap-6">
@@ -125,7 +124,7 @@ const me: NextPage = () => {
         {/* Created playlist */}
         <PlaylistRow
           title="Created Playlists"
-          items={createdPlaylists}
+          items={createdPlaylist}
           knowId={true}
         />
 
