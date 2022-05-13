@@ -147,8 +147,6 @@ const Header = () => {
         setUserId(res.data.user);
         setUsername(formUsername);
         alert('Successfully logged in')
-        setAvatarTip(`Hello ${username}  Click to log out`)
-        //username needs to be put into the string
         handleClose()
       } else {
         setInvalidError('Incorrect Username or Password')
@@ -190,11 +188,11 @@ const Header = () => {
       </div>
       {/*Avatar */}
       <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
-        <Tooltip title={avatarTip} placement="left" >
+        <Tooltip title={username ? `Hello ${username}, click to log out` : "Click here to register/log in" } placement="left" >
           <label htmlFor="logIn-modal">
             <img
               className="object-cover w-12 h-12 rounded-full"
-              src={ username ? `https://stamp.fyi/avatar/${username}` : ""}
+              src={ username ? `https://stamp.fyi/avatar/${username}` : "https://stamp.fyi/avatar/hello"}
               onClick={handleOpen}
             />
           </label>
