@@ -194,7 +194,9 @@ const Header = () => {
         <div
           className="cursor-pointer"
           onClick={() => {
-            router.push('/me')
+            if (userInfo.token) {
+              router.push('/me')
+            }
           }}
         >
           Library
