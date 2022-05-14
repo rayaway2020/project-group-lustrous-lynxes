@@ -31,7 +31,6 @@ const Header = () => {
   })
 
   const [isRegister, setIsRegister] = useState(false)
-
   const [dialogOpen, setDialogOpen] = useState(false)
   const handleOpen = () => setDialogOpen(true)
   const handleClose = () => {
@@ -39,14 +38,10 @@ const Header = () => {
     resetValues()
   }
 
-  const [emailError, setEmailError] = useState(false)
-
-  const [isInvalid, setIsInvalid] = useState(false)
-  const [invalidError, setInvalidError] = useState('')
-
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertSuccess, setAlertSuccess] = useState(true)
   const [alertMsg, setAlertMsg] = useState('')
+  const [formValidation, setFormValidation] = useState({email: false, username: false, password: false})
 
   const handleAlertClose = () => {
     setAlertOpen(false)
@@ -64,8 +59,6 @@ const Header = () => {
     setFormUsername('')
     setPassword('')
     setFormErrors({ email: '', username: '', password: '' })
-    setInvalidError('')
-    setIsInvalid(false)
   }
 
   const switchDialog = () => {
@@ -74,9 +67,6 @@ const Header = () => {
   }
 
   const handleSubmit = () => {
-    setInvalidError('')
-    setIsInvalid(false)
-
     if (!password) {
       setFormErrors({ ...formErrors, username: 'Password is required!' })
     } else if (password.length < 8) {
@@ -86,10 +76,11 @@ const Header = () => {
       })
     }
 
+    //Check
     if (
-      formErrors.email == '' &&
-      formErrors.username == '' &&
-      formErrors.password == ''
+      formValidation.email == false &&
+      formValidation.username == false &&
+      formValidation.password == false
     ) {
       isRegister ? register() : login()
     }
@@ -107,8 +98,6 @@ const Header = () => {
         setAlertOpen(true)
         handleClose()
       } else {
-        setInvalidError('Registration failed')
-        setIsInvalid(true)
         setAlertMsg('Registration failed')
         setAlertSuccess(false)
         setAlertOpen(true)
@@ -158,6 +147,16 @@ const Header = () => {
     setAlertMsg('Successfully logged out')
     setAlertSuccess(true)
     setAlertOpen(true)
+  }
+
+  const helperPassword = () => {
+    if (!password) {
+      setFormValidation({...formValidation, password: true})
+      return ("Password is required")
+    } else if (password.length < 8) {
+      setFormValidation({...formValidation, password: true})
+      return ("Password needs to be more than 7 charcaters")
+    }
   }
 
   return (
@@ -297,13 +296,7 @@ const Header = () => {
             fullWidth
             onChange={(e) => setPassword(e.target.value)}
             variant="outlined"
-            helperText={
-              !password
-                ? 'Password is required'
-                : password.length < 8
-                ? 'Password needs to be more than 8 characters'
-                : ''
-            }
+            helperText={helperPassword}
             value={password}
             required
           />
@@ -333,14 +326,6 @@ const Header = () => {
           >
             Sign up for an new account?
           </DialogContentText>
-        )}
-
-        {isInvalid ? (
-          <DialogContentText onClick={switchDialog}>
-            {invalidError}
-          </DialogContentText>
-        ) : (
-          <></>
         )}
 
         <DialogActions
