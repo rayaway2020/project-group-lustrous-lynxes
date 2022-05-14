@@ -10,7 +10,6 @@ type SongItemProps = {
   title: string
   cover: string
   duration: number
-  options: any
   onClick: () => void
 }
 
@@ -20,11 +19,11 @@ const SongItem = ({
   title,
   cover,
   duration,
-  options,
   onClick,
 }: SongItemProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(1)
+  const [dropdown, setDropdown] = useState([{title: "", id: ""}])
   const { playlist, currentSong } = useContext(playbarContext)
 
   const { userInfo } = useContext(userContext)
@@ -40,7 +39,9 @@ const SongItem = ({
     setAnchorEl(null)
     axios.put("http://localhost:3001/api/playlists/addsong", {
       songId: playlist?.[currentSong].videoId,
-      playlistId: options[index].id
+      playlistId: dropdown[index].id
+    }).then((res) => {
+      res.status === 200 ? alert("Successfully added!") : null;
     })
   }
 
@@ -76,41 +77,54 @@ const SongItem = ({
             event.stopPropagation()
             setAnchorEl(event.currentTarget)
             userInfo.token ? 
-            null
+            //Get Dropdown Options
+          axios.get("http://localhost:3001/api/playlists/user/created", { params: {
+            userId: userInfo.id
+          }}).then(res => {
+            const data = res.data.map((item: any) => ({
+              title: item.title,
+              id: item._id
+            }))
+            setDropdown(data);
+          }
+          )
             : alert("Log in to see your playlists")
 
           }}
         >
           <DotsHorizontalIcon className="w-6 h-6" />
         </ListItem>
+        {userInfo.token? 
         <Menu
-          id="lock-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'lock-button',
-            role: 'listbox',
-          }}
+        id="lock-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'lock-button',
+          role: 'listbox',
+        }}
+      >
+        <MenuItem
+          selected={selectedIndex === 0}
+          onClick={(event: any) => handleMenuItemClick(event, 0)}
         >
+          {'Choose the playlist'}
+        </MenuItem>
+        <Divider sx={{ my: 0.5 }} />
+        {/* Dropdown options */}
+        {dropdown?.map((option: any, index: number) => (
           <MenuItem
-            selected={selectedIndex === 0}
-            onClick={(event: any) => handleMenuItemClick(event, 0)}
+            key={index+1}
+            onClick={(event: any) => handleMenuItemClick(event, index)}
           >
-            {'Choose the playlist'}
+            {option.title}
           </MenuItem>
-          <Divider sx={{ my: 0.5 }} />
-          {/* Dropdown options */}
-          {options?.map((option: any, index: number) => (
-            <MenuItem
-              key={index+1}
-              selected={index + 1 === selectedIndex}
-              onClick={(event: any) => handleMenuItemClick(event, index)}
-            >
-              {option.title}
-            </MenuItem>
-          ))}
-        </Menu>
+        ))}
+      </Menu>
+      :
+      null}
+        
       </div>
     </div>
   )

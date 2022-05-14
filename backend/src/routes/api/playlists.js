@@ -8,43 +8,33 @@ const router = express.Router();
 // Retrieve one playlist
 router.get('/network', async (req, res) => {
     const unknownTypeId = req.query.id;
-    const userId = req.query.userId;
-    const info = {id: "", playlist: [], like: false, isUser: false }
+    //Try to find it as a youtube playlist
     const utubePlaylist = await Playlist.findOne({ browseId: unknownTypeId})
 
     try {
-        if (userId) {
-            const dbUser = await User.findOne({ _id: userId});
-            if (utubePlaylist) {
-                info.id = utubePlaylist._id;
-                const api = await getAPIInstance();
-                info.playlist = await api.getPlaylist(unknownTypeId);
-                console.log(dbUser);
-                info.like = dbUser.likedPlaylist.includes(utubePlaylist._id);
-            }
-            else {
-                const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId})
-                info.id = dbPlaylist._id;
-                info.isUser = true;
-                info.like = dbUser.likedPlaylist.includes(dbPlaylist._id);
-            }
-        } else {
-            if (utubePlaylist) {
-                info.id = utubePlaylist._id;
-                const api = await getAPIInstance();
-                info.playlist = await api.getPlaylist(unknownTypeId);
-            } else {
-                const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId});
-                info.id = dbPlaylist._id;
-                info.isUser = true;
-            }
+        if (utubePlaylist) {
+            const api = await getAPIInstance();
+            //songs in the playlist
+            const playlistInfo = await api.getPlaylist(unknownTypeId);
+            res.json({id: utubePlaylist._id, playlist: playlistInfo, isUser: false })
         }
-    } catch {
+        else {
+            const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId})
+            const songIdList = dbPlaylist.content;
+            const songList = songIdList.length > 0? await Song.find({ '_id': { $in: songIdList }}) : [{}]
+
+            res.json({id: dbPlaylist._id, playlist: {
+                title: dbPlaylist.title, 
+                thumbnail: dbPlaylist.thumbnail,
+                owner: dbPlaylist.author,
+                description: dbPlaylist.description,
+                content: songList
+            }, isUser: true})
+        }
+        }
+    catch {
         err => res.json(err);
     }
-    
-
-    res.json(info);
 
 });
 
