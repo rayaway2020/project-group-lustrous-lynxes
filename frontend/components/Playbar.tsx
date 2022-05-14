@@ -30,7 +30,7 @@ const Playbar = ({ like }: PlaybarProps) => {
 
   const { userInfo, setUserInfo } = useContext(userContext)
 
-  return currentSong ? (
+  return currentSong || playlist ? (
     <section className="fixed bottom-0 left-0 right-0 z-50 max-w-screen-xl px-6 m-auto bg-white ">
       <div className="flex flex-row items-center justify-between h-16">
         {/* cover section */}
@@ -51,7 +51,7 @@ const Playbar = ({ like }: PlaybarProps) => {
         <div className="flex flex-row items-center justify-center flex-1 gap-8">
           <ChevronDoubleLeftIcon
             className="w-6 h-6 cursor-pointer"
-            onClick={playPrev}
+            onClick={() => playPrev()}
           />
           {isPlaying ? (
             <StopIcon
@@ -70,10 +70,10 @@ const Playbar = ({ like }: PlaybarProps) => {
           )}
           <ChevronDoubleRightIcon
             className="w-6 h-6 cursor-pointer"
-            onClick={playNext}
+            onClick={() => playNext()}
           />
         </div>
-        
+
         {/* play setting */}
         <div className="flex flex-row items-center justify-end flex-1 gap-6">
           {userInfo.likedSongs.includes(playlist[currentSong].videoId) ? (
@@ -94,31 +94,39 @@ const Playbar = ({ like }: PlaybarProps) => {
                     }
                   )
                   .then((res) => {
-                    const temp = userInfo.likedSongs.filter((x: any) => x != playlist[currentSong].videoId);
-                    setUserInfo({...userInfo, likedSongs: temp})
-                  });
+                    const temp = userInfo.likedSongs.filter(
+                      (x: any) => x != playlist[currentSong].videoId
+                    )
+                    setUserInfo({ ...userInfo, likedSongs: temp })
+                  })
               }}
             />
           ) : (
             <HeartIconOutlined
               className="w-6 h-6"
-              onClick={() => { userInfo.token ? axios
-                .put(
-                  'http://localhost:3001/api/songs/add',
-                  {
-                    userId: userInfo.id,
-                    songId: playlist[currentSong].videoId,
-                  },
-                  {
-                    headers: {
-                      'auth-token': userInfo.token,
-                    },
-                  }
-                ).then((res: any) => {
-                  const temp = [...userInfo.likedSongs, playlist[currentSong].videoId]
-                  setUserInfo({...userInfo, likedSongs: temp})
-                }) :
-                alert("Please log in");
+              onClick={() => {
+                userInfo.token
+                  ? axios
+                      .put(
+                        'http://localhost:3001/api/songs/add',
+                        {
+                          userId: userInfo.id,
+                          songId: playlist[currentSong].videoId,
+                        },
+                        {
+                          headers: {
+                            'auth-token': userInfo.token,
+                          },
+                        }
+                      )
+                      .then((res: any) => {
+                        const temp = [
+                          ...userInfo.likedSongs,
+                          playlist[currentSong].videoId,
+                        ]
+                        setUserInfo({ ...userInfo, likedSongs: temp })
+                      })
+                  : alert('Please log in')
               }}
             />
           )}

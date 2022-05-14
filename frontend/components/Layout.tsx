@@ -1,10 +1,9 @@
 import Header from './Header'
 import Playbar from './Playbar'
 import ReactPlayer from 'react-player'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import React from 'react'
 import Popup from './Popup'
-import axios from 'axios'
 
 export const playbarContext = React.createContext<any>(undefined)
 export const userContext = React.createContext<any>(undefined)
@@ -14,19 +13,19 @@ const Layout = ({ children }: any) => {
   const [currentSong, setCurrentSong] = useState<number | undefined>(undefined)
   const [isPlaying, setPlaying] = useState(true)
   const [isPopupOpen, setPopupOpen] = useState(false)
-  const [isLiked, setIsLiked] = useState(false)
+  // const [isLiked, setIsLiked] = useState(false)
 
   const [userInfo, setUserInfo] = useState({
-    username: "",
-    id: "",
-    token: "",
-    likedSongs: [""],
-    likedPlaylist: [""],
-    createdPlaylist: [""]
+    username: '',
+    id: '',
+    token: '',
+    likedSongs: [''],
+    likedPlaylist: [''],
+    createdPlaylist: [''],
   })
 
   const playNext = () => {
-    if (!playlist || !currentSong) {
+    if (!playlist || currentSong === undefined) {
       return
     }
     if (currentSong === playlist.length - 1) {
@@ -38,7 +37,7 @@ const Layout = ({ children }: any) => {
   }
 
   const playPrev = () => {
-    if (!playlist || !currentSong) {
+    if (!playlist || currentSong === undefined) {
       return
     }
     if (currentSong === 0) {
@@ -51,16 +50,16 @@ const Layout = ({ children }: any) => {
 
   return (
     <>
-      {currentSong ? (
+      {playlist ? (
         <ReactPlayer
-          url={`https://www.youtube.com/watch?v=${playlist?.[currentSong].videoId}`}
+          url={`https://www.youtube.com/watch?v=${
+            playlist?.[currentSong || 0].videoId
+          }`}
           playing={isPlaying}
           className="fixed top-0 right-0 translate-x-full"
         />
       ) : null}
-      <userContext.Provider
-        value={{ userInfo, setUserInfo }}
-      >
+      <userContext.Provider value={{ userInfo, setUserInfo }}>
         <playbarContext.Provider
           value={{
             playlist,
@@ -76,9 +75,9 @@ const Layout = ({ children }: any) => {
         >
           <Header />
           {children}
-          <Playbar like={isLiked} />
-          {isPopupOpen && currentSong ? (
-            <Popup id={playlist?.[currentSong].videoId} />
+          <Playbar like={true} />
+          {isPopupOpen && playlist ? (
+            <Popup id={playlist?.[currentSong || 0].videoId} />
           ) : null}
         </playbarContext.Provider>
       </userContext.Provider>

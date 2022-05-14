@@ -3,9 +3,8 @@ import SongItem from '../../components/SongItem'
 import PlaylistHeader from '../../components/PlaylistHeader'
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { userContext, playbarContext } from '../../components/Layout'
+import { playbarContext } from '../../components/Layout'
 import axios from 'axios'
-
 
 const Playlist: NextPage = () => {
   const router = useRouter()
@@ -19,7 +18,6 @@ const Playlist: NextPage = () => {
       }
     | undefined
   >()
-  const { userInfo } = useContext(userContext)
   const [songs, setSongs] = useState<any>()
   const [isLoading, setIsLoading] = useState(true)
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
@@ -57,18 +55,19 @@ const Playlist: NextPage = () => {
                 id: data.id,
               }
           setInfo(tem)
-          
+
           //Set songs
-          const playlistSongs: any = !data.isUser ? 
-          data.playlist.content?.map(
-            (item: { thumbnails: { url: string | undefined } }) => {
-              if (!item.thumbnails.url) {
-                item.thumbnails.url = info?.cover
-              }
-              return item
-            }
-          ): data.playlist.content;
-          setSongs(playlistSongs) 
+          const playlistSongs: any = !data.isUser
+            ? data.playlist.content?.map(
+                (item: { thumbnails: { url: string | undefined } }) => {
+                  if (!item.thumbnails.url) {
+                    item.thumbnails.url = info?.cover
+                  }
+                  return item
+                }
+              )
+            : data.playlist.content
+          setSongs(playlistSongs)
           setIsLoading(false)
         })
     }
@@ -87,9 +86,8 @@ const Playlist: NextPage = () => {
                 key={i}
                 index={i + 1}
                 title={item.name || item.title}
-                cover={(item.thumbnails?.url || item?.cover) || info?.cover}
+                cover={item.thumbnails?.url || item?.cover || info?.cover}
                 duration={item.duration}
-                id={item?.videoId || item?._id}
                 onClick={() => {
                   if (!item.thumbnails?.url) {
                     item.thumbnails.url = info?.cover
@@ -98,9 +96,9 @@ const Playlist: NextPage = () => {
                   setPlaylist(songs)
                   setCurrentSong(i)
                   setPlaying(true)
-                  
+
                   if (item?.videoId) {
-                      axios.post('http://localhost:3001/api/songs/', {
+                    axios.post('http://localhost:3001/api/songs/', {
                       id: item.videoId,
                       title: item.name,
                       cover: item.thumbnails.url || info?.cover,
