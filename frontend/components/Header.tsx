@@ -6,11 +6,13 @@ import { useRouter } from 'next/router'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Alert from '@mui/material/Alert';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Tooltip from '@mui/material/Tooltip';
+import Modal from '@mui/material/Modal';
 
 
 const Header = () => {
@@ -42,6 +44,14 @@ const Header = () => {
 
   const [isInvalid, setIsInvalid] = useState(false);
   const [invalidError, setInvalidError] = useState('');
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSuccess, setAlertSuccess] = useState(true);
+  const [alertMsg, setAlertMsg] = useState('');
+
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  }
 
   const goBack = () => {
     history.back()
@@ -86,12 +96,16 @@ const Header = () => {
       email: email,
     }).then((res: any) => {
       if (res.status == 200) {
-        alert('Successfully registered and please log in!')
+        setAlertMsg('Successfully registered and please log in!')
+        setAlertSuccess(true)
+        setAlertOpen(true)
         handleClose()
       } else {
         setInvalidError('Registration failed')
         setIsInvalid(true)
-        alert('Registration failed')
+        setAlertMsg('Registration failed')
+        setAlertSuccess(false)
+        setAlertOpen(true)
       }
     })
     
@@ -111,18 +125,25 @@ const Header = () => {
           likedPlaylist: res.data.likedPlaylists,
           createdPlaylist: res.data.createdPlaylist
         })
-        alert('Successfully logged in')
+        setAlertMsg('Successfully logged in')
+        setAlertSuccess(true)
+        setAlertOpen(true)
         handleClose()
       } else {
         throw new Error();
       }
     }).catch(err => {
-      alert("Account does not exist. Please register first.")
+      setAlertMsg('Wrong username or password, please try again')
+      setAlertSuccess(false)
+      setAlertOpen(true)
     })
   }
 
   const logout = () => {
     setUserInfo({username: "", id: "", token: "", likedSongs: [""], likedPlaylist: [""], createdPlaylist: [""]})
+    setAlertMsg('Successfully logged out')
+    setAlertSuccess(true)
+    setAlertOpen(true)
   }
 
   return (
@@ -156,7 +177,9 @@ const Header = () => {
         </div>
       </div>
       {/*Avatar */}
-      <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4">
+      
+      
+      <div className="flex flex-row items-center justify-end flex-1 w-0 gap-4 h-12">
         <Tooltip title={userInfo.username ? `Hello ${userInfo.username}, click to log out` : "Click here to register/log in" } placement="left" >
           <label htmlFor="logIn-modal">
             <img
@@ -211,7 +234,7 @@ const Header = () => {
             required
           />
         </DialogContent>
-        
+
         {isRegister? (
         <DialogContentText sx={{
           paddingLeft: '24px',
@@ -248,6 +271,11 @@ const Header = () => {
         </DialogActions>
       </Dialog>
 
+
+      <Modal open={alertOpen} onClose={handleAlertClose}>
+          {alertSuccess? (<Alert severity="success">{alertMsg}</Alert>
+          ): (<Alert severity="error">{alertMsg}</Alert>)}
+      </Modal>
     </header>
   )
 }
