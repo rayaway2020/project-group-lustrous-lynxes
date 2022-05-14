@@ -168,7 +168,7 @@ const me: NextPage = () => {
                   paddingBottom: '16px',
                   textAlign: 'center',
                   }}>Create your own lists</DialogTitle>
-                <DialogContent>
+                <DialogContent sx={{width:'70%', margin: 'auto'}}>
                   <DialogContentText>
                     To cutomized your own list, please enter a name and
                     description for this list.
@@ -181,6 +181,7 @@ const me: NextPage = () => {
                     label="Playlist name"
                     type="text"
                     fullWidth
+                    
                     variant="outlined"
                     onChange={(e) => setNewPlaylist(e.target.value)}
                     helperText={listNameError}
@@ -188,7 +189,6 @@ const me: NextPage = () => {
                     required
                   />
                   <TextField
-                    autoFocus
                     margin="normal"
                     id="name"
                     label="Description"
