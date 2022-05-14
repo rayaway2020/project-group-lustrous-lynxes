@@ -1,13 +1,13 @@
 # Music APP by lustrous-lynxes
 CS732/SE750 group repository for the Lustrous Lynxes
 
-# Installation: Frontend
+# Installation: Frontend and Backend
+At the root directory
 ```
 cd frontend
 npm i
 ```
-
-# Installation: Backend
+and
 ```
 cd backend
 npm i
