@@ -4,7 +4,7 @@ import { User } from '../../db/schema.js';
 import bcrypt from 'bcrypt';
 
 const router = express.Router();
-const TOKEN_SECRET= 'gbf0wvx7AOqkU0p9p30mqHYC';
+const TOKEN_SECRET = 'gbf0wvx7AOqkU0p9p30mqHYC';
 
 router.post('/register', async (req, res) => {
     //Check if the user is already in the database
@@ -19,13 +19,13 @@ router.post('/register', async (req, res) => {
     const user = new User({
         username: req.body.username,
         email: req.body.email,
-        password: hashPassword
-    })
+        password: hashPassword,
+    });
     try {
         const savedUser = await user.save();
         res.send({ user: savedUser._id });
-    } catch { err =>
-        res.status(400).send(err);
+    } catch {
+        err => res.status(400).send(err);
     }
 });
 
@@ -35,28 +35,28 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ username: req.body.username });
         if (!user) {
             res.sendStatus(400);
-        }
-        else {
+        } else {
             // Check Passwords
-            const validPass = await bcrypt.compare(req.body.password, user.password);
-            if (!validPass) return res.status(400).send("Incorrect password");
+            const validPass = await bcrypt.compare(
+                req.body.password,
+                user.password
+            );
+            if (!validPass) return res.status(400).send('Incorrect password');
 
             //Create and sign a token
             const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
-            res.json({ 
+            res.json({
                 username: user.username,
-                id: user._id, 
+                id: user._id,
                 token: token,
                 likedSongs: user.likedSongs,
                 likedPlaylists: user.likedPlaylist,
-                createdPlaylist: user.ownedPlaylist
+                createdPlaylist: user.ownedPlaylist,
             });
-        }   
-    }
-    catch {
+        }
+    } catch {
         res.sendStatus(400);
     }
-
 });
 
 export default router;

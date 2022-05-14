@@ -62,6 +62,11 @@ const SongItem = ({
         src={cover}
         alt={title}
         className="aspect-square h-8 w-8 rounded object-cover"
+        onError={({ currentTarget }) => {
+          currentTarget.onerror = null // prevents looping
+          currentTarget.src =
+            'https://pro2-bar-s3-cdn-cf4.myportfolio.com/dbea3cc43adf643e2aac2f1cbb9ed2f0/f14d6fc4-2cea-41a2-9724-a7e5dff027e8_rw_600.jpg?h=99cbed677113851ef5b0af352fa8a5b1'
+        }}
       />
       <div className="flex-1 truncate">{title}</div>
       <div>{`${minutes}:${seconds}`}</div>

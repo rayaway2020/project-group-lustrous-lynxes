@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
 
     const NewRelease = await Playlist.find().sort({ browseId: -1 }).limit(5);
 
-
     const raw = [
         {
             title: 'Trending',
