@@ -75,7 +75,7 @@ const Layout = ({ children }: any) => {
         >
           <Header />
           {children}
-          <Playbar like={true} />
+          <Playbar />
           {isPopupOpen && playlist ? (
             <Popup id={playlist?.[currentSong || 0].videoId} />
           ) : null}
