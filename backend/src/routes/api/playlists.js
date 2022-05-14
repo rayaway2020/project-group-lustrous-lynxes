@@ -208,8 +208,12 @@ router.put('/add', verify, async (req, res) => {
             { _id: userId }, 
             { $push: { likedPlaylist: playlistId } },
         );
+        await Playlist.updateOne(
+            {_id: playlistId },
+            { $inc: { likes: 1 } }
+        )
 
-        res.json({});
+        res.sendStatus(200);
     } catch {err =>
         res.send(err);
     }

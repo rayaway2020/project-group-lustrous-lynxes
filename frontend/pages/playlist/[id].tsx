@@ -5,8 +5,6 @@ import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { userContext, playbarContext } from '../../components/Layout'
 import axios from 'axios'
-import { UserAddIcon } from '@heroicons/react/outline'
-import { ItemMeta } from 'semantic-ui-react'
 
 
 const Playlist: NextPage = () => {

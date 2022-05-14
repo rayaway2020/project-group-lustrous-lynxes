@@ -25,21 +25,6 @@ const Layout = ({ children }: any) => {
     createdPlaylist: [""]
   })
 
-  // useEffect(() => {
-  //   if (currentSong) {
-  //     axios
-  //       .get('http://localhost:3001/api/songs/isliked', {
-  //         params: {
-  //           userId: userId,
-  //           songId: playlist?.[currentSong],
-  //         },
-  //       })
-  //       .then((res) => {
-  //         res.data.liked ? setIsLiked(true) : setIsLiked(false)
-  //       })
-  //   }
-  // }, [currentSong])
-
   const playNext = () => {
     if (!playlist || !currentSong) {
       return

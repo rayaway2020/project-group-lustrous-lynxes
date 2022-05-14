@@ -46,10 +46,9 @@ const PlayListHeader = ({
             <span>Play</span>
           </div>
           <div className="flex flex-row gap-2 px-4 py-1 bg-white rounded w-min">
-            {console.log(userInfo)}
             {userInfo.likedPlaylist.includes(id) ? (
               <HeartIcon
-                className="w-6 h-6"
+                className="w-6 h-6 cursor-pointer"
                 onClick={() => { 
                   axios
                     .put(
@@ -72,7 +71,7 @@ const PlayListHeader = ({
               />
             ) : (
               <HeartIconOutlined
-                className="w-6 h-6"
+                className="w-6 h-6 cursor-pointer"
                 onClick={() => { userInfo.token ? 
                   axios
                     .put(

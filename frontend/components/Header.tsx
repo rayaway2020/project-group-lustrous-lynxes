@@ -3,11 +3,8 @@ import { useContext, useState, useEffect } from 'react'
 import Axios from 'axios'
 import { userContext } from './Layout'
 import { useRouter } from 'next/router'
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -45,8 +42,6 @@ const Header = () => {
 
   const [isInvalid, setIsInvalid] = useState(false);
   const [invalidError, setInvalidError] = useState('');
-
-  const [avatarTip, setAvatarTip] = useState ('Click to Log In/Register')
 
   const goBack = () => {
     history.back()
@@ -123,7 +118,7 @@ const Header = () => {
       email: email,
     }).then((res: any) => {
       if (res.status == 200) {
-        alert('Successfully registered')
+        alert('Successfully registered and please log in!')
         handleClose()
       } else {
         setInvalidError('Registration failed')
@@ -156,6 +151,10 @@ const Header = () => {
         alert('Incorrect Username or Password')
       }
     })
+  }
+
+  const logout = () => {
+    setUserInfo({username: "", id: "", token: "", likedSongs: [""], likedPlaylist: [""], createdPlaylist: [""]})
   }
 
   return (
@@ -195,14 +194,14 @@ const Header = () => {
             <img
               className="object-cover w-12 h-12 rounded-full"
               src={ userInfo.username ? `https://stamp.fyi/avatar/${userInfo.username}` : "https://stamp.fyi/avatar/hello"}
-              onClick={handleOpen}
+              onClick={ userInfo.username? logout : handleOpen}
             />
           </label>
         </Tooltip>
       </div>
       
       <Dialog open={dialogOpen} onClose={handleClose}>
-        {isRegister? <DialogTitle>Register</DialogTitle> : <DialogTitle sx={{fontWeight: 'bold', paddingTop: '32px', paddingBottom: '5px', textAlign: 'center'}}>Login To Your Account</DialogTitle>}
+        {isRegister? <DialogTitle sx={{fontSize:'2rem', fontWeight: 'bold', paddingTop: '32px', paddingBottom: '16px', textAlign: 'center'}}>Register</DialogTitle> : <DialogTitle sx={{fontSize:'2rem', fontWeight: 'bold', paddingTop: '32px', paddingBottom: '16px', textAlign: 'center'}}>Login To Your Account</DialogTitle>}
         <DialogContent sx={{paddingBottom: '10px'}}>
           
           {isRegister? <TextField
@@ -250,10 +249,12 @@ const Header = () => {
         </DialogContent>
         
         {isRegister? (
-        <DialogContentText fontWeight= 'bold' 
-                           fontStyle= 'oblique' 
-                           textAlign='center' 
-                           color='red' 
+        <DialogContentText sx={{
+          paddingLeft: '24px',
+          color: 'rgba(0, 0, 0, 0.87)',
+          textAlign: 'center',
+        }}
+                           className="cursor-pointer"
                            onClick={switchDialog}>
           Already got an account? Click here to log in
         </DialogContentText>) 

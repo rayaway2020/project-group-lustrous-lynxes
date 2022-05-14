@@ -69,6 +69,12 @@ const forYouData = [
         author: 'YouTube Music',
         thumbnail: 'https://lh3.googleusercontent.com/u9jpUPmj5edPtErIVJdM1zTB2xDxAu4nNtqaDmP0RNVm72En8Yh-tq3T0-6bSfWz6MmLTqanf0HJLdES=w226-h226-l90-rj'
     },
+    {
+        browseId: "VLRDCLAK5uy_lBNUteBRencHzKelu5iDHwLF6mYqjL-JU",
+        title: 'Pop Certified',
+        author: 'Youtube Music',
+        thumbnail: 'https://lh3.googleusercontent.com/BgHOWFl90OcP47UkXZZfRl5nOLAntdTwH1SPL21lRnqHx80_Bstn78MuMwbGnmC_t_kxcfLjcKLVKQ=w60-h60-l90-rj'
+    }
 ];
 
 const newReleaseData = [
