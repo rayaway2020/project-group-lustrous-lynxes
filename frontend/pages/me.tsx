@@ -161,14 +161,18 @@ const me: NextPage = () => {
                 Create
               </Button>
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle sx={{
-                  fontSize: '2rem',
-                  fontWeight: 'bold',
-                  paddingTop: '32px',
-                  paddingBottom: '16px',
-                  textAlign: 'center',
-                  }}>Create your own lists</DialogTitle>
-                <DialogContent sx={{width:'70%', margin: 'auto'}}>
+                <DialogTitle
+                  sx={{
+                    fontSize: '2rem',
+                    fontWeight: 'bold',
+                    paddingTop: '32px',
+                    paddingBottom: '16px',
+                    textAlign: 'center',
+                  }}
+                >
+                  Create your own lists
+                </DialogTitle>
+                <DialogContent sx={{ width: '70%', margin: 'auto' }}>
                   <DialogContentText>
                     To cutomized your own list, please enter a name and
                     description for this list.
@@ -181,7 +185,6 @@ const me: NextPage = () => {
                     label="Playlist name"
                     type="text"
                     fullWidth
-                    
                     variant="outlined"
                     onChange={(e) => setNewPlaylist(e.target.value)}
                     helperText={listNameError}

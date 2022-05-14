@@ -9,15 +9,11 @@ import {
   VolumeUpIcon,
   StopIcon,
 } from '@heroicons/react/outline'
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { userContext, playbarContext } from './Layout'
 import axios from 'axios'
 
-interface PlaybarProps {
-  like: boolean
-}
-
-const Playbar = ({ like }: PlaybarProps) => {
+const Playbar = () => {
   const {
     playlist,
     currentSong,
