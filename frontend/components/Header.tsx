@@ -16,6 +16,8 @@ import Tooltip from '@mui/material/Tooltip';
 const Header = () => {
   const router = useRouter()
   const { userInfo, setUserInfo } = useContext(userContext)
+
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
   
   const [formUsername, setFormUsername] = useState('');
   const [password, setPassword] = useState('')
@@ -37,8 +39,6 @@ const Header = () => {
   }
 
   const [emailError, setEmailError] = useState(false);
-  const [userNameError, setUserNameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
 
   const [isInvalid, setIsInvalid] = useState(false);
   const [invalidError, setInvalidError] = useState('');
@@ -54,9 +54,6 @@ const Header = () => {
     setEmail('')
     setFormUsername('')
     setPassword('')
-    setEmailError(false)
-    setUserNameError(false)
-    setPasswordError(false)
     setFormErrors({ email: '', username: '', password: '' })
     setInvalidError('')
     setIsInvalid(false)
@@ -68,46 +65,17 @@ const Header = () => {
   }
 
   const handleSubmit = () => {
-    setEmailError(false)
-    setUserNameError(false)
-    setPasswordError(false)
-    setFormErrors({ email: '', username: '', password: '' })
     setInvalidError('')
     setIsInvalid(false)
-    const errors = {email: '', username: '', password: ''}
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
-
-    if(isRegister){
-      if (!email) {
-        errors.email = 'Email is required!'
-        setEmailError(true)
-      } else if (!regex.test(email)) {
-        errors.email = 'This is not a valid email format'
-        setEmailError(true)
-      }
-    }
-
-    if (!formUsername) {
-      errors.username = 'Username is required!'
-      setUserNameError(true)
-    }
 
     if (!password) {
-      errors.password = 'Password is required!'
-      setPasswordError(true)
+      setFormErrors({...formErrors, username: "Password is required!"});
     } else if (password.length < 8) {
-      errors.password = 'Password must be at least 8 characters'
-      setPasswordError(true)
+      setFormErrors({...formErrors, password: "Password must be at least 8 characters"});
     }
 
-    if (errors.email == '' && errors.username == '' && errors.password == ''){
-      if(isRegister){
-        register()
-      }else{
-        login()
-      }
-    } else{
-      setFormErrors(errors)
+    if (formErrors.email == '' && formErrors.username == '' && formErrors.password == ''){
+      isRegister? register() : login();
     }
   }
 
@@ -146,10 +114,10 @@ const Header = () => {
         alert('Successfully logged in')
         handleClose()
       } else {
-        setInvalidError('Incorrect Username or Password')
-        setIsInvalid(true)
-        alert('Incorrect Username or Password')
+        throw new Error();
       }
+    }).catch(err => {
+      alert("Account does not exist. Please register first.")
     })
   }
 
@@ -203,48 +171,44 @@ const Header = () => {
       <Dialog open={dialogOpen} onClose={handleClose}>
         {isRegister? <DialogTitle sx={{fontSize:'2rem', fontWeight: 'bold', paddingTop: '32px', paddingBottom: '16px', textAlign: 'center'}}>Register</DialogTitle> : <DialogTitle sx={{fontSize:'2rem', fontWeight: 'bold', paddingTop: '32px', paddingBottom: '16px', textAlign: 'center'}}>Login To Your Account</DialogTitle>}
         <DialogContent sx={{paddingBottom: '10px'}}>
-          
           {isRegister? <TextField
-            error = {emailError}
-            autoFocus
+            error = { !email? true : !regex.test(email)? true : false }
             margin="dense"
-            id="name"
+            id="email"
             label="Email Address"
             type="email"
             fullWidth
             variant="outlined"
             value = {email}
             onChange={(e) => setEmail(e.target.value)}
-            helperText={formErrors.email}
+            helperText={!email? "Email is required" : !regex.test(email)? "Please enter an email" : ""}
             required
           /> : null}
-          
           <TextField
-            error={userNameError}
-            autoFocus
+            error={!formUsername? true: false }
             margin="dense"
-            id="name"
+            id="username"
             label="Username"
             type="text"
             fullWidth
             variant="outlined"
             onChange={(e) => setFormUsername(e.target.value)}
-            helperText={formErrors.username}
+            helperText={!formUsername? "Username is required" : null}
             value = {formUsername}
             required
           />
           <TextField
-            error={passwordError}
+            error={ (!password || password.length < 8) ? true: false}
             margin="dense"
-            id="name"
+            id="password"
             label="Password"
             type="password"
             fullWidth
             onChange={(e) => setPassword(e.target.value)}
             variant="outlined"
+            helperText={!password? "Password is required": (password.length < 8) ? "Password needs to be more than 8 characters" : ""}
+            value = {password}
             required
-            helperText={formErrors.password}
-            value ={password}
           />
         </DialogContent>
         

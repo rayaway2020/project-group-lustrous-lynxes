@@ -30,24 +30,32 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    // Check if the user exists
-    const user = await User.findOne({ username: req.body.username });
-    if (!user) return res.status(400).send("Account does not exist.")
+    try {
+        // Check if the user exists
+        const user = await User.findOne({ username: req.body.username });
+        if (!user) {
+            res.sendStatus(400);
+        }
+        else {
+            // Check Passwords
+            const validPass = await bcrypt.compare(req.body.password, user.password);
+            if (!validPass) return res.status(400).send("Incorrect password");
 
-    // Check Passwords
-    const validPass = await bcrypt.compare(req.body.password, user.password);
-    if (!validPass) return res.status(400).send("Incorrect password");
-
-    //Create and sign a token
-    const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
-    res.json({ 
-        username: user.username,
-        id: user._id, 
-        token: token,
-        likedSongs: user.likedSongs,
-        likedPlaylists: user.likedPlaylist,
-        createdPlaylist: user.ownedPlaylist
-    });
+            //Create and sign a token
+            const token = jwt.sign({ _id: user._id }, TOKEN_SECRET);
+            res.json({ 
+                username: user.username,
+                id: user._id, 
+                token: token,
+                likedSongs: user.likedSongs,
+                likedPlaylists: user.likedPlaylist,
+                createdPlaylist: user.ownedPlaylist
+            });
+        }   
+    }
+    catch {
+        res.sendStatus(400);
+    }
 
 });
 
