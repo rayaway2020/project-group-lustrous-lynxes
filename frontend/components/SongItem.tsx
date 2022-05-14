@@ -1,8 +1,9 @@
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
-import { Divider, ListItem, Menu, MenuItem } from '@mui/material'
+import { Box, Divider, ListItem, Menu, MenuItem } from '@mui/material'
 import { useContext, useState } from 'react'
 import { userContext, playbarContext } from './Layout'
 import axios from 'axios'
+import { bgcolor, fontSize } from '@mui/material/node_modules/@mui/system'
 
 type SongItemProps = {
   index: number
@@ -96,35 +97,60 @@ const SongItem = ({
         >
           <DotsHorizontalIcon className="w-6 h-6" />
         </ListItem>
-        {userInfo.token ? (
-          <Menu
-            id="lock-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'lock-button',
-              role: 'listbox',
+
+
+        {userInfo.token? 
+        <Menu
+          id="lock-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'lock-button',
+            role: 'listbox',
+          }}
+          sx={{
+            // backgroundColor: 'rgba(255, 99, 71, 1.0)',
+          }}
+        >
+          <MenuItem
+            selected={selectedIndex === 0}
+            onClick={(event: any) => handleMenuItemClick(event, 0)}
+            disabled
+            sx={{
+              color: 'rgba(0,0,0, 1)', 
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: '16px',
+              fontFamily: 'poppins',   
+              paddingLeft: '32px',
+              paddingRight: '32px',
+              paddingTop: '16px',
+              paddingBottom: '16px',
             }}
           >
+            {'Add this song to your playlist'}
+          </MenuItem>
+          <Divider sx={{ my: 0.5}} />
+          {/* Dropdown options */}
+          {dropdown?.map((option: any, index: number) => (
             <MenuItem
-              selected={selectedIndex === 0}
-              onClick={(event: any) => handleMenuItemClick(event, 0)}
+              key={index}
+              onClick={(event: any) => handleMenuItemClick(event, index)}
+              sx={{
+                paddingLeft: '32px',
+                color: 'rgba(0, 0, 0, 1)',
+                backgroundColor: 'rgba(255, 255, 255, 1.0)',
+                fontFamily: 'Poppins',        
+              }}
             >
-              {'Choose the playlist'}
+              {option.title}
             </MenuItem>
-            <Divider sx={{ my: 0.5 }} />
-            {/* Dropdown options */}
-            {dropdown?.map((option: any, index: number) => (
-              <MenuItem
-                key={index + 1}
-                onClick={(event: any) => handleMenuItemClick(event, index)}
-              >
-                {option.title}
-              </MenuItem>
-            ))}
-          </Menu>
-        ) : null}
+          ))}
+      </Menu>
+      :
+      null}
+        
       </div>
     </div>
   )
