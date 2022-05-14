@@ -202,8 +202,8 @@ const Header = () => {
       </div>
       
       <Dialog open={dialogOpen} onClose={handleClose}>
-        {isRegister? <DialogTitle>Register</DialogTitle> : <DialogTitle>Login</DialogTitle>}
-        <DialogContent>
+        {isRegister? <DialogTitle>Register</DialogTitle> : <DialogTitle sx={{fontWeight: 'bold', paddingTop: '32px', paddingBottom: '5px', textAlign: 'center'}}>Login To Your Account</DialogTitle>}
+        <DialogContent sx={{paddingBottom: '10px'}}>
           
           {isRegister? <TextField
             error = {emailError}
@@ -213,7 +213,7 @@ const Header = () => {
             label="Email Address"
             type="email"
             fullWidth
-            variant="standard"
+            variant="outlined"
             value = {email}
             onChange={(e) => setEmail(e.target.value)}
             helperText={formErrors.email}
@@ -228,7 +228,7 @@ const Header = () => {
             label="Username"
             type="text"
             fullWidth
-            variant="standard"
+            variant="outlined"
             onChange={(e) => setFormUsername(e.target.value)}
             helperText={formErrors.username}
             value = {formUsername}
@@ -236,14 +236,13 @@ const Header = () => {
           />
           <TextField
             error={passwordError}
-            autoFocus
             margin="dense"
             id="name"
             label="Password"
             type="password"
             fullWidth
             onChange={(e) => setPassword(e.target.value)}
-            variant="standard"
+            variant="outlined"
             required
             helperText={formErrors.password}
             value ={password}
@@ -259,7 +258,14 @@ const Header = () => {
           Already got an account? Click here to log in
         </DialogContentText>) 
         : (
-        <DialogContentText onClick={switchDialog}>
+        <DialogContentText 
+          sx={{
+            paddingLeft: '24px',
+            color: 'rgba(0, 0, 0, 0.87)',
+            textAlign: 'center',
+          }}
+          className="cursor-pointer"
+          onClick={switchDialog}>
           Sign up for an new account?
         </DialogContentText>
         )}
@@ -271,7 +277,7 @@ const Header = () => {
           : ( <></>
         )}
         
-        <DialogActions>
+        <DialogActions sx={{paddingTop: '22px', paddingRight: '24px', paddingBottom: '10px'}}>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </DialogActions>

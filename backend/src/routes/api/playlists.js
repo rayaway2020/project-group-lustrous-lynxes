@@ -185,12 +185,16 @@ router.put('/addsong', async(req, res) => {
 
     const dbPlaylist = await Playlist.findById(playlistId);
     if (dbPlaylist) {
-        await Playlist.updateOne(
-            {_id: playlistId},
-            { $push: { content: songId } },
-        );
-        
-        res.sendStatus(200);
+        if (!dbPlaylist.content.includes(songId)) {
+            await Playlist.updateOne(
+                {_id: playlistId},
+                { $push: { content: songId } },
+            );
+            res.sendStatus(200);
+        }
+        else {
+            res.sendStatus(201);
+        }
     }
 })
 

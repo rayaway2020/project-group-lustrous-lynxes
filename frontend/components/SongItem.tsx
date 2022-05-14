@@ -42,6 +42,7 @@ const SongItem = ({
       playlistId: dropdown[index].id
     }).then((res) => {
       res.status === 200 ? alert("Successfully added!") : null;
+      res.status === 201 ? alert("Existing song in the playlist"): null;
     })
   }
 
