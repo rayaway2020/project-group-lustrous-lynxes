@@ -32,6 +32,7 @@ const Playlist: NextPage = () => {
         })
         .then((res) => {
           const data = res.data
+          console.log(data);
           //Get playlist header info
           const tem: {
             title: string

@@ -24,10 +24,7 @@ router.get('/network', async (req, res) => {
         } else {
             const dbPlaylist = await Playlist.findOne({ _id: unknownTypeId });
             const songIdList = dbPlaylist.content;
-            const songList =
-                songIdList.length > 0
-                    ? await Song.find({ _id: { $in: songIdList } })
-                    : [{}];
+            const songList = await Song.find({ _id: { $in: songIdList } });
 
             res.json({
                 id: dbPlaylist._id,
