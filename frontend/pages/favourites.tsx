@@ -1,14 +1,11 @@
 import type { NextPage } from 'next'
 import SongItem from '../components/SongItem'
 import { useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { userContext, playbarContext } from '../components/Layout'
 import axios from 'axios'
 import FavouriteHeader from '../components/FavouritesHeader'
-import { UserAddIcon } from '@heroicons/react/outline'
 
 const Favourites: NextPage = () => {
-  const router = useRouter()
   const [info, setInfo] = useState<
     | {
         title: string
@@ -21,8 +18,7 @@ const Favourites: NextPage = () => {
   >()
   const { userInfo } = useContext(userContext)
   const [songs, setSongs] = useState<any>()
-  const [options, setOptions] = useState<any>()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
 
   useEffect(() => {
@@ -34,17 +30,10 @@ const Favourites: NextPage = () => {
             })
     axios.get("http://localhost:3001/api/songs/favorite", { params: {
       userId: userInfo.userId
-    }}).then(res => setSongs(res.data))
-    axios.get("http://localhost:3001/api/playlists/user/created", { params: {
-              userId: userInfo.id
-            }}).then(res => {
-              const data = res.data.map((item: any) => ({
-                title: item.title,
-                id: item._id
-              }))
-              setOptions(data);
-            }
-          )
+    }}).then(res => {
+      setSongs(res.data)
+      setIsLoading(false)
+    })
   }, [])
 
   return (
@@ -63,7 +52,6 @@ const Favourites: NextPage = () => {
                 title={item.title}
                 cover={item.cover}
                 duration={item.duration}
-                id={item._id}
                 onClick={() => {
                   setPlaylist(songs)
                   setCurrentSong(i)

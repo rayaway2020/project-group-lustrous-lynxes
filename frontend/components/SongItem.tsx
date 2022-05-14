@@ -1,9 +1,8 @@
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
-import { Box, Divider, ListItem, Menu, MenuItem } from '@mui/material'
+import { Divider, ListItem, Menu, MenuItem } from '@mui/material'
 import { useContext, useState } from 'react'
 import { userContext, playbarContext } from './Layout'
 import axios from 'axios'
-import { bgcolor, fontSize } from '@mui/material/node_modules/@mui/system'
 
 type SongItemProps = {
   index: number
