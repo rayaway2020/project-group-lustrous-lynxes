@@ -63,7 +63,6 @@ const Favourites: NextPage = () => {
                 title={item.title}
                 cover={item.cover}
                 duration={item.duration}
-                options={options}
                 id={item._id}
                 onClick={() => {
                   setPlaylist(songs)
