@@ -1,4 +1,4 @@
-import SongCard from './SongCard'
+import SongItem from './SongItem'
 
 interface SonglistRowProps {
   title: string
@@ -9,15 +9,15 @@ const SonglistRow = ({ title, items }: SonglistRowProps) => {
   return (
     <div className="flex flex-col w-full gap-5">
       <div className="text-2xl font-semibold">{title}</div>
-      <div className="grid grid-cols-5 gap-8">
+      <div className="flex flex-col gap-4">
         {items?.map((item, i) => (
-          <SongCard
+          <SongItem
             key={i}
+            index={i + 1}
             cover={item.thumbnail}
             title={item.title}
-            subtitle={item.artist || 'unknown'}
             duration={item.duration}
-            id={item.videoId}
+            onClick={() => {}}
           />
         ))}
       </div>
