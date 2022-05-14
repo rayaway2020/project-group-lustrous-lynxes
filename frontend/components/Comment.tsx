@@ -19,7 +19,7 @@ const Comment = ({
   date,
   content,
   like,
-  likecount
+  likecount,
 }: CommentProps) => {
   var today = new Date()
   var date =
@@ -34,15 +34,15 @@ const Comment = ({
   const [likeCount, setLikeCount] = useState(likecount)
 
   return (
-    <div className="flex flex-row w-full gap-4">
+    <div className="flex w-full flex-row gap-4">
       <img
         src="https://stamp.fyi/avatar/hello"
         alt=""
-        className="w-12 h-12 rounded-full"
+        className="h-12 w-12 rounded-full"
       />
-      <div className="flex flex-col items-start justify-start flex-1 w-0 gap-1">
+      <div className="flex w-0 flex-1 flex-col items-start justify-start gap-1">
         {/* name and date */}
-        <div className="flex flex-row gap-6 justify-items-start">
+        <div className="flex flex-row justify-items-start gap-6">
           <b>{author}</b> {date ? date : dateTime}
         </div>
         {/* content */}
@@ -50,30 +50,42 @@ const Comment = ({
           <p>{content}</p>
         </div>
         {/* reply, like and like count */}
-        <div className="flex flex-row justify-between w-full">
+        <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row items-center gap-2">
             {liked ? (
-              <HeartIcon className="w-6 h-6" onClick={() => {
-                axios.put('http://localhost:3001/api/songs/comment/cancellikes', {
-                    commentId: id,
-                    userId: userInfo.id
-                  }).then((res) => {
-                    setLikeCount(res.data.likes);
-                    setLiked(!liked);
-                  })
-                }} />
+              <HeartIcon
+                className="h-6 w-6"
+                onClick={() => {
+                  axios
+                    .put(
+                      'http://localhost:3001/api/songs/comment/cancellikes',
+                      {
+                        commentId: id,
+                        userId: userInfo.id,
+                      }
+                    )
+                    .then((res) => {
+                      setLikeCount(res.data.likes)
+                      setLiked(!liked)
+                    })
+                }}
+              />
             ) : (
-              <HeartIconOutlined className="w-6 h-6" onClick={() => {
-                axios.put('http://localhost:3001/api/songs/comment/addlikes', {
-                    commentId: id,
-                    userId: userInfo.id
-                  }).then((res) => {
-                    setLikeCount(res.data.likes);
-                    setLiked(!liked);
-                  })
-              }} />
-            )
-            }
+              <HeartIconOutlined
+                className="h-6 w-6"
+                onClick={() => {
+                  axios
+                    .put('http://localhost:3001/api/songs/comment/addlikes', {
+                      commentId: id,
+                      userId: userInfo.id,
+                    })
+                    .then((res) => {
+                      setLikeCount(res.data.likes)
+                      setLiked(!liked)
+                    })
+                }}
+              />
+            )}
             {likeCount}
           </div>
         </div>

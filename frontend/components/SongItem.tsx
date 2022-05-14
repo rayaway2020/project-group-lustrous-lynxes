@@ -54,14 +54,14 @@ const SongItem = ({
   const seconds = Math.ceil(mind % 60) - 1
   return (
     <div
-      className="flex flex-row items-center gap-6 cursor-pointer"
+      className="flex cursor-pointer flex-row items-center gap-6"
       onClick={() => onClick()}
     >
       <div className="w-8 text-gray-600">{index > 9 ? index : `0${index}`}</div>
       <img
         src={cover}
         alt={title}
-        className="object-cover w-8 h-8 rounded aspect-square"
+        className="aspect-square h-8 w-8 rounded object-cover"
       />
       <div className="flex-1 truncate">{title}</div>
       <div>{`${minutes}:${seconds}`}</div>
@@ -94,62 +94,61 @@ const SongItem = ({
               : alert('Log in to see your playlists')
           }}
         >
-          <DotsHorizontalIcon className="w-6 h-6" />
+          <DotsHorizontalIcon className="h-6 w-6" />
         </ListItem>
 
-
-        {userInfo.token? 
-        <Menu
-          id="lock-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'lock-button',
-            role: 'listbox',
-          }}
-          sx={{
-            // backgroundColor: 'rgba(255, 99, 71, 1.0)',
-          }}
-        >
-          <MenuItem
-            selected={selectedIndex === 0}
-            onClick={(event: any) => handleMenuItemClick(event, 0)}
-            disabled
-            sx={{
-              color: 'rgba(0,0,0, 1)', 
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              fontFamily: 'poppins',   
-              paddingLeft: '32px',
-              paddingRight: '32px',
-              paddingTop: '16px',
-              paddingBottom: '16px',
+        {userInfo.token ? (
+          <Menu
+            id="lock-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'lock-button',
+              role: 'listbox',
             }}
+            sx={
+              {
+                // backgroundColor: 'rgba(255, 99, 71, 1.0)',
+              }
+            }
           >
-            {'Add this song to your playlist'}
-          </MenuItem>
-          <Divider sx={{ my: 0.5}} />
-          {/* Dropdown options */}
-          {dropdown?.map((option: any, index: number) => (
             <MenuItem
-              key={index}
-              onClick={(event: any) => handleMenuItemClick(event, index)}
+              selected={selectedIndex === 0}
+              onClick={(event: any) => handleMenuItemClick(event, 0)}
+              disabled
               sx={{
+                color: 'rgba(0,0,0, 1)',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                fontFamily: 'poppins',
                 paddingLeft: '32px',
-                color: 'rgba(0, 0, 0, 1)',
-                backgroundColor: 'rgba(255, 255, 255, 1.0)',
-                fontFamily: 'Poppins',        
+                paddingRight: '32px',
+                paddingTop: '16px',
+                paddingBottom: '16px',
               }}
             >
-              {option.title}
+              {'Add this song to your playlist'}
             </MenuItem>
-          ))}
-      </Menu>
-      :
-      null}
-        
+            <Divider sx={{ my: 0.5 }} />
+            {/* Dropdown options */}
+            {dropdown?.map((option: any, index: number) => (
+              <MenuItem
+                key={index}
+                onClick={(event: any) => handleMenuItemClick(event, index)}
+                sx={{
+                  paddingLeft: '32px',
+                  color: 'rgba(0, 0, 0, 1)',
+                  backgroundColor: 'rgba(255, 255, 255, 1.0)',
+                  fontFamily: 'Poppins',
+                }}
+              >
+                {option.title}
+              </MenuItem>
+            ))}
+          </Menu>
+        ) : null}
       </div>
     </div>
   )

@@ -30,13 +30,13 @@ const SearchResult: NextPage = () => {
   }, [router.query.name])
 
   return (
-    <div className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto">
+    <div className="mx-auto flex w-full max-w-screen-xl flex-col gap-8 px-6">
       {isLoading ? (
-        <div className="flex items-center justify-center w-full h-screen">
+        <div className="flex h-screen w-full items-center justify-center">
           <img
             src="https://raw.githubusercontent.com/Codelessly/FlutterLoadingGIFs/master/packages/cupertino_activity_indicator.gif"
             alt="loading"
-            className="w-12 h-12"
+            className="h-12 w-12"
           />
         </div>
       ) : (

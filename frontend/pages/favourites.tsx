@@ -22,29 +22,35 @@ const Favourites: NextPage = () => {
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
 
   useEffect(() => {
-    setInfo({   title: 'My favourite songs',
-                cover: 'https://i.pinimg.com/736x/8d/64/e9/8d64e974c73f8cb168958407dc79eb17.jpg',
-                owner: userInfo.username,
-                description: 'This is all your favorite songs!',
-                id: 'id'
-            })
-    axios.get("http://localhost:3001/api/songs/favorite", { params: {
-      userId: userInfo.userId
-    }}).then(res => {
-      setSongs(res.data)
-      setIsLoading(false)
+    setInfo({
+      title: 'My favourite songs',
+      cover:
+        'https://i.pinimg.com/736x/8d/64/e9/8d64e974c73f8cb168958407dc79eb17.jpg',
+      owner: userInfo.username,
+      description: 'This is all your favorite songs!',
+      id: 'id',
     })
+    axios
+      .get('http://localhost:3001/api/songs/favorite', {
+        params: {
+          userId: userInfo.userId,
+        },
+      })
+      .then((res) => {
+        setSongs(res.data)
+        setIsLoading(false)
+      })
   }, [])
 
   return (
     <>
       {!isLoading && (
-        <div className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto my-24">
+        <div className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
           {/* header section */}
           {info && <FavouriteHeader {...info} />}
           {/* playlist section */}
           {/* todo this bg color need to be updated */}
-          <div className="flex flex-col gap-4 px-12 py-8 rounded-2xl bg-slate-50">
+          <div className="flex flex-col gap-4 rounded-2xl bg-slate-50 px-12 py-8">
             {songs?.map((item: any, i: number) => (
               <SongItem
                 key={i}

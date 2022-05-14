@@ -5,11 +5,11 @@ interface CoverProps {
 
 const Cover = ({ url, alt }: CoverProps) => {
   return (
-    <div className="overflow-hidden transition duration-300 rounded-lg aspect-square hover:drop-shadow-xl">
+    <div className="aspect-square overflow-hidden rounded-lg transition duration-300 hover:drop-shadow-xl">
       <img
         src={url}
         alt={alt}
-        className="object-cover w-full h-full"
+        className="h-full w-full object-cover"
         onError={({ currentTarget }) => {
           currentTarget.onerror = null // prevents looping
           currentTarget.src =

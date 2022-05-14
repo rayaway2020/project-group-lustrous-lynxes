@@ -6,13 +6,13 @@ import { userContext } from '../components/Layout'
 import { useContext, useState, useEffect } from 'react'
 import LibrarySongItem from '../components/LibrarySongItem'
 import PlaylistRow from '../components/PlaylistRow'
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
 
 const me: NextPage = () => {
   const { userInfo, setUserInfo } = useContext(userContext)
@@ -26,38 +26,42 @@ const me: NextPage = () => {
   const [isListNameError, setIsListNameError] = useState(false)
   const [listNameError, setListNameError] = useState('')
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
     setIsListNameError(false)
     setListNameError('')
     setNewPlaylist('')
     setDesc('')
-    setOpen(false);
-  };
+    setOpen(false)
+  }
   const handleSave = () => {
-    if(newPlaylist == ''){
+    if (newPlaylist == '') {
       setIsListNameError(true)
       setListNameError('Playlist name is required')
-    }else{
+    } else {
       createPlaylist()
       handleClose()
     }
   }
 
   useEffect(() => {
-    userInfo.token ? 
-    axios.get("http://localhost:3001/api/playlists/user/info", { params: {
-      userId: userInfo.id
-    }}).then(res => {
-      setCreatedPlaylist(res.data.ownedPlaylist);
-      setFavoritePlaylist(res.data.favoriteList);
-      setLikedSongs(res.data.likedSongs);
-    })
-    : null;
+    userInfo.token
+      ? axios
+          .get('http://localhost:3001/api/playlists/user/info', {
+            params: {
+              userId: userInfo.id,
+            },
+          })
+          .then((res) => {
+            setCreatedPlaylist(res.data.ownedPlaylist)
+            setFavoritePlaylist(res.data.favoriteList)
+            setLikedSongs(res.data.likedSongs)
+          })
+      : null
   }, [])
 
   const createPlaylist = () => {
@@ -77,7 +81,10 @@ const me: NextPage = () => {
         }
       )
       .then((res) => {
-        setUserInfo({...userInfo, createdPlaylist: userInfo.createdPlaylist.push(res.data._id)})
+        setUserInfo({
+          ...userInfo,
+          createdPlaylist: userInfo.createdPlaylist.push(res.data._id),
+        })
         setCreatedPlaylist([...createdPlaylist, res.data])
         setNewPlaylist('')
         setDesc('')
@@ -86,31 +93,39 @@ const me: NextPage = () => {
 
   return (
     <>
-      <section className="flex flex-col w-full max-w-screen-xl gap-12 px-6 mx-auto my-24">
+      <section className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-12 px-6">
         <div className="flex flex-row items-center gap-2">
           <img
-            className="object-cover w-12 h-12 rounded-full"
-            src={userInfo.username? `https://stamp.fyi/avatar/${userInfo.username}`: "https://stamp.fyi/avatar/hello"}
+            className="h-12 w-12 rounded-full object-cover"
+            src={
+              userInfo.username
+                ? `https://stamp.fyi/avatar/${userInfo.username}`
+                : 'https://stamp.fyi/avatar/hello'
+            }
           />
           <h1 className="text-3xl font-bold">{userInfo.username}'s Library</h1>
         </div>
 
         <div className="flex flex-row justify-between gap-6">
           {/* cover of favorite song */}
-          <div className="flex flex-col justify-between w-1/3 p-8 transition duration-300 h-80 rounded-3xl bg-sky-50 hover:drop-shadow-xl cursor-pointer"
-                onClick={()=> {router.push('/favourites')}}>
+          <div
+            className="flex h-80 w-1/3 cursor-pointer flex-col justify-between rounded-3xl bg-sky-50 p-8 transition duration-300 hover:drop-shadow-xl"
+            onClick={() => {
+              router.push('/favourites')
+            }}
+          >
             <div>Description</div>
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
                 <b>My Favorite Songs</b>
                 <div>{likedSongs?.length} Songs</div>
               </div>
-              <PlayIcon className="w-12 h-12" />
+              <PlayIcon className="h-12 w-12" />
             </div>
           </div>
 
           {/* Songs */}
-          <div className="flex flex-row flex-wrap w-2/3 p-2 h-80">
+          <div className="flex h-80 w-2/3 flex-row flex-wrap p-2">
             {likedSongs?.map((item: any, i: number) => (
               <LibrarySongItem
                 title={item.title}
@@ -128,8 +143,8 @@ const me: NextPage = () => {
           knowId={true}
         />
 
-         {/* Favorite playlist */}
-         <PlaylistRow
+        {/* Favorite playlist */}
+        <PlaylistRow
           title="Favorite Playlists"
           items={favoritePlaylist}
           knowId={true}
@@ -151,7 +166,8 @@ const me: NextPage = () => {
               <DialogTitle>Create my own list</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  To cutomized your own list, please enter the name and description for this list.
+                  To cutomized your own list, please enter the name and
+                  description for this list.
                 </DialogContentText>
                 <TextField
                   autoFocus
@@ -165,7 +181,6 @@ const me: NextPage = () => {
                   onChange={(e) => setNewPlaylist(e.target.value)}
                   helperText={listNameError}
                   value={newPlaylist}
-                  
                   required
                 />
                 <TextField

@@ -22,11 +22,11 @@ const search: NextPage = () => {
         <h1 className="text-[32px] font-bold">30000 playlists</h1>
       </div>
       <div className="form-control">
-        <div className="flex items-center justify-center w-full input-group">
+        <div className="input-group flex w-full items-center justify-center">
           <input
             type="text"
             placeholder="Search…"
-            className="w-3/5 input input-bordered"
+            className="input input-bordered w-3/5"
             onChange={(e) => {
               setSearchValue(e.target.value)
             }}
@@ -34,7 +34,7 @@ const search: NextPage = () => {
           <button className="btn btn-square" onClick={toSearchPage}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

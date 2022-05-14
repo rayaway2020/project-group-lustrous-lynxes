@@ -7,7 +7,6 @@ import axios from 'axios'
 import { useContext, useState } from 'react'
 import { userContext } from './Layout'
 
-
 type PlayListHeaderProps = {
   cover: string
   title: string
@@ -23,33 +22,32 @@ const PlayListHeader = ({
   description,
   id,
 }: PlayListHeaderProps) => {
-
   const { userInfo, setUserInfo } = useContext(userContext)
 
   return (
-    <div className="flex flex-row w-full gap-8 p-12 bg-gray-100 h-80 rounded-2xl">
+    <div className="flex h-80 w-full flex-row gap-8 rounded-2xl bg-gray-100 p-12">
       <img
         src={cover}
         alt={title}
-        className="object-contain h-full aspect-square rounded-2xl"
+        className="aspect-square h-full rounded-2xl object-contain"
       />
-      <div className="flex flex-col justify-between flex-1 w-0 gap-2">
-        <div className="w-full text-3xl font-semibold truncate">{title}</div>
-        <div className="flex flex-col w-full">
+      <div className="flex w-0 flex-1 flex-col justify-between gap-2">
+        <div className="w-full truncate text-3xl font-semibold">{title}</div>
+        <div className="flex w-full flex-col">
           {/* owner? */}
           <span>Album by {owner}</span>
         </div>
         <div className="w-full text-gray-600 line-clamp-3">{description}</div>
         <div className="flex flex-row items-center justify-start gap-4">
-          <div className="flex flex-row gap-2 px-4 py-1 bg-white rounded w-min">
-            <PlayIcon className="w-6 h-6" />
+          <div className="flex w-min flex-row gap-2 rounded bg-white px-4 py-1">
+            <PlayIcon className="h-6 w-6" />
             <span>Play</span>
           </div>
-          <div className="flex flex-row gap-2 px-4 py-1 bg-white rounded w-min">
+          <div className="flex w-min flex-row gap-2 rounded bg-white px-4 py-1">
             {userInfo.likedPlaylist.includes(id) ? (
               <HeartIcon
-                className="w-6 h-6 cursor-pointer"
-                onClick={() => { 
+                className="h-6 w-6 cursor-pointer"
+                onClick={() => {
                   axios
                     .put(
                       'http://localhost:3001/api/playlists/delete',
@@ -64,34 +62,36 @@ const PlayListHeader = ({
                       }
                     )
                     .then((res) => {
-                      const temp = userInfo.likedPlaylist.filter((x: any) => x != id);
-                      setUserInfo({...userInfo, likedPlaylist: temp})
+                      const temp = userInfo.likedPlaylist.filter(
+                        (x: any) => x != id
+                      )
+                      setUserInfo({ ...userInfo, likedPlaylist: temp })
                     })
                 }}
               />
             ) : (
               <HeartIconOutlined
-                className="w-6 h-6 cursor-pointer"
-                onClick={() => { userInfo.token ? 
-                  axios
-                    .put(
-                      'http://localhost:3001/api/playlists/add',
-                      {
-                        userId: userInfo.id,
-                        playlistId: id,
-                      },
-                      {
-                        headers: {
-                          'auth-token': userInfo.token,
-                        },
-                      }
-                    )
-                    .then((res) => {
-                      const temp = [...userInfo.likedPlaylist, id]
-                      setUserInfo({...userInfo, likedPlaylist: temp})
-                    })
-                    :
-                    alert("Please log in");
+                className="h-6 w-6 cursor-pointer"
+                onClick={() => {
+                  userInfo.token
+                    ? axios
+                        .put(
+                          'http://localhost:3001/api/playlists/add',
+                          {
+                            userId: userInfo.id,
+                            playlistId: id,
+                          },
+                          {
+                            headers: {
+                              'auth-token': userInfo.token,
+                            },
+                          }
+                        )
+                        .then((res) => {
+                          const temp = [...userInfo.likedPlaylist, id]
+                          setUserInfo({ ...userInfo, likedPlaylist: temp })
+                        })
+                    : alert('Please log in')
                 }}
               />
             )}

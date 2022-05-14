@@ -10,11 +10,11 @@ const LibrarySongItem = ({ title, cover, duration }: SongItemProps) => {
   const seconds = Math.ceil(mind % 60)
 
   return (
-    <div className="flex flex-row items-start h-20 gap-3 p-4 transition duration-300 w-72 rounded-xl hover:bg-sky-50">
+    <div className="flex h-20 w-72 flex-row items-start gap-3 rounded-xl p-4 transition duration-300 hover:bg-sky-50">
       <img
         src={cover}
         alt={title}
-        className="object-contain w-12 h-12 rounded aspect-square"
+        className="aspect-square h-12 w-12 rounded object-contain"
       />
       <div className="flex flex-col">
         <b>{title}</b>

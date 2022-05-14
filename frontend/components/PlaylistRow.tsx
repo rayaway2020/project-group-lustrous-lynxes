@@ -14,11 +14,11 @@ const PlaylistRow = ({ title, items, knowId }: PlaylistRowProps) => {
         {items?.map((item, i) => (
           <PlaylistCard
             key={i}
-            id={knowId? item._id : ""}
+            id={knowId ? item._id : ''}
             cover={item.thumbnail}
             title={item.title}
             subtitle={item.author}
-            browseId={item.browseId}            
+            browseId={item.browseId}
           />
         ))}
       </div>

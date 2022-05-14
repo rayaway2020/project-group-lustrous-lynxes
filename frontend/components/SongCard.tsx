@@ -1,7 +1,6 @@
 import Cover from './Cover'
 import axios from 'axios'
 
-
 interface SongCardProps {
   id: string // video id
   cover: string
