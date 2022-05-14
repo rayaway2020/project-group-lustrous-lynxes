@@ -54,14 +54,14 @@ const SongItem = ({
   const seconds = Math.ceil(mind % 60) - 1
   return (
     <div
-      className="flex flex-row items-center gap-6 cursor-pointer"
+      className="flex cursor-pointer flex-row items-center gap-6"
       onClick={() => onClick()}
     >
       <div className="w-8 text-gray-600">{index > 9 ? index : `0${index}`}</div>
       <img
         src={cover}
         alt={title}
-        className="object-cover w-8 h-8 rounded aspect-square"
+        className="aspect-square h-8 w-8 rounded object-cover"
         onError={({ currentTarget }) => {
           currentTarget.onerror = null // prevents looping
           currentTarget.src =
@@ -99,7 +99,7 @@ const SongItem = ({
               : alert('Log in to see your playlists')
           }}
         >
-          <DotsHorizontalIcon className="w-6 h-6" />
+          <DotsHorizontalIcon className="h-6 w-6" />
         </ListItem>
 
         {userInfo.token ? (
