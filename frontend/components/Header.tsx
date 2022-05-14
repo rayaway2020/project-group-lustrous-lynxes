@@ -24,13 +24,8 @@ const Header = () => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
-  const [formErrors, setFormErrors] = useState({
-    email: '',
-    username: '',
-    password: '',
-  })
-
   const [isRegister, setIsRegister] = useState(false)
+
   const [dialogOpen, setDialogOpen] = useState(false)
   const handleOpen = () => setDialogOpen(true)
   const handleClose = () => {
@@ -41,7 +36,6 @@ const Header = () => {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertSuccess, setAlertSuccess] = useState(true)
   const [alertMsg, setAlertMsg] = useState('')
-  const [formValidation, setFormValidation] = useState({email: false, username: false, password: false})
 
   const handleAlertClose = () => {
     setAlertOpen(false)
@@ -58,7 +52,6 @@ const Header = () => {
     setEmail('')
     setFormUsername('')
     setPassword('')
-    setFormErrors({ email: '', username: '', password: '' })
   }
 
   const switchDialog = () => {
@@ -67,21 +60,24 @@ const Header = () => {
   }
 
   const handleSubmit = () => {
+    const formValidation = {email: false, username: false, password: false};
+    if(isRegister && !email) {
+      formValidation.email = true;
+    }else if(isRegister && !regex.test(email)){
+      formValidation.email = true;
+    }
+    if(!formUsername) {
+      formValidation.username = true;
+    }else if(formUsername.length < 6) {
+      formValidation.username = true;
+    }
     if (!password) {
-      setFormErrors({ ...formErrors, username: 'Password is required!' })
+      formValidation.password = true;
     } else if (password.length < 8) {
-      setFormErrors({
-        ...formErrors,
-        password: 'Password must be at least 8 characters',
-      })
+      formValidation.password = true;
     }
 
-    //Check
-    if (
-      formValidation.email == false &&
-      formValidation.username == false &&
-      formValidation.password == false
-    ) {
+    if ( !formValidation.email && !formValidation.username && !formValidation.password ) {
       isRegister ? register() : login()
     }
   }
@@ -147,16 +143,6 @@ const Header = () => {
     setAlertMsg('Successfully logged out')
     setAlertSuccess(true)
     setAlertOpen(true)
-  }
-
-  const helperPassword = () => {
-    if (!password) {
-      setFormValidation({...formValidation, password: true})
-      return ("Password is required")
-    } else if (password.length < 8) {
-      setFormValidation({...formValidation, password: true})
-      return ("Password needs to be more than 7 charcaters")
-    }
   }
 
   return (
@@ -266,16 +252,16 @@ const Header = () => {
               onChange={(e) => setEmail(e.target.value)}
               helperText={
                 !email
-                  ? 'Email is required'
-                  : !regex.test(email)
-                  ? 'Please enter an email'
-                  : ''
+                ? 'Email is required'
+                : !regex.test(email)
+                ? 'Please enter an email'
+                : ''
               }
               required
             />
           ) : null}
           <TextField
-            error={!formUsername ? true : false}
+            error={!formUsername || formUsername.length < 6 ? true : false}
             margin="dense"
             id="username"
             label="Username"
@@ -283,7 +269,12 @@ const Header = () => {
             fullWidth
             variant="outlined"
             onChange={(e) => setFormUsername(e.target.value)}
-            helperText={!formUsername ? 'Username is required' : null}
+            helperText={
+              !formUsername 
+              ? 'Username is required'
+              : formUsername.length < 6
+              ? 'Username must be at least 6 characters' 
+              : ''}
             value={formUsername}
             required
           />
@@ -296,7 +287,13 @@ const Header = () => {
             fullWidth
             onChange={(e) => setPassword(e.target.value)}
             variant="outlined"
-            helperText={helperPassword}
+            helperText={
+              !password 
+              ? 'Password is required' 
+              : password.length < 8
+              ? 'Password must be at least 8 characters'
+              : ''
+            }
             value={password}
             required
           />
