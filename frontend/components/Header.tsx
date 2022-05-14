@@ -212,7 +212,7 @@ const Header = () => {
           }
           placement="left"
         >
-          <label htmlFor="logIn-modal">
+          <label htmlFor="logIn-modal" className="cursor-pointer">
             <img
               className="h-12 w-12 rounded-full object-cover"
               src={

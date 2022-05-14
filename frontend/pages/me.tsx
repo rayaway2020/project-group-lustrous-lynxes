@@ -161,10 +161,16 @@ const me: NextPage = () => {
                 Create
               </Button>
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Create my own list</DialogTitle>
+                <DialogTitle sx={{
+                  fontSize: '2rem',
+                  fontWeight: 'bold',
+                  paddingTop: '32px',
+                  paddingBottom: '16px',
+                  textAlign: 'center',
+                  }}>Create your own lists</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    To cutomized your own list, please enter the name and
+                    To cutomized your own list, please enter a name and
                     description for this list.
                   </DialogContentText>
                   <TextField
@@ -175,7 +181,7 @@ const me: NextPage = () => {
                     label="Playlist name"
                     type="text"
                     fullWidth
-                    variant="standard"
+                    variant="outlined"
                     onChange={(e) => setNewPlaylist(e.target.value)}
                     helperText={listNameError}
                     value={newPlaylist}
@@ -183,19 +189,19 @@ const me: NextPage = () => {
                   />
                   <TextField
                     autoFocus
-                    margin="dense"
+                    margin="normal"
                     id="name"
                     label="Description"
                     type="text"
                     fullWidth
                     onChange={(e) => setDesc(e.target.value)}
-                    variant="standard"
+                    variant="outlined"
                     value={desc}
                   />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>Cancel</Button>
-                  <Button onClick={handleSave}>Save</Button>
+                  <Button onClick={handleSave}>Create</Button>
                 </DialogActions>
               </Dialog>
             </div>

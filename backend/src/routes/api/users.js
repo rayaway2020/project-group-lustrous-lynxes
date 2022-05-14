@@ -16,7 +16,7 @@ router.get('/', verify, async (req, res) => {
             thumbnail: user.thumbnail + user.username,
             ownedPlaylist: user.ownedPlaylist,
             likedPlaylist: user.likedPlaylist,
-            likedSongs: user.likedSongs
+            likedSongs: user.likedSongs,
         });
     } else {
         res.statusCode(404);
