@@ -23,25 +23,4 @@ router.get('/', verify, async (req, res) => {
     }
 });
 
-// Add Liked Playlist
-router.put('/addplaylist', verify, async (req, res) => {
-    const userId = req.params.userId;
-    const playlistId = req.params.playlistId;
-
-    const success = await addLikedPlaylist(userId, playlistId);
-
-    res.sendStatus(success ? 204 : 404);
-});
-
-// Remove Liked Playlist
-router.put('/removeplaylist', async (req, res) => {
-    const userId = req.params.userId;
-    const playlistId = req.params.playlistId;
-
-    const success = await removeLikedPlaylist(userId, playlistId);
-
-    res.sendStatus(success ? 204 : 404);
-});
-
-
 export default router;
