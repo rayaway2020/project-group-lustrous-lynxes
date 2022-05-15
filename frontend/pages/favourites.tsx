@@ -44,7 +44,6 @@ const Favourites: NextPage = () => {
 
   return (
     <>
-      {console.log(songs)}
       {!isLoading && (
         <div className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
           {/* header section */}

@@ -60,6 +60,7 @@ const Playlist: NextPage = () => {
             ? data.playlist.content?.map((item: any) => ({
                 videoId: item.videoId,
                 title: item.name,
+                artist: item.author.name,
                 thumbnails: Array.isArray(item.thumbnails)
                   ? item.thumbnails[item.thumbnails.length - 1].url
                   : item.thumbnails
@@ -109,6 +110,7 @@ const Playlist: NextPage = () => {
                     axios.post('http://localhost:3001/api/songs/', {
                       id: item.videoId,
                       title: item.title,
+                      author: item.author,
                       cover: item.thumbnails,
                       duration: item.duration,
                     })
