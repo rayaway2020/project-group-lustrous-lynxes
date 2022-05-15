@@ -56,3 +56,7 @@ If you want to know more about the project architecture or any implementation de
 ## Song detail page
 ![image](https://user-images.githubusercontent.com/69098495/168461558-e00c1ac3-e278-49c4-9d4b-3aa34cfbf790.png)
 
+## Users' library page
+![image](https://user-images.githubusercontent.com/69098495/168461823-9fa00fb7-f7a5-4968-9b0e-6fe7201d2cf1.png)
+
+
