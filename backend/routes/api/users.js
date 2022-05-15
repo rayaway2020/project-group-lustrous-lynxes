@@ -1,11 +1,10 @@
 import express from 'express';
-import verify from './verifyToken.js';
-import { User } from '../../db/schema.js';
+import {verify} from './verifyToken';
+import { User } from '../../db/schema';
 
 const router = express.Router();
 
-router.use(express.json());
-
+// Get all user information
 router.get('/', verify, async (req, res) => {
     const user = await User.findById(req.query.id);
 
@@ -16,7 +15,7 @@ router.get('/', verify, async (req, res) => {
             thumbnail: user.thumbnail + user.username,
             ownedPlaylist: user.ownedPlaylist,
             likedPlaylist: user.likedPlaylist,
-            likedSongs: user.likedSongs,
+            likedSongs: user.likedSongs
         });
     } else {
         res.statusCode(404);

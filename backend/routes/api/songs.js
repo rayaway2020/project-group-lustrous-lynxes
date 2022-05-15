@@ -1,6 +1,6 @@
 import express from 'express';
-import verify from './verifyToken.js';
-import { Song, User, Comment } from '../../db/schema.js';
+import {verify} from './verifyToken';
+import { Song, User, Comment } from '../../db/schema';
 
 const router = express.Router();
 
@@ -23,16 +23,17 @@ router.get('/favorite', async (req, res) => {
         const songIdList = dbUser.likedSongs;
         if (songIdList.length > 0) {
             const songList = await Song.find({
-                _id: { $in: songIdList },
+                '_id': { $in: songIdList }
             });
-
+        
             res.json(songList);
         } else {
             res.json([]);
         }
     } else {
-        res.json([]);
+        res.json([])
     }
+    
 });
 
 router.get('/comments', async (req, res) => {
@@ -42,24 +43,14 @@ router.get('/comments', async (req, res) => {
 
     if (idList.length > 0) {
         const all_comments = await Comment.find({
-            _id: { $in: idList },
+            '_id': { $in: idList }
         });
-
+    
         res.json(all_comments);
     } else {
         res.json([]);
     }
-});
-
-router.get('/isliked', async (req, res) => {
-    const songId = req.query.songId;
-    const user = await User.findById(req.query.userId);
-
-    if (user) {
-        const likedSongs = user.likedSongs;
-
-        res.json({ isLiked: likedSongs.includes(songId) });
-    }
+    
 });
 
 //Create One Song
@@ -77,11 +68,12 @@ router.post('/', async (req, res) => {
             _id: id,
             title: title,
             cover: cover,
-            duration: duration,
+            duration: duration
         });
         await newSong.save();
         res.json(newSong);
-    } else {
+    }
+    else {
         res.json({});
     }
 });
@@ -92,18 +84,19 @@ router.post('/comment', verify, async (req, res) => {
     const author = req.body.username;
     const content = req.body.content;
 
+
     try {
         const comment = new Comment({ author: author, content: content });
         await comment.save();
 
         await Song.findOneAndUpdate(
-            { _id: songId },
-            { $push: { comments: comment._id } }
+            { _id: songId }, 
+            { $push: { comments: comment._id } },
         );
 
         res.json({ commendId: comment._id });
-    } catch {
-        err => res.send(err);
+    } catch {err =>
+        res.send(err);
     }
 });
 
@@ -116,19 +109,20 @@ router.put('/comment/addlikes', async (req, res) => {
         const likes = dbComment.likes + 1;
         const userList = dbComment.likedUsers;
         userList.push(user);
-
+        
+    
         await Comment.updateOne(
-            { _id: id },
+            { _id: id }, 
             {
-                $set: {
-                    likes: likes,
-                    likedUsers: userList,
-                },
-            }
-        );
-
+                $set: { 
+                    "likes": likes, "likedUsers": userList 
+                }
+            },
+        )
+        
         res.json({ likes: likes });
-    } catch {
+    }
+    catch {
         res.json({});
     }
 });
@@ -139,23 +133,24 @@ router.put('/comment/cancellikes', async (req, res) => {
 
     try {
         const dbComment = await Comment.findById(id);
-        const likes = dbComment.likes > 0 ? dbComment.likes - 1 : 0;
+        const likes = dbComment.likes > 0? dbComment.likes - 1: 0;
         const userList = dbComment.likedUsers;
         const deletedList = userList.filter(u => u !== user);
-
+    
         await Comment.updateOne(
-            { _id: id },
+            { _id: id }, 
             {
-                $set: {
-                    likes: likes,
-                    likedUsers: deletedList,
-                },
+                $set: { 
+                    likes: likes, likedUsers: deletedList 
+                }
             }
-        );
-
+            
+        )
+        
         res.json({ likes: likes });
-    } catch {
-        err => res.send(err);
+    }
+    catch {
+        err => res.send(err) 
     }
 });
 
@@ -166,17 +161,18 @@ router.put('/add', verify, async (req, res) => {
 
     try {
         await User.updateOne(
-            { _id: userId },
-            { $push: { likedSongs: songId } }
+            { _id: userId }, 
+            { $push: { likedSongs: songId } },
         );
 
         res.json({});
-    } catch {
-        err => res.send(err);
+    } catch {err =>
+        res.send(err);
     }
+
 });
 
-//Delete like
+//Delete like 
 router.put('/delete', verify, async (req, res) => {
     const userId = req.body.userId;
     const songId = req.body.songId;
@@ -185,12 +181,19 @@ router.put('/delete', verify, async (req, res) => {
     const likedSongs = dbUser.likedSongs.filter(x => x !== songId);
 
     try {
-        await User.updateOne({ _id: userId }, { likedSongs: likedSongs });
+        await User.updateOne(
+            { _id: userId }, 
+            { likedSongs: likedSongs },
+        );
 
         res.json({});
-    } catch {
-        err => res.send(err);
+    } catch {err =>
+        res.send(err);
     }
+
 });
+
+
+
 
 export default router;
