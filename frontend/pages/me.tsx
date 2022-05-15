@@ -187,7 +187,7 @@ const me: NextPage = () => {
                     type="text"
                     fullWidth
                     variant="outlined"
-                    onChange={(e: any) => setNewPlaylist(e.target.value)}
+                    onChange={(e) => setNewPlaylist(e.target.value)}
                     helperText={listNameError}
                     value={newPlaylist}
                     required
@@ -198,7 +198,7 @@ const me: NextPage = () => {
                     label="Description"
                     type="text"
                     fullWidth
-                    onChange={(e: any) => setDesc(e.target.value)}
+                    onChange={(e) => setDesc(e.target.value)}
                     variant="outlined"
                     value={desc}
                   />

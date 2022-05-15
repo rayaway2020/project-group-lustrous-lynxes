@@ -55,20 +55,20 @@ const Playlist: NextPage = () => {
                 id: data.id,
               }
           setInfo(tem)
-
-          console.log(data.playlist.content)
+          
+          console.log(data.playlist.content);
           //Set songs
           const playlistSongs: any = !data.isUser
             ? data.playlist.content?.map((item: any) => ({
-                videoId: item.videoId,
-                title: item.name,
-                thumbnails: Array.isArray(item.thumbnails)
-                  ? item.thumbnails[item.thumbnails.length - 1].url
-                  : item.thumbnails
-                  ? item.thumbnails.url
-                  : 'https://c.tenor.com/Tu0MCmJ4TJUAAAAC/load-loading.gif',
-                duration: item.duration,
-              }))
+              videoId: item.videoId,
+              title: item.name,
+              thumbnails: Array.isArray(item.thumbnails)
+              ? item.thumbnails[item.thumbnails.length - 1].url
+              : item.thumbnails
+              ? item.thumbnails.url
+              : 'https://c.tenor.com/Tu0MCmJ4TJUAAAAC/load-loading.gif',
+              duration: item.duration
+            }))
             : data.playlist.content
           setSongs(playlistSongs)
 

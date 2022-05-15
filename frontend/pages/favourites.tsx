@@ -30,8 +30,7 @@ const Favourites: NextPage = () => {
       description: 'This is all your favorite songs!',
       id: 'id',
     })
-    axios
-      .get('http://localhost:3001/api/songs/favorite', {
+    axios.get('http://localhost:3001/api/songs/favorite', {
         params: {
           userId: userInfo.id,
         },
@@ -44,6 +43,7 @@ const Favourites: NextPage = () => {
 
   return (
     <>
+      {console.log(songs)}
       {!isLoading && (
         <div className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
           {/* header section */}
