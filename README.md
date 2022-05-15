@@ -16,8 +16,7 @@ This application supply the following feature:
 * 💬 **Comment songs and like others comments**: Users can interact with others using this commenting/like comment system to share their thoughts and feelings about the song.
 * 💿 **Recommmended playlists**: The users would be recommened with some playlist such as trending, new realeased playlists.
 
-
-# Installation: Frontend and Backend
+# Quick Installation: Frontend and Backend
 At the root directory
 ```
 cd frontend
@@ -39,6 +38,21 @@ To run tests
 npm run test
 ```
 
-## Information about our project
+# More Information about our project
 
 If you want to know more about the project architecture or any implementation details, visit the wiki page [here](https://github.com/UOA-CS732-SE750-Students-2022/project-group-lustrous-lynxes/wiki).
+
+# Application screenshots
+## Home page
+![image](https://user-images.githubusercontent.com/69098495/168461650-351a99af-14f8-48c6-9401-f25ff2903838.png)
+
+## Search page
+![image](https://user-images.githubusercontent.com/69098495/168461581-8b1e1f1e-f9bf-4090-8fc6-487a5dae1b8e.png)
+![image](https://user-images.githubusercontent.com/69098495/168461603-89c8fbb7-392f-4c86-9e56-b2b2830cb392.png)
+
+## Playlist page
+![image](https://user-images.githubusercontent.com/69098495/168461511-627bc880-d032-4609-8c78-1b48b53851da.png)
+
+## Song detail page
+![image](https://user-images.githubusercontent.com/69098495/168461558-e00c1ac3-e278-49c4-9d4b-3aa34cfbf790.png)
+
