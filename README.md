@@ -12,7 +12,7 @@ This application supply the following feature:
 * **Search playlist**: The users may also wish to search for a playlist existed or created by others
 * **User authentication**: Users can either choose to use this app with or without authenticated, by registering a new account and log in, they can perform some furhter functionality.
 * **Create new playlist and add songs**: Once logged in, users can also cutomized their own playlists and add songs to it.
-* **Like/dislike a plallsit**: Users would be able to like the playlist and find liked playlist in their account
+* **Like/dislike a playlist**: Users would be able to like the playlist and find liked playlist in their account
 * **Comment songs and like others comments**: Users can interact with others using this commenting/like comment system to share their thoughts and feelings about the song.
 * **Recommmended playlists**: The users would be recommened with some playlist such as trending, new realeased playlists.
 
