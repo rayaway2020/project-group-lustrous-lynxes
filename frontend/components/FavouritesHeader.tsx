@@ -1,10 +1,4 @@
-import {
-  PlayIcon,
-  HeartIcon as HeartIconOutlined,
-} from '@heroicons/react/outline'
-import { HeartIcon } from '@heroicons/react/solid'
-import axios from 'axios'
-import { useState } from 'react'
+import { PlayIcon } from '@heroicons/react/outline'
 
 type FavouriteHeaderProps = {
   cover: string
@@ -21,8 +15,6 @@ const FavouriteHeader = ({
   description,
   id,
 }: FavouriteHeaderProps) => {
-  const userId = '627ce8e7a27332aa9d3e8d77'
-
   return (
     <div className="flex h-80 w-full flex-row gap-8 rounded-2xl bg-gray-100 p-12">
       <img

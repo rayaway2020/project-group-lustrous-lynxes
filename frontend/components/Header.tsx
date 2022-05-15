@@ -253,7 +253,7 @@ const Header = () => {
               fullWidth
               variant="outlined"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e: any) => setEmail(e.target.value)}
               helperText={
                 !email
                   ? 'Email is required'
@@ -272,7 +272,7 @@ const Header = () => {
             type="text"
             fullWidth
             variant="outlined"
-            onChange={(e) => setFormUsername(e.target.value)}
+            onChange={(e: any) => setFormUsername(e.target.value)}
             helperText={
               !formUsername
                 ? 'Username is required'
@@ -290,7 +290,7 @@ const Header = () => {
             label="Password"
             type="password"
             fullWidth
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: any) => setPassword(e.target.value)}
             variant="outlined"
             helperText={
               !password

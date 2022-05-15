@@ -33,7 +33,8 @@ const PopupCover = () => {
       <img
         src={
           playlist[currentSong].thumbnails?.url ||
-          playlist[currentSong].thumbnail
+          playlist[currentSong].thumbnails ||
+          playlist[currentSong].thumbnail // for search result
         }
         alt={playlist[currentSong].name || playlist[currentSong].title}
         className="aspect-square h-64 w-64 rounded-xl bg-auto object-cover"

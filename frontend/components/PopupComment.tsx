@@ -35,7 +35,7 @@ const PopupComment = ({ songID }: PopUpCommentProps) => {
       {/* Avatar and Input*/}
       <div className="flex flex-row gap-4">
         <img
-          src={`https://stamp.fyi/avatar/${userInfo.username}`}
+          src={`https://stamp.fyi/avatar/${userInfo.username || 'hello'}`}
           alt=""
           className="h-12 w-12 rounded-full"
         />

@@ -30,7 +30,8 @@ const Favourites: NextPage = () => {
       description: 'This is all your favorite songs!',
       id: 'id',
     })
-    axios.get('http://localhost:3001/api/songs/favorite', {
+    axios
+      .get('http://localhost:3001/api/songs/favorite', {
         params: {
           userId: userInfo.id,
         },

@@ -5,7 +5,7 @@ import PlaylistRow from '../components/PlaylistRow'
 const Home: NextPage = () => {
   const [playlists, setPlaylists] = useState<any[] | undefined>()
   useEffect(() => {
-    //从数据库拉取，直接使用Id
+    // using id to get from the backend database
     fetch('http://localhost:3001/api/recommend')
       .then((res) => res.json())
       .then((data) => {
