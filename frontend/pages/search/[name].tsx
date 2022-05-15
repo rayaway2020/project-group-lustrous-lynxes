@@ -42,7 +42,7 @@ const SearchResult: NextPage = () => {
       ) : (
         <div className="py-24">
           {playlists && (
-            <PlaylistRow title={'Playlist:'} items={playlists} knowId={false} />
+            <PlaylistRow title={'Playlist:'} items={playlists} knowId={true} />
           )}
           {songs && <SonglistRow title={'Song:'} items={songs} />}
         </div>
