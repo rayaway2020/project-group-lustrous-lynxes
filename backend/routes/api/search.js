@@ -1,6 +1,6 @@
 import express from 'express';
-import getAPIInstance from '../../util/youtube.js';
-import { Playlist } from '../../db/schema.js';
+import {getAPIInstance} from '../../util/youtube';
+import {Playlist} from '../../db/schema';
 
 const router = express.Router();
 
@@ -14,15 +14,15 @@ router.get('/', async (req, res) => {
     // sort here
     await api.search(searchQuery, 'song').then(result => {
         const songs = result.content.slice(0, 10).map(item => ({
-            videoId: item?.videoId,
-            title: item?.name,
+            videoId: item.videoId,
+            title: item.name,
             artist:
-                item?.artist.length > 1
+                item.artist.length > 1
                     ? item.artist[0].name
                     : item.artist.name,
-            duration: item?.duration,
+            duration: item.duration,
             thumbnail:
-                item?.thumbnails.length === 0
+                item.thumbnails.length === 0
                     ? 'https://c.tenor.com/Tu0MCmJ4TJUAAAAC/load-loading.gif'
                     : item.thumbnails[item.thumbnails.length - 1].url,
         }));

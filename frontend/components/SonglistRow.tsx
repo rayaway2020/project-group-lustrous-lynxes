@@ -11,6 +11,7 @@ interface SonglistRowProps {
 
 const SonglistRow = ({ title, items }: SonglistRowProps) => {
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
+  {console.log(items)}
   return (
     <div className="flex w-full flex-col gap-5">
       <div className="text-2xl font-semibold">{title}</div>
@@ -19,6 +20,7 @@ const SonglistRow = ({ title, items }: SonglistRowProps) => {
           <SongItem
             key={i}
             index={i + 1}
+            videoId={item.videoId}
             cover={item.thumbnail}
             title={item.title}
             duration={item.duration}
@@ -27,10 +29,10 @@ const SonglistRow = ({ title, items }: SonglistRowProps) => {
               setCurrentSong(i)
               setPlaying(true)
 
-              if (item?.videoId) {
+              if (item.videoId) {
                 axios.post('http://localhost:3001/api/songs/', {
                   id: item.videoId,
-                  title: item.name,
+                  title: item.title,
                   cover: item.thumbnail,
                   duration: item.duration,
                 })

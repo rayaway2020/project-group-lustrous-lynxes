@@ -5,8 +5,6 @@ import {
   ChevronDoubleRightIcon,
   ChevronUpIcon,
   PlayIcon,
-  CubeIcon,
-  VolumeUpIcon,
   StopIcon,
 } from '@heroicons/react/outline'
 import { useContext } from 'react'
@@ -34,6 +32,7 @@ const Playbar = () => {
           <img
             src={
               playlist[currentSong].thumbnails?.url ||
+              playlist[currentSong].thumbnails ||
               playlist[currentSong].thumbnail // for search result
             }
             alt={playlist[currentSong].name || playlist[currentSong].title}
