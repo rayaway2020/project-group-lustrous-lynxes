@@ -2,11 +2,8 @@ import express from 'express';
 import { verify } from './verifyToken';
 import { getAPIInstance } from '../../util/youtube';
 import { User, Playlist, Song } from '../../db/schema';
-import cors from 'cors';
 
 const router = express.Router();
-
-router.use(cors());
 
 // Retrieve one playlist
 router.get('/network', async (req, res) => {

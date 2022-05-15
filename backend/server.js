@@ -6,15 +6,14 @@ import cors from 'cors';
 const app = express();
 const port = 3001;
 
+app.use(cors());
+
 // Setup JSON parsing for the request body
 app.use(express.json());
 
 // Setup our API routes.
 import routes from './routes';
 app.use('/', routes);
-
-app.use(cors());
-
 
 // Connect to the database.
 // Once connected, the "then" function will be called, which will start the app listening for client connections.

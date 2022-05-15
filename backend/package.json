@@ -14,7 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
-    "cors": "^2.8.5",
     "express": "^4.17.2",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
@@ -28,6 +27,7 @@
     "@types/jest": "^27.4.1",
     "babel-jest": "^27.5.1",
     "cross-env": "^7.0.3",
+    "cors": "^2.8.5",
     "esm": "^3.2.25",
     "jest": "^27.5.1",
     "mongodb-memory-server": "^8.4.0",

@@ -2,10 +2,8 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../../db/schema';
 import bcrypt from 'bcrypt';
-import cors from 'cors';
 
 const router = express.Router();
-router.use(cors());
 
 const TOKEN_SECRET= 'gbf0wvx7AOqkU0p9p30mqHYC';
 

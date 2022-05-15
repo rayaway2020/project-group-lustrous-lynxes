@@ -1,9 +1,8 @@
 import express from 'express';
 import {getAPIInstance} from '../../util/youtube';
-import cors from 'cors';
+import {Playlist} from '../../db/schema';
 
 const router = express.Router();
-router.use(cors());
 
 router.get('/', async (req, res) => {
     const searchQuery = req.query.search;
