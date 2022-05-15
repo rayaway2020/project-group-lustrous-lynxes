@@ -2,7 +2,7 @@
 [Appname] - Group project for CS732/SE750 group: Lustrous Lynxes
 
 # Project Overview
-This project is a music streaming service web app along with social platform elements where passionate music lovers may share their thoughts and discover more great musics. The frontend was implemented using React framework and backend database was supplied by MongoDB.
+This project is a music streaming service web app along with social platform elements where passionate music lovers may share their thoughts and discover more great musics. The frontend was implemented using React framework, along with node.js, tailwind CSS, MUI-material UI and backend database was supplied by MongoDB.
 
 # Project Features
 This application supply the following feature:
