@@ -27,17 +27,17 @@ const Playbar = () => {
   const { userInfo, setUserInfo } = useContext(userContext)
 
   return currentSong || playlist ? (
-    <section className="fixed bottom-0 left-0 right-0 z-50 max-w-screen-xl px-6 m-auto bg-white ">
-      <div className="flex flex-row items-center justify-between h-16">
+    <section className="fixed bottom-0 left-0 right-0 z-50 m-auto max-w-screen-xl bg-white px-6 ">
+      <div className="flex h-16 flex-row items-center justify-between">
         {/* cover section */}
-        <div className="flex flex-row items-center flex-1 gap-4">
+        <div className="flex flex-1 flex-row items-center gap-4">
           <img
             src={
               playlist[currentSong].thumbnails?.url ||
               playlist[currentSong].thumbnail // for search result
             }
             alt={playlist[currentSong].name || playlist[currentSong].title}
-            className="object-cover w-10 h-10 rounded-full"
+            className="h-10 w-10 rounded-full object-cover"
             onError={({ currentTarget }) => {
               currentTarget.onerror = null // prevents looping
               currentTarget.src =
@@ -56,37 +56,37 @@ const Playbar = () => {
           </div>
         </div>
         {/* control bar */}
-        <div className="flex flex-row items-center justify-center flex-1 gap-8">
+        <div className="flex flex-1 flex-row items-center justify-center gap-8">
           <ChevronDoubleLeftIcon
-            className="w-6 h-6 cursor-pointer"
+            className="h-6 w-6 cursor-pointer"
             onClick={() => playPrev()}
           />
           {isPlaying ? (
             <StopIcon
-              className="w-8 h-8 cursor-pointer"
+              className="h-8 w-8 cursor-pointer"
               onClick={() => {
                 setPlaying(!isPlaying)
               }}
             />
           ) : (
             <PlayIcon
-              className="w-8 h-8 cursor-pointer"
+              className="h-8 w-8 cursor-pointer"
               onClick={() => {
                 setPlaying(!isPlaying)
               }}
             />
           )}
           <ChevronDoubleRightIcon
-            className="w-6 h-6 cursor-pointer"
+            className="h-6 w-6 cursor-pointer"
             onClick={() => playNext()}
           />
         </div>
 
         {/* play setting */}
-        <div className="flex flex-row items-center justify-end flex-1 gap-6">
+        <div className="flex flex-1 flex-row items-center justify-end gap-6">
           {userInfo.likedSongs.includes(playlist[currentSong].videoId) ? (
             <HeartIcon
-              className="w-6 h-6"
+              className="h-6 w-6"
               onClick={() => {
                 axios
                   .put(
@@ -111,7 +111,7 @@ const Playbar = () => {
             />
           ) : (
             <HeartIconOutlined
-              className="w-6 h-6"
+              className="h-6 w-6"
               onClick={() => {
                 userInfo.token
                   ? axios
@@ -139,7 +139,7 @@ const Playbar = () => {
             />
           )}
           <ChevronUpIcon
-            className="w-6 h-6 cursor-pointer"
+            className="h-6 w-6 cursor-pointer"
             onClick={() => {
               // prevent the body scroll
               document.body.classList.add('overflow-hidden')

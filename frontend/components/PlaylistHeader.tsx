@@ -4,7 +4,7 @@ import {
 } from '@heroicons/react/outline'
 import { HeartIcon } from '@heroicons/react/solid'
 import axios from 'axios'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { userContext } from './Layout'
 
 type PlayListHeaderProps = {
@@ -13,6 +13,7 @@ type PlayListHeaderProps = {
   owner: string
   description: string
   id: string
+  play: () => void
 }
 
 const PlayListHeader = ({
@@ -21,6 +22,7 @@ const PlayListHeader = ({
   owner,
   description,
   id,
+  play,
 }: PlayListHeaderProps) => {
   const { userInfo, setUserInfo } = useContext(userContext)
 
@@ -39,7 +41,12 @@ const PlayListHeader = ({
         </div>
         <div className="w-full text-gray-600 line-clamp-3">{description}</div>
         <div className="flex flex-row items-center justify-start gap-4">
-          <div className="flex w-min flex-row gap-2 rounded bg-white px-4 py-1">
+          <div
+            className="flex w-min cursor-pointer flex-row gap-2 rounded bg-white px-4 py-1"
+            onClick={() => {
+              play()
+            }}
+          >
             <PlayIcon className="h-6 w-6" />
             <span>Play</span>
           </div>

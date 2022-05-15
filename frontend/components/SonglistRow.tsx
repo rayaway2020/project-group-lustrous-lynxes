@@ -12,7 +12,7 @@ interface SonglistRowProps {
 const SonglistRow = ({ title, items }: SonglistRowProps) => {
   const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
   return (
-    <div className="flex flex-col w-full gap-5">
+    <div className="flex w-full flex-col gap-5">
       <div className="text-2xl font-semibold">{title}</div>
       <div className="flex flex-col gap-4">
         {items?.map((item, i) => (

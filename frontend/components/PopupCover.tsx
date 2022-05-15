@@ -19,10 +19,10 @@ const PopupCover = () => {
     playPrev,
   } = useContext(playbarContext)
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-6">
+    <div className="flex h-full flex-col items-center justify-center gap-6">
       <div className="absolute left-24 top-10">
         <ChevronDownIcon
-          className="w-8 h-8 cursor-pointer"
+          className="h-8 w-8 cursor-pointer"
           onClick={() => {
             setPopupOpen(false)
             // recovery the body scroll
@@ -36,7 +36,7 @@ const PopupCover = () => {
           playlist[currentSong].thumbnail
         }
         alt={playlist[currentSong].name || playlist[currentSong].title}
-        className="object-cover w-64 h-64 bg-auto aspect-square rounded-xl"
+        className="aspect-square h-64 w-64 rounded-xl bg-auto object-cover"
       />
       <div className="flex flex-col items-center justify-between">
         <div>{playlist[currentSong].name || playlist[currentSong].title}</div>
@@ -47,23 +47,23 @@ const PopupCover = () => {
         </div>
       </div>
       <div className="flex flex-row items-center justify-center gap-8">
-        <ChevronDoubleLeftIcon className="w-6 h-6" onClick={playPrev} />
+        <ChevronDoubleLeftIcon className="h-6 w-6" onClick={playPrev} />
         {isPlaying ? (
           <StopIcon
-            className="w-10 h-10 cursor-pointer"
+            className="h-10 w-10 cursor-pointer"
             onClick={() => {
               setPlaying(!isPlaying)
             }}
           />
         ) : (
           <PlayIcon
-            className="w-10 h-10 cursor-pointer"
+            className="h-10 w-10 cursor-pointer"
             onClick={() => {
               setPlaying(!isPlaying)
             }}
           />
         )}
-        <ChevronDoubleRightIcon className="w-6 h-6" onClick={playNext} />
+        <ChevronDoubleRightIcon className="h-6 w-6" onClick={playNext} />
       </div>
     </div>
   )
