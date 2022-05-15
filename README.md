@@ -4,10 +4,18 @@
 # Project Overview
 This project is a music streaming service web app along with social platform elements where passionate music lovers may share their thoughts and discover more great musics. The fronend was implemented using React framework and backend database was supplied by MongoDB.
 
-# Project Feature
-* dd
-* dd
-* dd
+# Project Features
+This application supply the following feature:
+* **Search song**: The users may wish to search for any songs they are interested in and will be presented with a number of matched results
+* **Play/Pause/Skip**: The users will be albe to perform play/pause/skip actions with a specific song as the basic function of an music streaming web app.
+* **Display details of songs**: Some basic information like name, cover and duration of a song would be showed to the user.
+* **Search playlist**: The users may also wish to search for a playlist existed or created by others
+* **User authentication**: Users can either choose to use this app with or without authenticated, by registering a new account and log in, they can perform some furhter functionality.
+* **Create new playlist and add songs**: Once logged in, users can also cutomized their own playlists and add songs to it.
+* **Like/dislike a plallsit**: Users would be able to like the playlist and find liked playlist in their account
+* **Comment songs and like others comments**: Users can interact with others using this commenting/like comment system to share their thoughts and feelings about the song.
+* **Recommmended playlists**: The users would be recommened with some playlist such as trending, new realeased playlists.
+
 
 # Installation: Frontend and Backend
 At the root directory
