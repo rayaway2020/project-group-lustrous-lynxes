@@ -8,7 +8,6 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
-    require('daisyui'),
     require('tailwind-scrollbar-hide'),
   ],
 }
