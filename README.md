@@ -5,6 +5,9 @@
 This project is a music streaming service web app along with social platform elements where passionate music lovers may share their thoughts and discover more great musics. The fronend was implemented using React framework and backend database was supplied by MongoDB.
 
 # Project Feature
+* dd
+* dd
+* dd
 
 # Installation: Frontend and Backend
 At the root directory
