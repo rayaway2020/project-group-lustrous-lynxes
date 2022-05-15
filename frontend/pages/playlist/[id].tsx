@@ -76,7 +76,7 @@ const Playlist: NextPage = () => {
   return (
     <>
       {!isLoading && (
-        <div className="flex flex-col w-full max-w-screen-xl gap-8 px-6 mx-auto my-24">
+        <div className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
           {/* header section */}
           {info && (
             <PlaylistHeader
@@ -89,7 +89,7 @@ const Playlist: NextPage = () => {
             />
           )}
           {/* playlist section */}
-          <div className="flex flex-col gap-4 px-12 py-8 rounded-2xl bg-slate-50">
+          <div className="flex flex-col gap-4 rounded-2xl bg-slate-50 px-12 py-8">
             {songs?.map((item: any, i: number) => (
               <SongItem
                 key={i}

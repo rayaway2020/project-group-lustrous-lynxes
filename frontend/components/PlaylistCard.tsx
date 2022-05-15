@@ -23,7 +23,7 @@ const PlaylistCard = ({
 
   return (
     <div
-      className="flex flex-col cursor-pointer"
+      className="flex cursor-pointer flex-col"
       onClick={() => {
         browseId
           ? axios
