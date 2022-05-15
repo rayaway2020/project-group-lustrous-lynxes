@@ -55,19 +55,23 @@ const Playlist: NextPage = () => {
                 id: data.id,
               }
           setInfo(tem)
-
+          
+          console.log(data.playlist.content);
           //Set songs
           const playlistSongs: any = !data.isUser
-            ? data.playlist.content?.map(
-                (item: { thumbnails: { url: string | undefined } }) => {
-                  if (!item.thumbnails.url) {
-                    item.thumbnails.url = info?.cover
-                  }
-                  return item
-                }
-              )
+            ? data.playlist.content?.map((item: any) => ({
+              videoId: item.videoId,
+              title: item.name,
+              thumbnails: Array.isArray(item.thumbnails)
+              ? item.thumbnails[item.thumbnails.length - 1].url
+              : item.thumbnails
+              ? item.thumbnails.url
+              : 'https://c.tenor.com/Tu0MCmJ4TJUAAAAC/load-loading.gif',
+              duration: item.duration
+            }))
             : data.playlist.content
           setSongs(playlistSongs)
+
           setIsLoading(false)
         })
     }
@@ -95,23 +99,19 @@ const Playlist: NextPage = () => {
                 key={i}
                 index={i + 1}
                 videoId={item.videoId}
-                title={item.name || item.title}
-                cover={item.thumbnails?.url || item?.cover || info?.cover}
+                title={item.title}
+                cover={item.thumbnails}
                 duration={item.duration}
                 onClick={() => {
-                  if (!item.thumbnails?.url) {
-                    item.thumbnails.url = info?.cover
-                  }
-
                   setPlaylist(songs)
                   setCurrentSong(i)
                   setPlaying(true)
 
-                  if (item?.videoId) {
+                  if (item.videoId) {
                     axios.post('http://localhost:3001/api/songs/', {
                       id: item.videoId,
-                      title: item.name,
-                      cover: item.thumbnails.url || info?.cover,
+                      title: item.title,
+                      cover: item.thumbnails,
                       duration: item.duration,
                     })
                   }
