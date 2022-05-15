@@ -30,10 +30,9 @@ const Favourites: NextPage = () => {
       description: 'This is all your favorite songs!',
       id: 'id',
     })
-    axios
-      .get('http://localhost:3001/api/songs/favorite', {
+    axios.get('http://localhost:3001/api/songs/favorite', {
         params: {
-          userId: userInfo.userId,
+          userId: userInfo.id,
         },
       })
       .then((res) => {
@@ -44,6 +43,7 @@ const Favourites: NextPage = () => {
 
   return (
     <>
+      {console.log(songs)}
       {!isLoading && (
         <div className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
           {/* header section */}
@@ -55,8 +55,9 @@ const Favourites: NextPage = () => {
               <SongItem
                 key={i}
                 index={i + 1}
+                videoId={item.videoId}
                 title={item.title}
-                cover={item.cover}
+                cover={item.thumbnail}
                 duration={item.duration}
                 onClick={() => {
                   setPlaylist(songs)

@@ -19,6 +19,7 @@ const SonglistRow = ({ title, items }: SonglistRowProps) => {
           <SongItem
             key={i}
             index={i + 1}
+            videoId={item.videoId}
             cover={item.thumbnail}
             title={item.title}
             duration={item.duration}

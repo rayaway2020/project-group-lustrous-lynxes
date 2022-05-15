@@ -17,22 +17,31 @@ router.get('/', async (req, res) => {
 
 router.get('/favorite', async (req, res) => {
     const userId = req.query.userId;
-    const dbUser = await User.findById(userId);
+    if (userId) {
+        const dbUser = await User.findById(userId);
 
-    if (dbUser) {
-        const songIdList = dbUser.likedSongs;
-        if (songIdList.length > 0) {
-            const songList = await Song.find({
-                '_id': { $in: songIdList }
-            });
-        
-            res.json(songList);
+        if (dbUser) {
+            const songIdList = dbUser.likedSongs;
+            if (songIdList.length > 0) {
+                const songList = await Song.find({
+                    '_id': { $in: songIdList }
+                });
+            
+                res.json(songList.map(item => ({
+                    comments: item.comments,
+                    duration: item.duration,
+                    title: item.title,
+                    videoId: item._id,
+                    thumbnail: item.cover
+                })));
+            } else {
+                res.json([]);
+            }
         } else {
-            res.json([]);
+            res.json([])
         }
-    } else {
-        res.json([])
     }
+    
     
 });
 

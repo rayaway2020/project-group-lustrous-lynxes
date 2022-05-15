@@ -5,6 +5,7 @@ import { userContext, playbarContext } from './Layout'
 import axios from 'axios'
 
 type SongItemProps = {
+  videoId: string
   index: number
   title: string
   cover: string
@@ -13,6 +14,7 @@ type SongItemProps = {
 }
 
 const SongItem = ({
+  videoId,
   index,
   title,
   cover,
@@ -30,14 +32,14 @@ const SongItem = ({
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLElement>,
-    index: number
+    number: number
   ) => {
-    setSelectedIndex(index)
+    setSelectedIndex(number)
     setAnchorEl(null)
     axios
       .put('http://localhost:3001/api/playlists/addsong', {
-        songId: playlist?.[currentSong].videoId,
-        playlistId: dropdown[index].id,
+        songId: videoId,
+        playlistId: dropdown[number].id,
       })
       .then((res) => {
         res.status === 200 ? alert('Successfully added!') : null

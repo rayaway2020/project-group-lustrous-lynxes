@@ -33,7 +33,12 @@ router.get('/network', async (req, res) => {
                     thumbnail: dbPlaylist.thumbnail,
                     owner: dbPlaylist.author,
                     description: dbPlaylist.description,
-                    content: songList,
+                    content: songList.map(item => ({
+                        videoId: item._id,
+                        title: item.title,
+                        thumbnails: item.cover,
+                        duration: item.duration
+                    })),
                 },
                 isUser: true,
             });
@@ -43,6 +48,7 @@ router.get('/network', async (req, res) => {
     }
 });
 
+//get created playlist, liked songs and favorite songs by the user.
 router.get('/user/info', async(req, res) => {
     const userId = req.query.userId;
     const dbUser = await User.findById(userId);

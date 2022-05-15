@@ -94,6 +94,7 @@ const Playlist: NextPage = () => {
               <SongItem
                 key={i}
                 index={i + 1}
+                videoId={item.videoId}
                 title={item.name || item.title}
                 cover={item.thumbnails?.url || item?.cover || info?.cover}
                 duration={item.duration}
