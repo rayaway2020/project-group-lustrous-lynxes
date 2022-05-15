@@ -6,8 +6,7 @@ This project is a music streaming service web app along with social platform ele
 
 # Project Feature
 
-
-## Installation: Frontend and Backend
+# Installation: Frontend and Backend
 At the root directory
 ```
 cd frontend
@@ -19,7 +18,7 @@ cd backend
 npm i
 ```
 
-## Usage: Frontend and Backend
+# Usage: Frontend and Backend
 At the /frontend and /backend directory, respectively, run 
 ```
 npm run dev
