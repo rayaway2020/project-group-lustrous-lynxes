@@ -27,54 +27,66 @@ const Playbar = () => {
   const { userInfo, setUserInfo } = useContext(userContext)
 
   return currentSong || playlist ? (
-    <section className="fixed bottom-0 left-0 right-0 z-50 m-auto max-w-screen-xl bg-white px-6 ">
-      <div className="flex h-16 flex-row items-center justify-between">
+    <section className="fixed bottom-0 left-0 right-0 z-50 max-w-screen-xl px-6 m-auto bg-white ">
+      <div className="flex flex-row items-center justify-between h-16">
         {/* cover section */}
-        <div className="flex flex-1 flex-row items-center gap-4">
+        <div className="flex flex-row items-center flex-1 gap-4">
           <img
-            src={playlist[currentSong].thumbnails.url}
-            alt={playlist[currentSong].name}
-            className="h-10 w-10 rounded-full object-cover"
+            src={
+              playlist[currentSong].thumbnails?.url ||
+              playlist[currentSong].thumbnail // for search result
+            }
+            alt={playlist[currentSong].name || playlist[currentSong].title}
+            className="object-cover w-10 h-10 rounded-full"
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null // prevents looping
+              currentTarget.src =
+                'https://pro2-bar-s3-cdn-cf4.myportfolio.com/dbea3cc43adf643e2aac2f1cbb9ed2f0/f14d6fc4-2cea-41a2-9724-a7e5dff027e8_rw_600.jpg?h=99cbed677113851ef5b0af352fa8a5b1'
+            }}
           />
           <div className="flex flex-col justify-between">
-            <div className="truncate">{playlist[currentSong].name}</div>
+            <div className="truncate">
+              {playlist[currentSong].name || playlist[currentSong].title}
+            </div>
             <div className="text-sm">
-              {playlist[currentSong].author.name || 'unknown'}
+              {playlist[currentSong].author?.name ||
+                playlist[currentSong].artist || // for search result
+                'unknown'}
             </div>
           </div>
         </div>
         {/* control bar */}
-        <div className="flex flex-1 flex-row items-center justify-center gap-8">
+        <div className="flex flex-row items-center justify-center flex-1 gap-8">
           <ChevronDoubleLeftIcon
-            className="h-6 w-6 cursor-pointer"
+            className="w-6 h-6 cursor-pointer"
             onClick={() => playPrev()}
           />
           {isPlaying ? (
             <StopIcon
-              className="h-8 w-8 cursor-pointer"
+              className="w-8 h-8 cursor-pointer"
               onClick={() => {
                 setPlaying(!isPlaying)
               }}
             />
           ) : (
             <PlayIcon
-              className="h-8 w-8 cursor-pointer"
+              className="w-8 h-8 cursor-pointer"
               onClick={() => {
                 setPlaying(!isPlaying)
               }}
             />
           )}
           <ChevronDoubleRightIcon
-            className="h-6 w-6 cursor-pointer"
+            className="w-6 h-6 cursor-pointer"
             onClick={() => playNext()}
           />
         </div>
 
         {/* play setting */}
-        <div className="flex flex-1 flex-row items-center justify-end gap-6">
+        <div className="flex flex-row items-center justify-end flex-1 gap-6">
           {userInfo.likedSongs.includes(playlist[currentSong].videoId) ? (
             <HeartIcon
-              className="h-6 w-6"
+              className="w-6 h-6"
               onClick={() => {
                 axios
                   .put(
@@ -99,7 +111,7 @@ const Playbar = () => {
             />
           ) : (
             <HeartIconOutlined
-              className="h-6 w-6"
+              className="w-6 h-6"
               onClick={() => {
                 userInfo.token
                   ? axios
@@ -127,7 +139,7 @@ const Playbar = () => {
             />
           )}
           <ChevronUpIcon
-            className="h-6 w-6 cursor-pointer"
+            className="w-6 h-6 cursor-pointer"
             onClick={() => {
               // prevent the body scroll
               document.body.classList.add('overflow-hidden')
