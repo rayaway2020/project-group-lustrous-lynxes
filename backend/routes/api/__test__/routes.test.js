@@ -38,9 +38,15 @@ beforeEach(async () => {
         username: 'user1',
         email: 'user1@gmail.com',
         password: '$2b$10$4f47V8LW8oeS8./FjnRYt.JN2bEp7YyarWFv1pxp.Z9n2Y8wI49AW',
-        likedPlaylist: [new mongoose.Types.ObjectId('000000000000000000000001')],
-        ownedPlaylist: [new mongoose.Types.ObjectId('000000000000000000000002')],
-        likedSongs: [new mongoose.Types.ObjectId('000000000000000000000001')],
+        likedPlaylist: [
+            new mongoose.Types.ObjectId('000000000000000000000001')
+        ],
+        ownedPlaylist: [
+            new mongoose.Types.ObjectId('000000000000000000000002')
+        ],
+        likedSongs: [
+            '000000000000000000000001'
+        ],
     };
 
     user2 = {
@@ -61,7 +67,25 @@ beforeEach(async () => {
     };
 
     song1 = {
+        _id: '000000000000000000000001',
+        title: 'song 1',
+        comments: [
+            new mongoose.Types.ObjectId('000000000000000000000001')
+        ]
+    };
+
+    song2 = {
+        _id: '000000000000000000000002',
+        title: 'song 2',
+    };
+
+    comment1 = {
         _id: new mongoose.Types.ObjectId('000000000000000000000001'),
+        title: 'song 1',
+    };
+
+    comment2 = {
+        _id: new mongoose.Types.ObjectId('000000000000000000000002'),
         title: 'song 1',
     };
 
@@ -70,6 +94,9 @@ beforeEach(async () => {
     await new Playlist(playlist1).save();
     await new Playlist(playlist2).save();
     await new Song(song1).save();
+    await new Song(song2).save();
+    await new Comment(comment1).save();
+    await new Comment(comment2).save();
 });
 
 /**
@@ -321,6 +348,7 @@ it('add a song', async done => {
 });
 
 it('get recommedation', async done => {
+    
     request(app)
         .get('/recommend')
         .send()
@@ -336,4 +364,107 @@ it('get recommedation', async done => {
         });
 });
 
+it('get one song and comments', async done => {
+    const id = '000000000000000000000001';
+    
+    request(app)
+        .get(`/songs/?id=${id}`)
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
 
+            expect(res._body._id).toBe('000000000000000000000001');
+
+            return done();
+        });
+});
+
+it('get favorite songs', async done => {
+    const id = '000000000000000000000001';
+    
+    request(app)
+        .get(`/songs/favorite/?userId=${id}`)
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+
+            expect(res._body[0].videoId).toBe('000000000000000000000001');
+
+            return done();
+        });
+});
+
+it('get comments', async done => {
+    const id = '000000000000000000000001';
+    
+    request(app)
+        .get(`/songs/comments?id=${id}`)
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+            
+            expect(res._body[0]._id).toBe('000000000000000000000001');
+
+            return done();
+        });
+});
+
+
+
+it('create one song', async done => {
+    const newSong = {
+        id: '000000000000000000000003',
+        title: "song 3",
+        cover: "cover",
+        duration: 1
+    }
+    
+    request(app)
+        .post(`/songs`)
+        .send(newSong)
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+
+            expect(res._body._id).toBe('000000000000000000000003');
+
+            return done();
+        });
+});
+
+it('add a like to a comment', async done => {
+    const newComment = {
+        commentId: '000000000000000000000003',
+        userId: "000000000000000000000001",
+    }
+    
+    request(app)
+        .put(`/songs/comment/addlikes`)
+        .send(newComment)
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+
+            return done();
+        });
+});
+
+it('cancel like to a comment', async done => {
+    const newComment = {
+        commentId: '000000000000000000000001',
+        userId: "000000000000000000000001",
+    }
+    
+    request(app)
+        .put(`/songs/comment/cancellikes`)
+        .send(newComment)
+        .expect(200)
+        .end((err, res) => {
+            if (err) return done(err);
+
+            return done();
+        });
+});
