@@ -132,6 +132,7 @@ const me: NextPage = () => {
             <div className="flex h-80 w-2/3 flex-row flex-wrap p-2">
               {likedSongs?.map((item: any, i: number) => (
                 <LibrarySongItem
+                  key={i}
                   title={item.title}
                   cover={item.cover}
                   duration={item.duration}

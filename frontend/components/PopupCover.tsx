@@ -31,14 +31,19 @@ const PopupCover = () => {
         />
       </div>
       <img
-        src={playlist[currentSong].thumbnails.url}
-        alt={playlist[currentSong].name}
+        src={
+          playlist[currentSong].thumbnails?.url ||
+          playlist[currentSong].thumbnail
+        }
+        alt={playlist[currentSong].name || playlist[currentSong].title}
         className="aspect-square h-64 w-64 rounded-xl bg-auto object-cover"
       />
       <div className="flex flex-col items-center justify-between">
-        <div>{playlist[currentSong].name}</div>
+        <div>{playlist[currentSong].name || playlist[currentSong].title}</div>
         <div className="mt-2 text-sm">
-          {playlist[currentSong].author.name || 'unknown'}
+          {playlist[currentSong].author?.name ||
+            playlist[currentSong].artist ||
+            'unknown'}
         </div>
       </div>
       <div className="flex flex-row items-center justify-center gap-8">

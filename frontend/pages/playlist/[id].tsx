@@ -32,7 +32,6 @@ const Playlist: NextPage = () => {
         })
         .then((res) => {
           const data = res.data
-          console.log(data);
           //Get playlist header info
           const tem: {
             title: string
@@ -79,7 +78,16 @@ const Playlist: NextPage = () => {
       {!isLoading && (
         <div className="mx-auto my-24 flex w-full max-w-screen-xl flex-col gap-8 px-6">
           {/* header section */}
-          {info && <PlaylistHeader {...info} />}
+          {info && (
+            <PlaylistHeader
+              {...info}
+              play={() => {
+                setPlaylist(songs)
+                setCurrentSong(0)
+                setPlaying(true)
+              }}
+            />
+          )}
           {/* playlist section */}
           <div className="flex flex-col gap-4 rounded-2xl bg-slate-50 px-12 py-8">
             {songs?.map((item: any, i: number) => (

@@ -1,3 +1,7 @@
+import axios from 'axios'
+import { info } from 'console'
+import { useContext } from 'react'
+import { playbarContext } from './Layout'
 import SongItem from './SongItem'
 
 interface SonglistRowProps {
@@ -6,6 +10,7 @@ interface SonglistRowProps {
 }
 
 const SonglistRow = ({ title, items }: SonglistRowProps) => {
+  const { setCurrentSong, setPlaying, setPlaylist } = useContext(playbarContext)
   return (
     <div className="flex w-full flex-col gap-5">
       <div className="text-2xl font-semibold">{title}</div>
@@ -17,7 +22,20 @@ const SonglistRow = ({ title, items }: SonglistRowProps) => {
             cover={item.thumbnail}
             title={item.title}
             duration={item.duration}
-            onClick={() => {}}
+            onClick={() => {
+              setPlaylist(items)
+              setCurrentSong(i)
+              setPlaying(true)
+
+              if (item?.videoId) {
+                axios.post('http://localhost:3001/api/songs/', {
+                  id: item.videoId,
+                  title: item.name,
+                  cover: item.thumbnail,
+                  duration: item.duration,
+                })
+              }
+            }}
           />
         ))}
       </div>

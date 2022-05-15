@@ -85,6 +85,7 @@ const PopupComment = ({ songID }: PopUpCommentProps) => {
       <section className="flex flex-col gap-4">
         {comments?.map((comment, i) => (
           <Comment
+            key={i}
             id={comment._id}
             author={comment.author}
             date={comment.createdDates}

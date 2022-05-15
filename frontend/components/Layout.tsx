@@ -57,6 +57,9 @@ const Layout = ({ children }: any) => {
           }`}
           playing={isPlaying}
           className="fixed top-0 right-0 translate-x-full"
+          onEnded={() => {
+            playNext()
+          }}
         />
       ) : null}
       <userContext.Provider value={{ userInfo, setUserInfo }}>

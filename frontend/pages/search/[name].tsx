@@ -40,7 +40,7 @@ const SearchResult: NextPage = () => {
           />
         </div>
       ) : (
-        <div className="py-24">
+        <div className="flex flex-col gap-12 py-24">
           {playlists && (
             <PlaylistRow title={'Playlist:'} items={playlists} knowId={true} />
           )}

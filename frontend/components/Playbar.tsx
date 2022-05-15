@@ -32,14 +32,26 @@ const Playbar = () => {
         {/* cover section */}
         <div className="flex flex-1 flex-row items-center gap-4">
           <img
-            src={playlist[currentSong].thumbnails.url}
-            alt={playlist[currentSong].name}
+            src={
+              playlist[currentSong].thumbnails?.url ||
+              playlist[currentSong].thumbnail // for search result
+            }
+            alt={playlist[currentSong].name || playlist[currentSong].title}
             className="h-10 w-10 rounded-full object-cover"
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null // prevents looping
+              currentTarget.src =
+                'https://pro2-bar-s3-cdn-cf4.myportfolio.com/dbea3cc43adf643e2aac2f1cbb9ed2f0/f14d6fc4-2cea-41a2-9724-a7e5dff027e8_rw_600.jpg?h=99cbed677113851ef5b0af352fa8a5b1'
+            }}
           />
           <div className="flex flex-col justify-between">
-            <div className="truncate">{playlist[currentSong].name}</div>
+            <div className="truncate">
+              {playlist[currentSong].name || playlist[currentSong].title}
+            </div>
             <div className="text-sm">
-              {playlist[currentSong].author.name || 'unknown'}
+              {playlist[currentSong].author?.name ||
+                playlist[currentSong].artist || // for search result
+                'unknown'}
             </div>
           </div>
         </div>
