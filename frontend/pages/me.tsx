@@ -14,7 +14,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-const me: NextPage = () => {
+const Me: NextPage = () => {
   const router = useRouter()
   const { userInfo, setUserInfo } = useContext(userContext)
 
@@ -216,4 +216,4 @@ const me: NextPage = () => {
   )
 }
 
-export default me
+export default Me

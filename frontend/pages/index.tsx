@@ -10,7 +10,6 @@ const Home: NextPage = () => {
       .then((res) => res.json())
       .then((data) => {
         setPlaylists(data)
-        console.log(data)
       })
   }, [])
   return (

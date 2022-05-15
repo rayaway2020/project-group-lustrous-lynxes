@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-const search: NextPage = () => {
+const Search: NextPage = () => {
   const router = useRouter()
   const [searchValue, setSearchValue] = useState<string | undefined>(undefined)
 
@@ -52,4 +52,4 @@ const search: NextPage = () => {
     </div>
   )
 }
-export default search
+export default Search
